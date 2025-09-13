@@ -8,12 +8,10 @@ interface MLSMatch {
   readonly home_team_name: string;
   readonly away_team_name: string;
   readonly planned_kickoff_time: string;
-  readonly match_status: string;
   readonly stadium_name: string;
   readonly stadium_city: string;
   readonly stadium_country: string;
   readonly match_day: number;
-  readonly match_type: string;
   readonly season: number;
   readonly neutral_venue: boolean;
   [key: string]: unknown;
@@ -23,8 +21,10 @@ interface MLSMatchResponse {
   readonly schedule: readonly MLSMatch[];
 }
 
+// TODO: Input via Actions
 const SEASON = 'MLS-SEA-0001K9';
 
+// TODO: Input via Actions
 const EXCLUDED_COMPETITION_IDS = new Set([
   'MLS-COM-000003',
   'MLS-COM-000004',
@@ -235,14 +235,17 @@ const main = async (): Promise<void> => {
 
     const sortedData = filteredData.sort((a, b) => {
       const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
-      if (timeComparison !== 0) return timeComparison;
-      return a.home_team_name.localeCompare(b.home_team_name);
+      if (timeComparison !== 0) {
+         return timeComparison;
+      } else {
+        return a.home_team_name.localeCompare(b.home_team_name);
+      }
     });
 
     const html = generateHTML(sortedData);
     await writeFile(join(process.cwd(), 'today.html'), html, 'utf-8');
   } catch (error) {
-    console.error('Error fetching data:', error instanceof Error ? error.message : String(error));
+    console.error('Error generating data:', error instanceof Error ? error.message : String(error));
     process.exit(1);
   }
 };
