@@ -38,26 +38,17 @@ jobs:
           echo "$SUBSCRIBERS" | jq -r '.[]' | while read -r email; do
             echo "Sending to subscriber (email hidden for privacy)"
 
-            # Create message content file to handle HTML properly
-            cat > /tmp/message.json << 'EOF'
-{
-  "Simple": {
-    "Subject": {
-      "Data": "SUBJECT_PLACEHOLDER"
-    },
-    "Body": {
-      "Html": {
-        "Data": "HTML_PLACEHOLDER"
-      }
-    }
-  }
-}
-EOF
-
-            # Replace placeholders with actual content
+            # Create message content using jq to handle HTML properly
             HTML_CONTENT="$(cat index.html | jq -Rs .)"
-            sed -i "s/SUBJECT_PLACEHOLDER/$SUBJECT/g" /tmp/message.json
-            sed -i "s/HTML_PLACEHOLDER/$HTML_CONTENT/g" /tmp/message.json
+            jq -n \
+              --arg subject "$SUBJECT" \
+              --argjson html "$HTML_CONTENT" \
+              '{
+                Simple: {
+                  Subject: { Data: $subject },
+                  Body: { Html: { Data: $html } }
+                }
+              }' > /tmp/message.json
 
             if aws sesv2 send-email \
               --from-email-address "${{ secrets.FROM_EMAIL }}" \
