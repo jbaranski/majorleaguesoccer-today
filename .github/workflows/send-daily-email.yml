@@ -33,21 +33,43 @@ jobs:
 
           # Email content
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
-          HTML_CONTENT="$(cat index.html)"
 
           # Send individual emails to each subscriber
           echo "$SUBSCRIBERS" | jq -r '.[]' | while read -r email; do
             echo "Sending to subscriber (email hidden for privacy)"
 
+            # Create message content file to handle HTML properly
+            cat > /tmp/message.json << 'EOF'
+{
+  "Simple": {
+    "Subject": {
+      "Data": "SUBJECT_PLACEHOLDER"
+    },
+    "Body": {
+      "Html": {
+        "Data": "HTML_PLACEHOLDER"
+      }
+    }
+  }
+}
+EOF
+
+            # Replace placeholders with actual content
+            HTML_CONTENT="$(cat index.html | jq -Rs .)"
+            sed -i "s/SUBJECT_PLACEHOLDER/$SUBJECT/g" /tmp/message.json
+            sed -i "s/HTML_PLACEHOLDER/$HTML_CONTENT/g" /tmp/message.json
+
             if aws sesv2 send-email \
               --from-email-address "${{ secrets.FROM_EMAIL }}" \
               --destination "ToAddresses=$email" \
-              --content "Simple={Subject={Data=\"$SUBJECT\"},Body={Html={Data=\"$HTML_CONTENT\"}}}"; then
+              --content file:///tmp/message.json > /dev/null 2>&1; then
               echo "✓ Email sent successfully"
             else
               echo "✗ Failed to send email"
               exit 1
             fi
+
+            rm -f /tmp/message.json
           done
 
           echo "All emails sent successfully"
