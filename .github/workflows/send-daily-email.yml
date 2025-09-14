@@ -40,7 +40,8 @@ jobs:
               "TemplateContent": {
                 "Subject": "$SUBJECT",
                 "Html": "$HTML_CONTENT"
-              }
+              },
+              "TemplateData": "{}"
             }
           }
           EOF
