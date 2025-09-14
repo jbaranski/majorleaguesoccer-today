@@ -191,12 +191,20 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         .gray {
             color: #9ca3af;
         }
+        .last-updated {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
         .no-games {
             text-align: center;
             color: white;
             font-size: 18px;
             font-weight: 500;
-            margin-top: 100px;
+            margin-top: 20px;
             opacity: 0.9;
         }
         @media (max-width: 640px) {
@@ -220,6 +228,7 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
+        <div class="last-updated">Last updated: <em>${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }).replace(',', '')} ET</em></div>
         ${matches.length > 0 ? matchesHtml : '<div class="no-games">No games scheduled for today</div>'}
     </div>
 </body>
@@ -232,9 +241,10 @@ const main = async (): Promise<void> => {
     const data = await getData(url);
 
     // Filter to today's 24-hour period and exclude unwanted competitions
+    // (must go a little wider fetching data or we can miss games depending on time of day run)
     const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    const startOfToday = new Date(now.toDateString());
+    const endOfToday = new Date(startOfToday.getTime() + (24 * 60 * 60 * 1000) - 1);
 
     const filteredData = data.schedule.filter(match => {
       const matchTime = new Date(match.planned_kickoff_time);

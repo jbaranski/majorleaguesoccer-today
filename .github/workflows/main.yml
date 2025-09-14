@@ -27,7 +27,7 @@ jobs:
       - name: Generate HTML file
         env:
           TZ: America/New_York
-        run: node dist/index.js
+        run: npm run start
       - name: Commit HTML file if changed
         run: |-
           git diff
