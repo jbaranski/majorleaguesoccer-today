@@ -1,0 +1,53 @@
+name: send_daily_email
+
+on:
+  schedule:
+    # Runs at 5:30 AM EDT (9:30 UTC) every day
+    - cron: "30 9 * * *"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: MLS-Today-SendEmail-GithubAction
+
+      - name: Send daily email to SES contact list
+        run: |
+          # Create email content JSON (emails never exposed to logs)
+          cat > /tmp/email-content.json << 'EOF'
+          {
+            "Simple": {
+              "Subject": {
+                "Data": "Major League Soccer Today - $(date +'%A, %B %d, %Y')",
+                "Charset": "UTF-8"
+              },
+              "Body": {
+                "Html": {
+                  "Data": "$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')",
+                  "Charset": "UTF-8"
+                }
+              }
+            }
+          }
+          EOF
+
+          # Send directly to contact list (no email addresses exposed)
+          aws sesv2 send-bulk-email \
+            --from-email-address "${{ secrets.FROM_EMAIL }}" \
+            --destination "ListManagementOptions={ContactListName=${{ secrets.CONTACT_LIST_NAME }}}" \
+            --content file:///tmp/email-content.json
+
+          rm -f /tmp/email-content.json
+          echo "Email sent via AWS SES"

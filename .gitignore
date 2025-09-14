@@ -9,3 +9,10 @@ dist/
 Thumbs.db
 *.log
 *.bak
+
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+.cdk.staging
+cdk.out
