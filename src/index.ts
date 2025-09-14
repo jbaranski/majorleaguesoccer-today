@@ -243,7 +243,7 @@ const main = async (): Promise<void> => {
     });
 
     const html = generateHTML(sortedData);
-    await writeFile(join(process.cwd(), 'today.html'), html, 'utf-8');
+    await writeFile(join(process.cwd(), 'index.html'), html, 'utf-8');
   } catch (error) {
     console.error('Error generating data:', error instanceof Error ? error.message : String(error));
     process.exit(1);
