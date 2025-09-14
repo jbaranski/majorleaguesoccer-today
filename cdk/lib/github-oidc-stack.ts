@@ -6,6 +6,7 @@ export interface GitHubOidcStackProps extends cdk.StackProps {
   githubOwner: string;
   githubRepo: string;
   githubBranch: string;
+  fromEmailDomain: string;
 }
 
 export class GitHubOidcStack extends cdk.Stack {
@@ -28,8 +29,8 @@ export class GitHubOidcStack extends cdk.Stack {
       statements: [
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
-          actions: ['ses:SendBulkEmail', 'ses:ListContacts', 'ses:GetContactList'],
-          resources: ['*']
+          actions: ['ses:SendEmail'],
+          resources: [`arn:aws:ses:${this.region}:${this.account}:identity/${props.fromEmailDomain}`]
         })
       ]
     });

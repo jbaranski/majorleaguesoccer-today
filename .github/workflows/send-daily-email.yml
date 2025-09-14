@@ -24,50 +24,32 @@ jobs:
           role-session-name: MLS-Today-SendEmail-GithubAction
           retry-max-attempts: 1
 
-      - name: Send daily email to SES contact list
+      - name: Send daily email to subscribers
         run: |
           set -euo pipefail
 
-          CONTACT_LIST="${{ secrets.CONTACT_LIST_NAME }}"
+          # Load subscriber list from secret
+          SUBSCRIBERS='${{ secrets.SUBSCRIBER_LIST }}'
 
-          # Create default content with inline template
+          # Email content
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
-          HTML_CONTENT="$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')"
+          HTML_CONTENT="$(cat index.html)"
 
-          cat > /tmp/default-content.json << EOF
-          {
-            "Template": {
-              "TemplateContent": {
-                "Subject": "$SUBJECT",
-                "Html": "$HTML_CONTENT"
-              },
-              "TemplateData": "{}"
-            }
-          }
-          EOF
+          # Send individual emails to each subscriber
+          echo "$SUBSCRIBERS" | jq -r '.[]' | while read -r email; do
+            echo "Sending to subscriber (email hidden for privacy)"
 
-          # Build recipients (no replacement content needed)
-          aws sesv2 list-contacts --contact-list-name "$CONTACT_LIST" --query 'Contacts[].EmailAddress' --output json | \
-          jq -c '[.[] | {Destination: {ToAddresses: [.]}}]' \
-            > /tmp/recipients.json
-
-          # Send bulk email (redirect output to avoid logging email addresses)
-          if aws sesv2 send-bulk-email \
-            --from-email-address "${{ secrets.FROM_EMAIL }}" \
-            --default-content file:///tmp/default-content.json \
-            --bulk-email-entries file:///tmp/recipients.json > /tmp/ses-response.json 2>&1; then
-            echo "Bulk email sent successfully"
-            # Only log success count, not email addresses
-            jq -r '.BulkEmailEntryResults | length as $total | map(select(.Status == "SUCCESS")) | length as $success | "Sent to \($success)/\($total) recipients"' /tmp/ses-response.json
-          else
-            echo "Bulk email failed"
-            # Log error count without exposing email addresses
-            if [ -f /tmp/ses-response.json ]; then
-              jq -r '.BulkEmailEntryResults | group_by(.Status) | map("\(.[0].Status): \(length) recipients") | .[]' /tmp/ses-response.json
+            if aws sesv2 send-email \
+              --from-email-address "${{ secrets.FROM_EMAIL }}" \
+              --destination "ToAddresses=$email" \
+              --content "Simple={Subject={Data=\"$SUBJECT\"},Body={Html={Data=\"$HTML_CONTENT\"}}}" \
+              > /dev/null 2>&1; then
+              echo "✓ Email sent successfully"
+            else
+              echo "✗ Failed to send email"
+              exit 1
             fi
-            exit 1
-          fi
+          done
 
-          # Cleanup
-          rm -f /tmp/default-content.json /tmp/recipients.json /tmp/ses-response.json
+          echo "All emails sent successfully"
 
