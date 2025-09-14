@@ -35,13 +35,15 @@ const EXCLUDED_COMPETITION_IDS = new Set([
 
 const getUrl = (): string => {
   const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const todayStart = new Date(today);
+  todayStart.setHours(0, 0, 0, 0);
+  const todayEnd = new Date(today);
+  todayEnd.setHours(23, 59, 59, 999);
 
   const baseUrl = `https://stats-api.mlssoccer.com/matches/seasons/${SEASON}`;
   const params = new URLSearchParams({
-    'match_date[gte]': today.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
-    'match_date[lte]': tomorrow.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[gte]': todayStart.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[lte]': todayEnd.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
     'per_page': '1000',
     'sort': 'planned_kickoff_time:asc,home_team_name:asc'
   });
