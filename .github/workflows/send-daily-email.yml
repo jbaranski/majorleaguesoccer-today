@@ -30,42 +30,31 @@ jobs:
 
           CONTACT_LIST="${{ secrets.CONTACT_LIST_NAME }}"
 
-          # Create email content JSON with proper shell expansion
+          # Create default content (template structure)
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           HTML_CONTENT="$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')"
 
-          cat > /tmp/email-content.json << EOF
+          cat > /tmp/default-content.json << EOF
           {
-            "Simple": {
-              "Subject": {
-                "Data": "$SUBJECT",
-                "Charset": "UTF-8"
-              },
-              "Body": {
-                "Html": {
-                  "Data": "$HTML_CONTENT",
-                  "Charset": "UTF-8"
-                }
-              }
+            "Template": {
+              "TemplateName": "DefaultTemplate"
             }
           }
           EOF
 
-          # Build recipients.json from SES contact list
-          aws sesv2 list-contacts \
-            --contact-list-name "$CONTACT_LIST" \
-            --query "Contacts[].EmailAddress" \
-            --output json | \
-          jq -c '[.[] | {Destination: {ToAddresses: [.]}}]' \
+          # Build recipients with HTML content
+          aws sesv2 list-contacts --contact-list-name "$CONTACT_LIST" --query 'Contacts[].EmailAddress' --output json | \
+          jq -c --arg subject "$SUBJECT" --arg html "$HTML_CONTENT" \
+             '[.[] | {Destination: {ToAddresses: [.]}, ReplacementEmailContent: {Subject: {Data: $subject, Charset: "UTF-8"}, Body: {Html: {Data: $html, Charset: "UTF-8"}}}}]' \
             > /tmp/recipients.json
 
-          # Send the bulk email
+          # Send bulk email
           aws sesv2 send-bulk-email \
             --from-email-address "${{ secrets.FROM_EMAIL }}" \
-            --default-content file:///tmp/email-content.json \
+            --default-content file:///tmp/default-content.json \
             --bulk-email-entries file:///tmp/recipients.json
 
           # Cleanup
-          rm -f /tmp/email-content.json /tmp/recipients.json
-          echo "Email sent via AWS SES"
+          rm -f /tmp/default-content.json /tmp/recipients.json
+          echo "Bulk email sent via AWS SES"
 
