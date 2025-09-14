@@ -50,16 +50,13 @@ jobs:
                 }
               }' > /tmp/message.json
 
-            echo "Debug: FROM_EMAIL is ${{ secrets.FROM_EMAIL }}"
-            echo "Debug: Destination email is $email"
-
             if aws sesv2 send-email \
               --from-email-address "${{ secrets.FROM_EMAIL }}" \
               --destination "{\"ToAddresses\":[\"$email\"]}" \
-              --content file:///tmp/message.json; then
-              echo "✓ Email sent successfully"
+              --content file:///tmp/message.json > /dev/null 2>&1; then
+              echo "Email sent successfully"
             else
-              echo "✗ Failed to send email"
+              echo "Failed to send email"
               exit 1
             fi
 

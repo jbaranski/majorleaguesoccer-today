@@ -30,7 +30,7 @@ export class GitHubOidcStack extends cdk.Stack {
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
           actions: ['ses:SendEmail'],
-          resources: [`arn:aws:ses:${this.region}:${this.account}:identity/${props.fromEmailDomain}`]
+          resources: [`arn:aws:ses:${this.region}:${this.account}:identity/*`]
         })
       ]
     });
