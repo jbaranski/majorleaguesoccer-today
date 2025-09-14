@@ -16,16 +16,6 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Debug OIDC Token Claims
-        run: |
-          echo "GitHub Token Claims:"
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Event Name: ${{ github.event_name }}"
-          echo "Actor: ${{ github.actor }}"
-          echo "Run ID: ${{ github.run_id }}"
-          echo "Expected sub: repo:${{ github.repository }}:ref:${{ github.ref }}"
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -36,7 +26,11 @@ jobs:
 
       - name: Send daily email to SES contact list
         run: |
-          # Create email content JSON (emails never exposed to logs)
+          set -euo pipefail
+
+          CONTACT_LIST="${{ secrets.CONTACT_LIST_NAME }}"
+
+          # Create email content JSON
           cat > /tmp/email-content.json << 'EOF'
           {
             "Simple": {
@@ -54,11 +48,21 @@ jobs:
           }
           EOF
 
-          # Send directly to contact list (no email addresses exposed)
+          # Build recipients.json from SES contact list (no logging of emails!)
+          aws sesv2 list-contacts \
+            --contact-list-name "$CONTACT_LIST" \
+            --query "Contacts[].EmailAddress" \
+            --output json |
+          jq -c '[.[] | {Destination: {ToAddresses: [.]}, ListManagementOptions: {ContactListName: env.CONTACT_LIST}}]' \
+            > /tmp/recipients.json
+
+          # Send the bulk email
           aws sesv2 send-bulk-email \
             --from-email-address "${{ secrets.FROM_EMAIL }}" \
-            --destination "ListManagementOptions={ContactListName=${{ secrets.CONTACT_LIST_NAME }}}" \
-            --content file:///tmp/email-content.json
+            --default-content file:///tmp/email-content.json \
+            --bulk-email-entries file:///tmp/recipients.json
 
-          rm -f /tmp/email-content.json
+          # Cleanup
+          rm -f /tmp/email-content.json /tmp/recipients.json
           echo "Email sent via AWS SES"
+
