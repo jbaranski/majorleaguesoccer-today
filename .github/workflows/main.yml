@@ -25,6 +25,8 @@ jobs:
       - name: Build TypeScript
         run: npm run build
       - name: Generate HTML file
+        env:
+          TZ: America/New_York
         run: node dist/index.js
       - name: Commit HTML file if changed
         run: |-
