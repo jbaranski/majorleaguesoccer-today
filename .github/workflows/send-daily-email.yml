@@ -30,22 +30,24 @@ jobs:
 
           CONTACT_LIST="${{ secrets.CONTACT_LIST_NAME }}"
 
-          # Create default content (template structure)
+          # Create default content with inline template
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           HTML_CONTENT="$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')"
 
           cat > /tmp/default-content.json << EOF
           {
             "Template": {
-              "TemplateName": "DefaultTemplate"
+              "TemplateContent": {
+                "Subject": "$SUBJECT",
+                "Html": "$HTML_CONTENT"
+              }
             }
           }
           EOF
 
-          # Build recipients with HTML content
+          # Build recipients (no replacement content needed)
           aws sesv2 list-contacts --contact-list-name "$CONTACT_LIST" --query 'Contacts[].EmailAddress' --output json | \
-          jq -c --arg subject "$SUBJECT" --arg html "$HTML_CONTENT" \
-             '[.[] | {Destination: {ToAddresses: [.]}, ReplacementEmailContent: {Subject: {Data: $subject, Charset: "UTF-8"}, Body: {Html: {Data: $html, Charset: "UTF-8"}}}}]' \
+          jq -c '[.[] | {Destination: {ToAddresses: [.]}}]' \
             > /tmp/recipients.json
 
           # Send bulk email
