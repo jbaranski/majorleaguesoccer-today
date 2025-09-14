@@ -1,5 +1,5 @@
 {
-  "name": "mls-daily-email",
+  "name": "majorleaguesoccer-today",
   "version": "1.0.0",
   "description": "Fetches MLS match data for today and tomorrow",
   "main": "dist/index.js",
