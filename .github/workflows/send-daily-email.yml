@@ -22,6 +22,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: MLS-Today-SendEmail-GithubAction
+          retry-max-attempts: 1
 
       - name: Send daily email to SES contact list
         run: |
