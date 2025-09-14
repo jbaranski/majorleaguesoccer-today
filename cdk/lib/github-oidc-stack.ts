@@ -28,7 +28,7 @@ export class GitHubOidcStack extends cdk.Stack {
       statements: [
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
-          actions: ['sesv2:SendBulkEmail', 'sesv2:ListContacts', 'sesv2:GetContactList'],
+          actions: ['ses:SendBulkEmail', 'ses:ListContacts', 'ses:GetContactList'],
           resources: ['*']
         })
       ]
