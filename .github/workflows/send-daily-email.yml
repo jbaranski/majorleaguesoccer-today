@@ -30,17 +30,20 @@ jobs:
 
           CONTACT_LIST="${{ secrets.CONTACT_LIST_NAME }}"
 
-          # Create email content JSON
-          cat > /tmp/email-content.json << 'EOF'
+          # Create email content JSON with proper shell expansion
+          SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
+          HTML_CONTENT="$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')"
+
+          cat > /tmp/email-content.json << EOF
           {
             "Simple": {
               "Subject": {
-                "Data": "Major League Soccer Today - $(date +'%A, %B %d, %Y')",
+                "Data": "$SUBJECT",
                 "Charset": "UTF-8"
               },
               "Body": {
                 "Html": {
-                  "Data": "$(cat index.html | sed 's/"/\\"/g' | tr -d '\n')",
+                  "Data": "$HTML_CONTENT",
                   "Charset": "UTF-8"
                 }
               }
