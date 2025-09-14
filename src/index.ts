@@ -35,15 +35,15 @@ const EXCLUDED_COMPETITION_IDS = new Set([
 
 const getUrl = (): string => {
   const today = new Date();
-  const todayStart = new Date(today);
-  todayStart.setHours(0, 0, 0, 0);
-  const todayEnd = new Date(today);
-  todayEnd.setHours(23, 59, 59, 999);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const baseUrl = `https://stats-api.mlssoccer.com/matches/seasons/${SEASON}`;
   const params = new URLSearchParams({
-    'match_date[gte]': todayStart.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
-    'match_date[lte]': todayEnd.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[gte]': yesterday.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[lte]': tomorrow.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
     'per_page': '1000',
     'sort': 'planned_kickoff_time:asc,home_team_name:asc'
   });
@@ -231,9 +231,17 @@ const main = async (): Promise<void> => {
     const url = getUrl();
     const data = await getData(url);
 
-    const filteredData = data.schedule.filter(
-      match => !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
-    );
+    // Filter to today's 24-hour period and exclude unwanted competitions
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+    const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+    const filteredData = data.schedule.filter(match => {
+      const matchTime = new Date(match.planned_kickoff_time);
+      const isToday = matchTime >= startOfToday && matchTime <= endOfToday;
+      const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
+      return isToday && isAllowedCompetition;
+    });
 
     const sortedData = filteredData.sort((a, b) => {
       const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
