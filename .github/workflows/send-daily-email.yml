@@ -51,12 +51,12 @@ jobs:
           }
           EOF
 
-          # Build recipients.json from SES contact list (no logging of emails!)
+          # Build recipients.json from SES contact list
           aws sesv2 list-contacts \
             --contact-list-name "$CONTACT_LIST" \
             --query "Contacts[].EmailAddress" \
-            --output json |
-          jq -c '[.[] | {Destination: {ToAddresses: [.]}, ListManagementOptions: {ContactListName: env.CONTACT_LIST}}]' \
+            --output json | \
+          jq -c '[.[] | {Destination: {ToAddresses: [.]}}]' \
             > /tmp/recipients.json
 
           # Send the bulk email
