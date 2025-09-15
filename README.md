@@ -4,7 +4,7 @@ Generates Major League Soccer league and tournament fixtures for the current day
 
 ## How do I subscribe to the newsletter?
 
-Visit [mlstoday.jeffsoftware.com](https://mlstoday.jeffsoftware.com) to subscribe.
+Visit https://mlstoday.jeffsoftware.com to subscribe.
 
 ## What competitions do you support?
 
