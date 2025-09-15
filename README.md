@@ -4,7 +4,7 @@ Generates Major League Soccer league and tournament fixtures for the current day
 
 ## How do I subscribe to the newsletter?
 
-Visit [mlstoday.jeffsoftware.com](https://mlstoday.jeffsoftware.com) to subscribe to our daily email newsletter and view today's fixtures.
+Visit [mlstoday.jeffsoftware.com](https://mlstoday.jeffsoftware.com) to subscribe.
 
 ## What competitions do you support?
 
@@ -25,7 +25,7 @@ We support all major Major League Soccer competitions and tournaments:
 | FIFA Club World Cup | Tournament |
 | CONCACAF Nations League | Tournament |
 
-*Note: We exclude MLS NEXT Pro games and test matches to focus on top-level professional competitions. But if this is something you'd like to see us support please let us know*
+*Note: We exclude MLS NEXT Pro games and test matches to focus on top-level professional competitions. But if this is something you'd like to see us support please let us know.*
 
 ## Will you sell or share my email address if I subscribe to your newsletter?
 
