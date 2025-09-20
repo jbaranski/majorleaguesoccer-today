@@ -99,15 +99,8 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
     Object.entries(Object.groupBy(matches, match => match.competition_name))
   );
 
-  // Generate HTML for each competition group (sorted by priority)
-  const competitionsHtml = Array.from(matchesByCompetition.entries())
-    .sort(([, matchesA], [, matchesB]) => {
-      if (!matchesA || !matchesB || matchesA.length === 0 || matchesB.length === 0) return 0;
-      const priorityA = getCompetitionPriority(matchesA[0]!.competition_id);
-      const priorityB = getCompetitionPriority(matchesB[0]!.competition_id);
-      return priorityA - priorityB;
-    })
-    .map(([competitionName, competitionMatches]) => {
+  // Generate HTML for each competition group
+  const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
     if (!competitionMatches || competitionMatches.length === 0) return '';
 
     // Get match day and season from first match (should be same for all in competition)
