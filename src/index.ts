@@ -35,22 +35,21 @@ const EXCLUDED_COMPETITION_IDS = new Set([
 const COMPETITION_PRIORITIES = new Map([
   ['MLS-COM-000001', 1], // Major League Soccer - Regular Season
   ['MLS-COM-000002', 2], // Major League Soccer - Cup Playoffs
-  ['MLS-COM-00002V', 3], // Canadian Championship
-  ['MLS-COM-000006', 4], // Leagues Cup
-  ['MLS-COM-00002U', 5], // U.S. Open Cup
-  ['MLS-COM-000007', 6], // Campeones Cup
-  ['MLS-COM-00002W', 7], // Copa America
-  ['MLS-COM-00002Z', 8], // CONCACAF Nations League
-  ['MLS-COM-00000K', 9], // CONCACAF Champions Cup
-  ['MLS-COM-00002Y', 10], // FIFA Club World Cup
-  ['MLS-COM-000005', 11], // MLS All-Star Game
+  ['MLS-COM-000005', 3], // MLS All-Star Game
+  ['MLS-COM-00002Y', 4], // FIFA Club World Cup
+  ['MLS-COM-000006', 5], // Leagues Cup
+  ['MLS-COM-00002U', 6], // U.S. Open Cup
+  ['MLS-COM-000007', 7], // Campeones Cup
+  ['MLS-COM-00002V', 8], // Canadian Championship
+  ['MLS-COM-00002W', 9], // Copa America
+  ['MLS-COM-00002Z', 10], // CONCACAF Nations League
+  ['MLS-COM-00000K', 11], // CONCACAF Champions Cup
   ['MLS-COM-00002S', 12], // Club Friendly Matches
 ]);
 
 const getCompetitionPriority = (competitionId: string): number => {
   return COMPETITION_PRIORITIES.get(competitionId) ?? Number.MAX_SAFE_INTEGER;
 };
-
 
 const getUrl = (): string => {
   const today = new Date();
@@ -89,32 +88,63 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
   const formatTime = (isoString: string): string => {
     const date = new Date(isoString);
     return date.toLocaleString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
       timeZone: 'America/New_York'
-    }).replace(',', '') + ' ET';
+    }) + ' ET';
   };
 
-  const matchesHtml = matches.map(match => `
-    <div class="match">
-      <div class="competition">${match.competition_name}</div>
-      <div class="matchup">
-        <strong>${match.home_team_name} vs ${match.away_team_name}</strong>
-      </div>
-      <div class="datetime">${formatTime(match.planned_kickoff_time)}</div>
-      <div class="venue">
-        <div class="stadium">${match.stadium_name}, ${match.stadium_city}, ${match.stadium_country}</div>
-        <div class="details">
-          <span class="gray">Match Day ${match.match_day}</span> •
-          <span class="gray">${match.season} Season</span>
-          ${match.neutral_venue ? ' • <span class="gray">Neutral Venue</span>' : ''}
+  // Group matches by competition
+  const matchesByCompetition = new Map(
+    Object.entries(Object.groupBy(matches, match => match.competition_name))
+  );
+
+  // Generate HTML for each competition group
+  const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
+    if (!competitionMatches || competitionMatches.length === 0) return '';
+
+    // Get match day and season from first match (should be same for all in competition)
+    const firstMatch = competitionMatches[0]!;
+
+    // Format the date from the first match
+    const matchDate = new Date(firstMatch.planned_kickoff_time);
+    const formattedDate = matchDate.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      timeZone: 'America/New_York'
+    });
+
+    return `
+    <div class="competition-card">
+      <div class="competition-header">
+        <div class="header-main">
+          <div class="competition-name">${competitionName}</div>
+          <div class="competition-date">${formattedDate}</div>
+        </div>
+        <div class="header-meta">
+          <span class="match-day">Match Day ${firstMatch.match_day}</span>
+          <span class="separator">-</span>
+          <span class="season">${firstMatch.season} Season</span>
         </div>
       </div>
+      <div class="matches-list">
+        ${competitionMatches.map(match => `
+          <div class="match">
+            <div class="matchup">
+              <strong>${match.home_team_name} vs ${match.away_team_name}</strong>
+            </div>
+            <div class="datetime">${formatTime(match.planned_kickoff_time)}</div>
+            <div class="venue">
+              <div class="stadium">${match.stadium_name}, ${match.stadium_city}, ${match.stadium_country}</div>
+              ${match.neutral_venue ? '<div class="details"><span class="neutral">Neutral Venue</span></div>' : ''}
+            </div>
+          </div>
+        `).join('')}
+      </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -147,32 +177,78 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             margin-bottom: 40px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .match {
+        .competition-card {
             background: white;
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            margin-bottom: 32px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
         }
-        .match:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        .competition-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 18px 24px 12px 24px;
         }
-        .competition {
-            font-size: 12px;
-            color: #8b5cf6;
-            font-weight: 600;
+        .header-main {
+            margin-bottom: 0;
+        }
+        .competition-name {
+            font-size: 18px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
+            line-height: 1.2;
+            color: white;
+        }
+        .competition-date {
+            font-size: 16px;
+            font-weight: 700;
+            font-style: italic;
+            color: white;
+            margin-bottom: 12px;
+        }
+        .header-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        .match-day {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e5e7eb;
+        }
+        .separator {
+            font-size: 14px;
+            color: #e5e7eb;
+            font-weight: 700;
+        }
+        .season {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e5e7eb;
+        }
+        .matches-list {
+            padding: 0;
+        }
+        .match {
+            padding: 24px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s ease;
+        }
+        .match:last-child {
+            border-bottom: none;
+        }
+        .match:hover {
+            background: #f9fafb;
         }
         .matchup {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #1f2937;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             line-height: 1.2;
         }
         .datetime {
@@ -188,8 +264,7 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             margin-right: 8px;
         }
         .venue {
-            border-top: 1px solid #e5e7eb;
-            padding-top: 16px;
+            margin-top: 8px;
         }
         .stadium {
             font-size: 16px;
@@ -207,6 +282,12 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             font-size: 13px;
             color: #6b7280;
             font-weight: 500;
+            margin-top: 4px;
+        }
+        .neutral {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 12px;
         }
         .gray {
             color: #9ca3af;
@@ -216,8 +297,45 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             color: #9ca3af;
             font-size: 18px;
             font-weight: 500;
-            margin-bottom: 30px;
+            margin-top: 30px;
             opacity: 0.9;
+        }
+        .source-code {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+        .source-code a {
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .source-code a:hover {
+            text-decoration: underline;
+        }
+        .footer-separator {
+            border: none;
+            border-top: 1px solid #4b5563;
+            margin: 15px auto;
+            width: 80%;
+            opacity: 0.5;
+        }
+        .footer {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 400;
+            margin-bottom: 0;
+            opacity: 0.8;
+        }
+        .footer a {
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
         .no-games {
             text-align: center;
@@ -235,12 +353,41 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
                 font-size: 2rem;
                 margin-bottom: 30px;
             }
+            .competition-card {
+                margin-bottom: 24px;
+            }
+            .competition-header {
+                padding: 16px 20px 10px 20px;
+            }
+            .header-main {
+                margin-bottom: 0;
+            }
+            .competition-name {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            .competition-date {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            .header-meta {
+                gap: 8px;
+                margin-bottom: 0;
+            }
+            .match-day {
+                font-size: 12px;
+            }
+            .separator {
+                font-size: 12px;
+            }
+            .season {
+                font-size: 12px;
+            }
             .match {
                 padding: 20px;
-                margin-bottom: 16px;
             }
             .matchup {
-                font-size: 20px;
+                font-size: 18px;
             }
         }
     </style>
@@ -248,8 +395,17 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
+        ${matches.length > 0 ? competitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
         <div class="last-updated">Last updated: <em>${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</em></div>
-        ${matches.length > 0 ? matchesHtml : '<div class="no-games">No games scheduled for today</div>'}
+        <div class="source-code">
+          <a href="https://github.com/jbaranski/majorleaguesoccer-today" target="_blank" rel="noopener">Source code</a> used to generate the daily fixture list is free and open source :)
+        </div>
+        <hr class="footer-separator">
+        <div class="footer">
+          Copyright 2025 Jeff Software |
+          <a href="mailto:admin@jeffsoftware.com">admin@jeffsoftware.com</a> |
+          <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">@jeffsoftware</a>
+        </div>
     </div>
 </body>
 </html>`;

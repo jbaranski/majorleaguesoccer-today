@@ -29,32 +29,78 @@
             margin-bottom: 40px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        .match {
+        .competition-card {
             background: white;
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
+            margin-bottom: 32px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
         }
-        .match:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        .competition-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 18px 24px 12px 24px;
         }
-        .competition {
-            font-size: 12px;
-            color: #8b5cf6;
-            font-weight: 600;
+        .header-main {
+            margin-bottom: 0;
+        }
+        .competition-name {
+            font-size: 18px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
+            line-height: 1.2;
+            color: white;
+        }
+        .competition-date {
+            font-size: 16px;
+            font-weight: 700;
+            font-style: italic;
+            color: white;
+            margin-bottom: 12px;
+        }
+        .header-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        .match-day {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e5e7eb;
+        }
+        .separator {
+            font-size: 14px;
+            color: #e5e7eb;
+            font-weight: 700;
+        }
+        .season {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e5e7eb;
+        }
+        .matches-list {
+            padding: 0;
+        }
+        .match {
+            padding: 24px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s ease;
+        }
+        .match:last-child {
+            border-bottom: none;
+        }
+        .match:hover {
+            background: #f9fafb;
         }
         .matchup {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             color: #1f2937;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             line-height: 1.2;
         }
         .datetime {
@@ -70,8 +116,7 @@
             margin-right: 8px;
         }
         .venue {
-            border-top: 1px solid #e5e7eb;
-            padding-top: 16px;
+            margin-top: 8px;
         }
         .stadium {
             font-size: 16px;
@@ -89,6 +134,12 @@
             font-size: 13px;
             color: #6b7280;
             font-weight: 500;
+            margin-top: 4px;
+        }
+        .neutral {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 12px;
         }
         .gray {
             color: #9ca3af;
@@ -98,8 +149,45 @@
             color: #9ca3af;
             font-size: 18px;
             font-weight: 500;
-            margin-bottom: 30px;
+            margin-top: 30px;
             opacity: 0.9;
+        }
+        .source-code {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+        .source-code a {
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .source-code a:hover {
+            text-decoration: underline;
+        }
+        .footer-separator {
+            border: none;
+            border-top: 1px solid #4b5563;
+            margin: 15px auto;
+            width: 80%;
+            opacity: 0.5;
+        }
+        .footer {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 400;
+            margin-bottom: 0;
+            opacity: 0.8;
+        }
+        .footer a {
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
         .no-games {
             text-align: center;
@@ -117,12 +205,41 @@
                 font-size: 2rem;
                 margin-bottom: 30px;
             }
+            .competition-card {
+                margin-bottom: 24px;
+            }
+            .competition-header {
+                padding: 16px 20px 10px 20px;
+            }
+            .header-main {
+                margin-bottom: 0;
+            }
+            .competition-name {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            .competition-date {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            .header-meta {
+                gap: 8px;
+                margin-bottom: 0;
+            }
+            .match-day {
+                font-size: 12px;
+            }
+            .separator {
+                font-size: 12px;
+            }
+            .season {
+                font-size: 12px;
+            }
             .match {
                 padding: 20px;
-                margin-bottom: 16px;
             }
             .matchup {
-                font-size: 20px;
+                font-size: 18px;
             }
         }
     </style>
@@ -131,7 +248,7 @@
     <div class="container">
         <h1>Major League Soccer Today</h1>
         <div class="last-updated">Last updated: <em>9/20/2025</em></div>
-        
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -143,11 +260,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -159,11 +276,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -175,11 +292,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -191,11 +308,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -207,11 +324,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -223,11 +340,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -239,11 +356,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -255,11 +372,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -271,11 +388,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -287,11 +404,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -303,11 +420,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -319,11 +436,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     <div class="match">
       <div class="competition">Major League Soccer - Regular Season</div>
       <div class="matchup">
@@ -335,11 +452,11 @@
         <div class="details">
           <span class="gray">Match Day 35</span> •
           <span class="gray">2025 Season</span>
-          
+
         </div>
       </div>
     </div>
-  
+
     </div>
 </body>
 </html>
