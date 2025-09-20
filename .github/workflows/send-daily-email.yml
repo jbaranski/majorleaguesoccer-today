@@ -51,7 +51,7 @@ jobs:
               }' > /tmp/message.json
 
             if aws sesv2 send-email \
-              --from-email-address "${{ secrets.FROM_EMAIL }}" \
+              --from-email-address "MLS Today <${{ secrets.FROM_EMAIL }}>" \
               --destination "{\"ToAddresses\":[\"$email\"]}" \
               --content file:///tmp/message.json > /dev/null 2>&1; then
               echo "Email sent successfully"
