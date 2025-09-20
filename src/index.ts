@@ -32,6 +32,25 @@ const EXCLUDED_COMPETITION_IDS = new Set([
   'MLS-COM-00002X'
 ]);
 
+const COMPETITION_PRIORITIES = new Map([
+  ['MLS-COM-000001', 1], // Major League Soccer - Regular Season
+  ['MLS-COM-000002', 2], // Major League Soccer - Cup Playoffs
+  ['MLS-COM-00002V', 3], // Canadian Championship
+  ['MLS-COM-000006', 4], // Leagues Cup
+  ['MLS-COM-00002U', 5], // U.S. Open Cup
+  ['MLS-COM-000007', 6], // Campeones Cup
+  ['MLS-COM-00002W', 7], // Copa America
+  ['MLS-COM-00002Z', 8], // CONCACAF Nations League
+  ['MLS-COM-00000K', 9], // CONCACAF Champions Cup
+  ['MLS-COM-00002Y', 10], // FIFA Club World Cup
+  ['MLS-COM-000005', 11], // MLS All-Star Game
+  ['MLS-COM-00002S', 12], // Club Friendly Matches
+]);
+
+const getCompetitionPriority = (competitionId: string): number => {
+  return COMPETITION_PRIORITIES.get(competitionId) ?? Number.MAX_SAFE_INTEGER;
+};
+
 
 const getUrl = (): string => {
   const today = new Date();
@@ -229,7 +248,7 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
-        <div class="last-updated">Last updated: <em>${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }).replace(',', '')} ET</em></div>
+        <div class="last-updated">Last updated: <em>${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</em></div>
         ${matches.length > 0 ? matchesHtml : '<div class="no-games">No games scheduled for today</div>'}
     </div>
 </body>
@@ -255,12 +274,20 @@ const main = async (): Promise<void> => {
     });
 
     const sortedData = filteredData.sort((a, b) => {
+      const priorityA = getCompetitionPriority(a.competition_id);
+      const priorityB = getCompetitionPriority(b.competition_id);
+
+      const priorityComparison = priorityA - priorityB;
+      if (priorityComparison !== 0) {
+        return priorityComparison;
+      }
+
       const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
       if (timeComparison !== 0) {
          return timeComparison;
-      } else {
-        return a.home_team_name.localeCompare(b.home_team_name);
       }
+
+      return a.home_team_name.localeCompare(b.home_team_name);
     });
 
     const html = generateHTML(sortedData);
