@@ -3,7 +3,7 @@ name: send_daily_email
 on:
   schedule:
     # Runs at 5:30 AM EDT (9:30 UTC) every day
-    - cron: "30 9 * * *"
+    # - cron: "30 9 * * *"
   workflow_dispatch: # Allow manual triggering
 
 jobs:
