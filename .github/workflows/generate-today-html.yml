@@ -1,11 +1,11 @@
 name: generate_today_html
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #schedule:
-  #  - cron: "0 9,21 * * *"
+  push:
+    branches:
+     - main
+  schedule:
+    - cron: "0 9,21 * * *"
   workflow_dispatch: # Allow manual triggering
 
 jobs:
