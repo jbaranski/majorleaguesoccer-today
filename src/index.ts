@@ -410,7 +410,7 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         </div>
         <hr class="footer-separator">
         <div class="footer">
-          Copyright 2025 Jeff Software |
+          Copyright 2025,2026 Jeff Software |
           <a href="mailto:admin@jeffsoftware.com">admin@jeffsoftware.com</a> |
           <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">@jeffsoftware</a>
         </div>
