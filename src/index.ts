@@ -169,81 +169,83 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #ffffff;
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
+            color: #1f2937;
         }
         .container {
-            max-width: 900px;
+            max-width: 672px;
             margin: 0 auto;
         }
         h1 {
-            color: white;
+            color: #1f2937;
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 1.875rem;
             font-weight: 700;
-            margin-bottom: 40px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+        .top-separator {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 24px 0;
         }
         .competition-card {
-            background: white;
-            border-radius: 16px;
-            margin-bottom: 32px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 2px solid #e5e7eb;
+            margin-bottom: 16px;
             overflow: hidden;
         }
         .competition-header {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            padding: 18px 24px 12px 24px;
+            background: #f3e8ff;
+            padding: 12px 16px 8px 16px;
+            border-bottom: 2px solid #e5e7eb;
         }
         .header-main {
             margin-bottom: 0;
         }
         .competition-name {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 4px;
             line-height: 1.2;
-            color: white;
+            color: #1f2937;
         }
         .competition-date {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: 400;
             font-style: italic;
-            color: white;
-            margin-bottom: 12px;
+            color: #4b5563;
+            margin-bottom: 4px;
         }
         .header-meta {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
             margin-bottom: 0;
         }
         .match-day {
-            font-size: 14px;
-            font-weight: 700;
-            color: #e5e7eb;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
         }
         .separator {
-            font-size: 14px;
-            color: #e5e7eb;
-            font-weight: 700;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
         }
         .season {
-            font-size: 14px;
-            font-weight: 700;
-            color: #e5e7eb;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
         }
         .matches-list {
             padding: 0;
         }
         .match {
-            padding: 24px;
-            border-bottom: 1px solid #f3f4f6;
+            padding: 12px 16px;
+            border-bottom: 2px solid #e5e7eb;
             transition: background-color 0.2s ease;
         }
         .match:last-child {
@@ -253,47 +255,35 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             background: #f9fafb;
         }
         .matchup {
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 700;
             color: #1f2937;
-            margin-bottom: 12px;
-            line-height: 1.2;
+            margin-bottom: 4px;
+            line-height: 1.4;
         }
         .datetime {
-            font-size: 16px;
-            font-weight: 600;
-            color: #dc2626;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-        }
-        .datetime::before {
-            content: "🕐";
-            margin-right: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 4px;
         }
         .venue {
-            margin-top: 8px;
+            margin-top: 2px;
         }
         .stadium {
-            font-size: 16px;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-        .stadium::before {
-            content: "🏟️";
-            margin-right: 8px;
+            font-size: 13px;
+            font-weight: 400;
+            color: #6b7280;
+            margin-bottom: 4px;
         }
         .details {
-            font-size: 13px;
+            font-size: 12px;
             color: #6b7280;
             font-weight: 500;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .neutral {
-            color: #f59e0b;
+            color: #d97706;
             font-weight: 600;
             font-size: 12px;
         }
@@ -302,100 +292,66 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         }
         .last-updated {
             text-align: center;
-            color: #9ca3af;
-            font-size: 18px;
-            font-weight: 500;
-            margin-top: 30px;
-            opacity: 0.9;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 16px;
+            margin-bottom: 8px;
         }
         .source-code {
             text-align: center;
-            color: #9ca3af;
+            color: #6b7280;
             font-size: 14px;
             font-weight: 400;
-            margin-top: 20px;
-            opacity: 0.9;
+            margin-top: 16px;
         }
         .source-code a {
+            color: #3b82f6;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 400;
         }
         .source-code a:hover {
             text-decoration: underline;
         }
         .footer-separator {
             border: none;
-            border-top: 1px solid #4b5563;
-            margin: 15px auto;
-            width: 80%;
-            opacity: 0.5;
+            border-top: 1px solid #e5e7eb;
+            margin: 16px 0;
         }
         .footer {
             text-align: center;
-            color: #9ca3af;
+            color: #6b7280;
             font-size: 12px;
-            font-weight: 400;
+            font-weight: 300;
             margin-bottom: 0;
-            opacity: 0.8;
         }
         .footer a {
+            color: #3b82f6;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 400;
         }
         .footer a:hover {
             text-decoration: underline;
         }
         .no-games {
             text-align: center;
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            margin-top: 20px;
-            opacity: 0.9;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 16px;
         }
         @media (max-width: 640px) {
             .container {
-                padding: 0 10px;
+                padding: 0 8px;
             }
             h1 {
-                font-size: 2rem;
-                margin-bottom: 30px;
-            }
-            .competition-card {
-                margin-bottom: 24px;
+                font-size: 1.5rem;
             }
             .competition-header {
-                padding: 16px 20px 10px 20px;
-            }
-            .header-main {
-                margin-bottom: 0;
-            }
-            .competition-name {
-                font-size: 16px;
-                margin-bottom: 10px;
-            }
-            .competition-date {
-                font-size: 14px;
-                margin-bottom: 10px;
-            }
-            .header-meta {
-                gap: 8px;
-                margin-bottom: 0;
-            }
-            .match-day {
-                font-size: 12px;
-            }
-            .separator {
-                font-size: 12px;
-            }
-            .season {
-                font-size: 12px;
+                padding: 10px 12px 6px 12px;
             }
             .match {
-                padding: 20px;
-            }
-            .matchup {
-                font-size: 18px;
+                padding: 10px 12px;
             }
         }
     </style>
@@ -403,8 +359,9 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
+        <hr class="top-separator">
+        <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
         ${matches.length > 0 ? competitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
-        <div class="last-updated">Last updated: <em>${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</em></div>
         <div class="source-code">
           <a href="https://github.com/jbaranski/majorleaguesoccer-today" target="_blank" rel="noopener">Source code</a> used to generate the daily fixture list is free and open source :)
         </div>
