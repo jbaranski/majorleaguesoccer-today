@@ -22,7 +22,7 @@ interface MLSMatchResponse {
 }
 
 // TODO: Input via Actions
-const SEASON = 'MLS-SEA-0001K9';
+const SEASON = 'MLS-SEA-0001KA';
 
 // TODO: Input via Actions
 const EXCLUDED_COMPETITION_IDS = new Set([
