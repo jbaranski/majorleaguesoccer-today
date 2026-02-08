@@ -35,10 +35,24 @@ export class GitHubOidcStack extends cdk.Stack {
       ]
     });
 
+    // Create DynamoDB permissions policy
+    const dynamoPolicy = new iam.PolicyDocument({
+      statements: [
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: ['dynamodb:Query'],
+          resources: [
+            `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector`,
+            `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector/index/SiteIndex`
+          ]
+        })
+      ]
+    });
+
     // Create IAM role for GitHub Actions
     this.role = new iam.Role(this, 'GitHubActionsRole', {
       roleName: `GitHubActions-${props.githubRepo}-Role`,
-      description: `Allows GitHub Actions in ${props.githubOwner}/${props.githubRepo} to send emails via AWS SES`,
+      description: `Allows GitHub Actions in ${props.githubOwner}/${props.githubRepo} to send emails via AWS SES and query DynamoDB`,
       assumedBy: new iam.WebIdentityPrincipal(this.oidcProvider.openIdConnectProviderArn, {
         StringEquals: {
           'token.actions.githubusercontent.com:sub': `repo:${props.githubOwner}/${props.githubRepo}:ref:refs/heads/${props.githubBranch}`,
@@ -46,7 +60,8 @@ export class GitHubOidcStack extends cdk.Stack {
         }
       }),
       inlinePolicies: {
-        SESEmailPolicy: sesPolicy
+        SESEmailPolicy: sesPolicy,
+        DynamoDBQueryPolicy: dynamoPolicy
       },
       maxSessionDuration: cdk.Duration.hours(1)
     });
