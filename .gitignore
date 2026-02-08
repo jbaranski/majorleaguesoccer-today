@@ -10,10 +10,6 @@ Thumbs.db
 *.log
 *.bak
 
-# Angular environment files (use .example files as templates)
-client/src/environments/environment.ts
-client/src/environments/environment.prod.ts
-
 *.js
 !jest.config.js
 *.d.ts
