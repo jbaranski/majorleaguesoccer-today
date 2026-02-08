@@ -1,0 +1,21 @@
+{
+  "name": "@jeffs/email-collector",
+  "version": "1.0.0",
+  "description": "Reusable Angular email collector component for serverless email collection",
+  "repository": {
+    "type": "git",
+    "url": "file:../../../"
+  },
+  "keywords": ["angular", "email", "collector", "form", "component"],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

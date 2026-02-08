@@ -21,6 +21,11 @@ interface MLSMatchResponse {
   readonly schedule: readonly MLSMatch[];
 }
 
+interface MatchesOutput {
+  readonly lastUpdated: string;
+  readonly matches: readonly MLSMatch[];
+}
+
 // TODO: Input via Actions
 const SEASON = 'MLS-SEA-0001KA';
 
@@ -85,6 +90,15 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
 };
 
 const generateHTML = (matches: readonly MLSMatch[]): string => {
+  const escapeHtml = (str: string | number): string => {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
   const formatTime = (isoString: string): string => {
     const date = new Date(isoString);
     return date.toLocaleString('en-US', {
@@ -119,24 +133,24 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
     <div class="competition-card">
       <div class="competition-header">
         <div class="header-main">
-          <div class="competition-name">${competitionName}</div>
-          <div class="competition-date">${formattedDate}</div>
+          <div class="competition-name">${escapeHtml(competitionName)}</div>
+          <div class="competition-date">${escapeHtml(formattedDate)}</div>
         </div>
         <div class="header-meta">
-          <span class="match-day">Match Day ${firstMatch.match_day}</span>
+          <span class="match-day">Match Day ${escapeHtml(firstMatch.match_day)}</span>
           <span class="separator">-</span>
-          <span class="season">${firstMatch.season} Season</span>
+          <span class="season">${escapeHtml(firstMatch.season)} Season</span>
         </div>
       </div>
       <div class="matches-list">
         ${competitionMatches.map(match => `
           <div class="match">
             <div class="matchup">
-              <strong>${match.home_team_name} vs ${match.away_team_name}</strong>
+              <strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>
             </div>
-            <div class="datetime">${formatTime(match.planned_kickoff_time)}</div>
+            <div class="datetime">${escapeHtml(formatTime(match.planned_kickoff_time))}</div>
             <div class="venue">
-              <div class="stadium">${match.stadium_name}, ${match.stadium_city}, ${match.stadium_country}</div>
+              <div class="stadium">${escapeHtml(match.stadium_name)}, ${escapeHtml(match.stadium_city)}, ${escapeHtml(match.stadium_country)}</div>
               ${match.neutral_venue ? '<div class="details"><span class="neutral">Neutral Venue</span></div>' : ''}
             </div>
           </div>
@@ -154,7 +168,7 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
+
       gtag('config', 'G-XG4BHHWJXS');
     </script>
     <meta charset="UTF-8">
@@ -376,6 +390,15 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 </html>`;
 };
 
+const generateJSON = (matches: readonly MLSMatch[]): string => {
+  const output: MatchesOutput = {
+    lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
+    matches
+  };
+
+  return JSON.stringify(output);
+};
+
 const main = async (): Promise<void> => {
   try {
     const url = getUrl();
@@ -412,7 +435,12 @@ const main = async (): Promise<void> => {
     });
 
     const html = generateHTML(sortedData);
+    const json = generateJSON(sortedData);
+
     await writeFile(join(process.cwd(), 'index.html'), html, 'utf-8');
+    await writeFile(join(process.cwd(), 'client', 'public', 'matches.json'), json, 'utf-8');
+
+    console.log('Generated index.html and client/public/matches.json successfully');
   } catch (error) {
     console.error('Error generating data:', error instanceof Error ? error.message : String(error));
     process.exit(1);

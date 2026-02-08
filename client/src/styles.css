@@ -1,0 +1,234 @@
+/* Exact CSS from the original static HTML */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 16px;
+  color: #1f2937;
+}
+
+.container {
+  max-width: 672px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: #1f2937;
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.top-separator {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 24px 0;
+}
+
+.competition-card {
+  border: 2px solid #e5e7eb;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.competition-header {
+  background: #f3e8ff;
+  padding: 12px 16px 8px 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.header-main {
+  margin-bottom: 0;
+}
+
+.competition-name {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  line-height: 1.2;
+  color: #1f2937;
+}
+
+.competition-date {
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.header-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.match-day {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.separator {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.season {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.matches-list {
+  padding: 0;
+}
+
+.match {
+  padding: 12px 16px;
+  border-bottom: 2px solid #e5e7eb;
+  transition: background-color 0.2s ease;
+}
+
+.match:last-child {
+  border-bottom: none;
+}
+
+.match:hover {
+  background: #f9fafb;
+}
+
+.matchup {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.datetime {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.venue {
+  margin-top: 2px;
+}
+
+.stadium {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.details {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.neutral {
+  color: #d97706;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.last-updated {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.source-code {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 16px;
+}
+
+.source-code a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.source-code a:hover {
+  text-decoration: underline;
+}
+
+.footer-separator {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 16px 0;
+}
+
+.footer {
+  text-align: center;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+.footer a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.no-games {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 16px;
+}
+
+/* Email collector centering */
+ec-email-collector {
+  display: flex;
+  justify-content: center;
+}
+
+ec-email-collector .ec-container {
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 8px;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+  .competition-header {
+    padding: 10px 12px 6px 12px;
+  }
+  .match {
+    padding: 10px 12px;
+  }
+}
