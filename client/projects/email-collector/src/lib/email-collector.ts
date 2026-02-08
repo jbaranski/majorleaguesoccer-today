@@ -29,7 +29,7 @@ export class EmailCollector {
     this.messageType.set('');
 
     try {
-      const response = await fetch(`${this.config().apiUrl}/collect`, {
+      const response = await fetch(`${this.config().apiUrl}/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
