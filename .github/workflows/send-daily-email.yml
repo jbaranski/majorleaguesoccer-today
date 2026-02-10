@@ -16,7 +16,20 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
+      - name: Check for fixtures
+        id: check-fixtures
+        run: |
+          MATCH_COUNT=$(jq '.matches | length' client/public/matches.json)
+          echo "Found $MATCH_COUNT fixtures for today"
+          if [ "$MATCH_COUNT" -eq 0 ]; then
+            echo "No fixtures today, skipping email send"
+            echo "has_fixtures=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_fixtures=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure AWS credentials
+        if: steps.check-fixtures.outputs.has_fixtures == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
@@ -25,6 +38,7 @@ jobs:
           retry-max-attempts: 1
 
       - name: Send daily email to subscribers
+        if: steps.check-fixtures.outputs.has_fixtures == 'true'
         run: |
           set -euo pipefail
 
