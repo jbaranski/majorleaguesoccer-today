@@ -377,6 +377,9 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
         ${matches.length > 0 ? competitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
         <div class="source-code">
+          View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
+        </div>
+        <div class="source-code">
           <a href="https://github.com/jbaranski/majorleaguesoccer-today" target="_blank" rel="noopener">Source code</a> used to generate the daily fixture list is free and open source :)
         </div>
         <hr class="footer-separator">
