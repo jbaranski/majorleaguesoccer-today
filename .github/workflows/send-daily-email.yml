@@ -53,19 +53,31 @@ jobs:
               ":active": {"BOOL": true}
             }')
 
-          # Extract email addresses from query result
+          # Extract subscribers from query result
           SUBSCRIBER_COUNT=$(echo "$QUERY_RESULT" | jq '.Items | length')
           echo "Found $SUBSCRIBER_COUNT active subscribers"
 
           # Email content
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
+          BASE_HTML=$(cat index.html)
 
           # Send individual emails to each subscriber
-          echo "$QUERY_RESULT" | jq -r '.Items[].email.S' | while read -r email; do
+          echo "$QUERY_RESULT" | jq -c '.Items[]' | while read -r item; do
+            email=$(echo "$item" | jq -r '.email.S')
+            unsub_id=$(echo "$item" | jq -r '.unsubscribe.S // empty')
             echo "Sending to subscriber (email hidden for privacy)"
 
+            # Inject unsubscribe link before closing </body> tag
+            if [ -n "$unsub_id" ]; then
+              UNSUB_LINK="${{ secrets.UNSUBSCRIBE_URL }}?id=${unsub_id}"
+              UNSUB_HTML="<div style=\"text-align:center;margin:16px 0;font-size:12px;color:#6b7280;\"><a href=\"${UNSUB_LINK}\" style=\"color:#3b82f6;\">Unsubscribe</a></div>"
+              EMAIL_HTML="${BASE_HTML//<\/body>/${UNSUB_HTML}<\/body>}"
+            else
+              EMAIL_HTML="$BASE_HTML"
+            fi
+
             # Create message content using jq to handle HTML properly
-            HTML_CONTENT="$(cat index.html | jq -Rs .)"
+            HTML_CONTENT="$(echo "$EMAIL_HTML" | jq -Rs .)"
             jq -n \
               --arg subject "$SUBJECT" \
               --argjson html "$HTML_CONTENT" \

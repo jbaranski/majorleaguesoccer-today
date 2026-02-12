@@ -1,6 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as path from 'path';
 
 export interface GitHubOidcStackProps extends cdk.StackProps {
   githubOwner: string;
@@ -84,6 +86,34 @@ export class GitHubOidcStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'GitHubRepository', {
       value: `${props.githubOwner}/${props.githubRepo}`,
       description: 'GitHub repository configured for OIDC access'
+    });
+
+    // Unsubscribe Lambda function
+    const unsubscribeFn = new lambda.Function(this, 'UnsubscribeFunction', {
+      functionName: 'mls-today-unsubscribe',
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '..', 'lambda', 'unsubscribe')),
+      timeout: cdk.Duration.seconds(10),
+      memorySize: 128,
+    });
+
+    // Grant DynamoDB scan + update permissions
+    unsubscribeFn.addToRolePolicy(new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['dynamodb:Scan', 'dynamodb:UpdateItem'],
+      resources: [`arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector`],
+    }));
+
+    // Public Function URL (GET from email links, no auth)
+    const fnUrl = unsubscribeFn.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.NONE,
+    });
+
+    new cdk.CfnOutput(this, 'UnsubscribeFunctionUrl', {
+      value: fnUrl.url,
+      description: 'Unsubscribe Lambda Function URL',
+      exportName: `${this.stackName}-UnsubscribeFunctionUrl`,
     });
   }
 }
