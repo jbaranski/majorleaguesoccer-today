@@ -382,6 +382,9 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         <div class="source-code">
           <a href="https://github.com/jbaranski/majorleaguesoccer-today" target="_blank" rel="noopener">Source code</a> used to generate the daily fixture list is free and open source :)
         </div>
+        <div style="text-align:center;margin:16px 0;font-size:12px;color:#6b7280;">
+          <a href="{{UNSUBSCRIBE_URL}}" style="color:#3b82f6;">Unsubscribe</a>
+        </div>
         <hr class="footer-separator">
         <div class="footer">
           Copyright 2025,2026 Jeff Software |

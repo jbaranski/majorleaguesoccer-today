@@ -67,10 +67,8 @@ jobs:
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
             echo "Sending to subscriber (email hidden for privacy)"
 
-            # Inject unsubscribe link before closing </body> tag
-            UNSUB_LINK="${{ secrets.UNSUBSCRIBE_URL }}?id=${unsub_id}"
-            UNSUB_HTML="<div style=\"text-align:center;margin:16px 0;font-size:12px;color:#6b7280;\"><a href=\"${UNSUB_LINK}\" style=\"color:#3b82f6;\">Unsubscribe</a></div>"
-            EMAIL_HTML="${BASE_HTML//<\/body>/${UNSUB_HTML}<\/body>}"
+            # Replace unsubscribe placeholder with subscriber-specific link
+            EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${{ secrets.UNSUBSCRIBE_URL }}?id=${unsub_id}}"
 
             # Create message content using jq to handle HTML properly
             HTML_CONTENT="$(echo "$EMAIL_HTML" | jq -Rs .)"
