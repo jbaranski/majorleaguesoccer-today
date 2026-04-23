@@ -1,0 +1,23 @@
+<div class="ec-container">
+  <form (ngSubmit)="onSubmit()">
+    <div class="ec-form-group">
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="you@example.com"
+        required
+        [disabled]="isSubmitting()"
+      />
+    </div>
+
+    <button type="submit" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Subscribing...' : 'Subscribe' }}
+    </button>
+  </form>
+
+  @if (messageType()) {
+    <div class="ec-message ec-message-{{ messageType() }}">{{ message() }}</div>
+  }
+</div>
