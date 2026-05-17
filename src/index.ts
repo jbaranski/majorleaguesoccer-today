@@ -14,6 +14,11 @@ interface MLSMatch {
   readonly match_day: number;
   readonly season: number;
   readonly neutral_venue: boolean;
+  readonly match_id: string;
+  readonly match_status: string;
+  readonly home_team_goals: number;
+  readonly away_team_goals: number;
+  readonly result: string;
   [key: string]: unknown;
 }
 
@@ -21,9 +26,54 @@ interface MLSMatchResponse {
   readonly schedule: readonly MLSMatch[];
 }
 
+interface GoalEvent {
+  readonly minute: number;
+  readonly player_name: string;
+  readonly team_id: string;
+  readonly team_name: string;
+  readonly is_own_goal: boolean;
+  readonly is_penalty: boolean;
+  readonly video_url?: string;
+  [key: string]: unknown;
+}
+
+// The MLS stats API match events response format
+interface MLSMatchEventsResponse {
+  readonly data?: readonly GoalEvent[];
+  readonly events?: readonly GoalEvent[];
+  readonly goals?: readonly GoalEvent[];
+  [key: string]: unknown;
+}
+
+// MLS content API video item
+interface MLSVideoItem {
+  readonly title?: string;
+  readonly slug?: string;
+  readonly contentUrl?: string;
+  readonly url?: string;
+  readonly tags?: readonly { slug?: string; name?: string }[];
+  readonly contentDate?: string;
+  readonly date?: string;
+  [key: string]: unknown;
+}
+
+interface MLSVideoResponse {
+  readonly data?: readonly MLSVideoItem[];
+  readonly content?: readonly MLSVideoItem[];
+  readonly hits?: readonly MLSVideoItem[];
+  readonly results?: readonly MLSVideoItem[];
+  [key: string]: unknown;
+}
+
+interface PreviousResult {
+  readonly match: MLSMatch;
+  readonly goals: readonly GoalEvent[];
+}
+
 interface MatchesOutput {
   readonly lastUpdated: string;
   readonly matches: readonly MLSMatch[];
+  readonly previousResults: readonly PreviousResult[];
 }
 
 // TODO: Input via Actions
@@ -50,6 +100,15 @@ const COMPETITION_PRIORITIES = new Map([
   ['MLS-COM-00002Z', 10], // CONCACAF Nations League
   ['MLS-COM-00000K', 11], // CONCACAF Champions Cup
   ['MLS-COM-00002S', 12], // Club Friendly Matches
+]);
+
+const COMPLETED_STATUSES = new Set([
+  'full-time',
+  'final',
+  'completed',
+  'fulltime',
+  'ft',
+  'post-match',
 ]);
 
 const getCompetitionPriority = (competitionId: string): number => {
@@ -89,7 +148,134 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
   return await response.json() as MLSMatchResponse;
 };
 
-const generateHTML = (matches: readonly MLSMatch[]): string => {
+// Fetch goal videos from MLS Soccer content API (goals topic, topic ID 2)
+const getGoalVideos = async (): Promise<MLSVideoItem[]> => {
+  // MLS Soccer's content API serves the goals video topic page at /video/topics/goals/2
+  const url = 'https://www.mlssoccer.com/api/content/v3/search?types=video&topicIds=2&count=50&page=1&order=desc';
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'JEFF-Bot'
+      }
+    });
+
+    if (!response.ok) {
+      console.warn(`Goal videos API returned ${response.status}, skipping video links`);
+      return [];
+    }
+
+    const data = await response.json() as MLSVideoResponse;
+
+    // Handle various possible response envelope formats
+    const items = data.data ?? data.content ?? data.hits ?? data.results;
+    if (Array.isArray(items)) {
+      return items as MLSVideoItem[];
+    }
+    return [];
+  } catch (err) {
+    console.warn('Failed to fetch goal videos:', err instanceof Error ? err.message : String(err));
+    return [];
+  }
+};
+
+// Try to fetch individual goal events for a completed match from the stats API
+const getMatchGoalEvents = async (matchId: string): Promise<GoalEvent[]> => {
+  const url = `https://stats-api.mlssoccer.com/matches/${matchId}/events`;
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'JEFF-Bot'
+      }
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = await response.json() as MLSMatchEventsResponse;
+
+    // Extract goal events from whatever field they come in
+    const events = data.data ?? data.events ?? data.goals ?? [];
+    if (!Array.isArray(events)) return [];
+
+    return (events as GoalEvent[]).filter(e => {
+      const type = String(e['type'] ?? e['event_type'] ?? '').toLowerCase();
+      return type === 'goal' || type === 'own_goal' || type === 'penalty_goal';
+    });
+  } catch {
+    return [];
+  }
+};
+
+// Resolve a video URL for a given video item
+const resolveVideoUrl = (video: MLSVideoItem): string | undefined => {
+  const path = video.slug ?? video.contentUrl ?? video.url ?? '';
+  if (!path) return undefined;
+  if (path.startsWith('http')) return path;
+  return `https://www.mlssoccer.com${path.startsWith('/') ? '' : '/'}${path}`;
+};
+
+// Match goal videos to a specific match by looking for both team names in video titles/tags
+const findVideosForMatch = (
+  videos: MLSVideoItem[],
+  homeTeamName: string,
+  awayTeamName: string
+): MLSVideoItem[] => {
+  const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+
+  // Build keyword sets from team names (last word often most distinctive)
+  const homeWords = homeTeamName.split(' ').map(normalize).filter(w => w.length > 2);
+  const awayWords = awayTeamName.split(' ').map(normalize).filter(w => w.length > 2);
+
+  return videos.filter(video => {
+    const title = normalize(video.title ?? '');
+    const tagSlugs = (video.tags ?? []).map(t => normalize(t.slug ?? t.name ?? ''));
+    const searchable = [title, ...tagSlugs].join(' ');
+
+    const matchesHome = homeWords.some(w => searchable.includes(w));
+    const matchesAway = awayWords.some(w => searchable.includes(w));
+    return matchesHome || matchesAway;
+  });
+};
+
+// Combine goal event data with matching videos
+const buildGoalEventsWithVideos = (
+  goalEvents: GoalEvent[],
+  matchVideos: MLSVideoItem[]
+): GoalEvent[] => {
+  if (goalEvents.length === 0) {
+    // No event data: surface one video per match as a general highlights link
+    return matchVideos.slice(0, 1).map(video => {
+      const videoUrl = resolveVideoUrl(video);
+      return {
+        minute: 0,
+        player_name: '',
+        team_id: '',
+        team_name: '',
+        is_own_goal: false as const,
+        is_penalty: false as const,
+        ...(videoUrl !== undefined ? { video_url: videoUrl } : {}),
+      };
+    });
+  }
+
+  // Pair each goal event with the corresponding video (by order)
+  return goalEvents.map((event, idx) => {
+    const fallback = matchVideos.length > 0 ? matchVideos[Math.min(idx, matchVideos.length - 1)] : undefined;
+    const videoUrl = fallback !== undefined ? resolveVideoUrl(fallback) : undefined;
+    return {
+      ...event,
+      ...(videoUrl !== undefined ? { video_url: videoUrl } : {}),
+    };
+  });
+};
+
+const generateHTML = (
+  todayMatches: readonly MLSMatch[],
+  previousResults: readonly PreviousResult[]
+): string => {
   const escapeHtml = (str: string | number): string => {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -108,19 +294,15 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
     }) + ' ET';
   };
 
-  // Group matches by competition
+  // Group today's matches by competition
   const matchesByCompetition = new Map(
-    Object.entries(Object.groupBy(matches, match => match.competition_name))
+    Object.entries(Object.groupBy(todayMatches, match => match.competition_name))
   );
 
-  // Generate HTML for each competition group
-  const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
+  const todayCompetitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
     if (!competitionMatches || competitionMatches.length === 0) return '';
 
-    // Get match day and season from first match (should be same for all in competition)
     const firstMatch = competitionMatches[0]!;
-
-    // Format the date from the first match
     const matchDate = new Date(firstMatch.planned_kickoff_time);
     const formattedDate = matchDate.toLocaleDateString('en-US', {
       month: '2-digit',
@@ -159,6 +341,68 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
     </div>
   `;
   }).join('');
+
+  // Group previous results by competition
+  const resultsByCompetition = new Map<string, PreviousResult[]>();
+  for (const result of previousResults) {
+    const key = result.match.competition_name;
+    if (!resultsByCompetition.has(key)) resultsByCompetition.set(key, []);
+    resultsByCompetition.get(key)!.push(result);
+  }
+
+  const previousResultsHtml = previousResults.length === 0 ? '' : `
+    <h2 class="section-title">Yesterday&#39;s Results</h2>
+    ${Array.from(resultsByCompetition.entries()).map(([competitionName, results]) => {
+      const firstMatch = results[0]!.match;
+      const matchDate = new Date(firstMatch.planned_kickoff_time);
+      const formattedDate = matchDate.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        timeZone: 'America/New_York'
+      });
+
+      return `
+    <div class="competition-card results-card">
+      <div class="competition-header results-header">
+        <div class="header-main">
+          <div class="competition-name">${escapeHtml(competitionName)}</div>
+          <div class="competition-date">${escapeHtml(formattedDate)}</div>
+        </div>
+        <div class="header-meta">
+          <span class="match-day">Match Day ${escapeHtml(firstMatch.match_day)}</span>
+          <span class="separator">-</span>
+          <span class="season">${escapeHtml(firstMatch.season)} Season</span>
+        </div>
+      </div>
+      <div class="matches-list">
+        ${results.map(({ match, goals }) => {
+          const goalLinksHtml = goals.length === 0 ? '' : `
+            <div class="goal-links">
+              ${goals.map(g => {
+                const label = g.player_name
+                  ? `\u26BD ${escapeHtml(g.player_name)}${g.minute > 0 ? ` ${escapeHtml(g.minute)}'` : ''}${g.is_own_goal ? ' (OG)' : ''}${g.is_penalty ? ' (P)' : ''}`
+                  : `\u26BD Goals`;
+                return g.video_url
+                  ? `<a href="${escapeHtml(g.video_url)}" class="goal-link" target="_blank" rel="noopener">${label}</a>`
+                  : `<span class="goal-item">${label}</span>`;
+              }).join('')}
+            </div>`;
+
+          return `
+          <div class="match">
+            <div class="matchup result-matchup">
+              <strong>${escapeHtml(match.home_team_name)}</strong>
+              <span class="score">${escapeHtml(match.home_team_goals)} \u2013 ${escapeHtml(match.away_team_goals)}</span>
+              <strong>${escapeHtml(match.away_team_name)}</strong>
+            </div>
+            ${goalLinksHtml}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+    }).join('')}
+  `;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -199,10 +443,24 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             font-weight: 700;
             margin-bottom: 8px;
         }
+        .section-title {
+            color: #1f2937;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            margin-top: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e5e7eb;
+        }
         .top-separator {
             border: none;
             border-top: 1px solid #e5e7eb;
             margin: 24px 0;
+        }
+        .section-separator {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 24px 0 16px 0;
         }
         .competition-card {
             border: 2px solid #e5e7eb;
@@ -213,6 +471,12 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             background: #f3e8ff;
             padding: 12px 16px 8px 16px;
             border-bottom: 2px solid #e5e7eb;
+        }
+        .results-card {
+            border-color: #d1d5db;
+        }
+        .results-header {
+            background: #f1f5f9;
         }
         .header-main {
             margin-bottom: 0;
@@ -274,6 +538,40 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             color: #1f2937;
             margin-bottom: 4px;
             line-height: 1.4;
+        }
+        .result-matchup {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .score {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .goal-links {
+            margin-top: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .goal-link {
+            font-size: 11px;
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 400;
+        }
+        .goal-link:hover {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .goal-item {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 400;
         }
         .datetime {
             font-size: 13px;
@@ -375,7 +673,8 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         <h1>Major League Soccer Today</h1>
         <hr class="top-separator">
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
-        ${matches.length > 0 ? competitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
+        ${todayMatches.length > 0 ? todayCompetitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
+        ${previousResults.length > 0 ? `<hr class="section-separator">${previousResultsHtml}` : ''}
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
         </div>
@@ -394,10 +693,14 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
 </html>`;
 };
 
-const generateJSON = (matches: readonly MLSMatch[]): string => {
+const generateJSON = (
+  matches: readonly MLSMatch[],
+  previousResults: readonly PreviousResult[]
+): string => {
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
-    matches
+    matches,
+    previousResults
   };
 
   return JSON.stringify(output);
@@ -408,38 +711,61 @@ const main = async (): Promise<void> => {
     const url = getUrl();
     const data = await getData(url);
 
-    // Filter to today's 24-hour period and exclude unwanted competitions
-    // (must go a little wider fetching data or we can miss games depending on time of day run)
     const now = new Date();
     const startOfToday = new Date(now.toDateString());
     const endOfToday = new Date(startOfToday.getTime() + (24 * 60 * 60 * 1000) - 1);
+    const startOfYesterday = new Date(startOfToday.getTime() - (24 * 60 * 60 * 1000));
 
-    const filteredData = data.schedule.filter(match => {
+    // Split fetched matches into today's scheduled and yesterday's completed
+    const todayMatches = data.schedule.filter(match => {
       const matchTime = new Date(match.planned_kickoff_time);
       const isToday = matchTime >= startOfToday && matchTime <= endOfToday;
       const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
       return isToday && isAllowedCompetition;
     });
 
-    const sortedData = filteredData.sort((a, b) => {
-      const priorityA = getCompetitionPriority(a.competition_id);
-      const priorityB = getCompetitionPriority(b.competition_id);
-
-      const priorityComparison = priorityA - priorityB;
-      if (priorityComparison !== 0) {
-        return priorityComparison;
-      }
-
-      const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
-      if (timeComparison !== 0) {
-         return timeComparison;
-      }
-
-      return a.home_team_name.localeCompare(b.home_team_name);
+    const yesterdayCompleted = data.schedule.filter(match => {
+      const matchTime = new Date(match.planned_kickoff_time);
+      const isYesterday = matchTime >= startOfYesterday && matchTime < startOfToday;
+      const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
+      const isCompleted = COMPLETED_STATUSES.has(match.match_status?.toLowerCase() ?? '');
+      return isYesterday && isAllowedCompetition && isCompleted;
     });
 
-    const html = generateHTML(sortedData);
-    const json = generateJSON(sortedData);
+    const sortMatches = (matches: MLSMatch[]): MLSMatch[] =>
+      matches.sort((a, b) => {
+        const priorityComparison = getCompetitionPriority(a.competition_id) - getCompetitionPriority(b.competition_id);
+        if (priorityComparison !== 0) return priorityComparison;
+
+        const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
+        if (timeComparison !== 0) return timeComparison;
+
+        return a.home_team_name.localeCompare(b.home_team_name);
+      });
+
+    const sortedTodayMatches = sortMatches([...todayMatches]);
+    const sortedYesterdayCompleted = sortMatches([...yesterdayCompleted]);
+
+    // Fetch goal videos (non-blocking, graceful fallback)
+    const goalVideos = await getGoalVideos();
+
+    // Build previous results with goal event data and matched video URLs
+    const previousResults: PreviousResult[] = await Promise.all(
+      sortedYesterdayCompleted.map(async (match) => {
+        const matchVideos = findVideosForMatch(goalVideos, match.home_team_name, match.away_team_name);
+
+        // Try to fetch individual goal events from the stats API
+        let goalEvents = await getMatchGoalEvents(match.match_id);
+
+        // Combine goal events with video links
+        const goals = buildGoalEventsWithVideos(goalEvents, matchVideos);
+
+        return { match, goals };
+      })
+    );
+
+    const html = generateHTML(sortedTodayMatches, previousResults);
+    const json = generateJSON(sortedTodayMatches, previousResults);
 
     await writeFile(join(process.cwd(), 'index.html'), html, 'utf-8');
     await writeFile(join(process.cwd(), 'client', 'public', 'matches.json'), json, 'utf-8');
