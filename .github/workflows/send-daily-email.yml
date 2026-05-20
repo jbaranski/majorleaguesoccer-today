@@ -39,6 +39,10 @@ jobs:
 
       - name: Send daily email to subscribers
         if: steps.check-fixtures.outputs.has_fixtures == 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          UNSUBSCRIBE_URL: ${{ secrets.UNSUBSCRIBE_URL }}
         run: |
           set -euo pipefail
 
@@ -68,31 +72,28 @@ jobs:
             echo "Sending to subscriber (email hidden for privacy)"
 
             # Replace unsubscribe placeholder with subscriber-specific link
-            EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${{ secrets.UNSUBSCRIBE_URL }}?id=${unsub_id}}"
+            EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${UNSUBSCRIBE_URL}?id=${unsub_id}}"
 
-            # Create message content using jq to handle HTML properly
-            HTML_CONTENT="$(echo "$EMAIL_HTML" | jq -Rs .)"
-            jq -n \
+            # Build JSON payload for Resend API
+            PAYLOAD=$(jq -n \
+              --arg from "MLS Today <${FROM_EMAIL}>" \
+              --arg to "$email" \
               --arg subject "$SUBJECT" \
-              --argjson html "$HTML_CONTENT" \
-              '{
-                Simple: {
-                  Subject: { Data: $subject },
-                  Body: { Html: { Data: $html } }
-                }
-              }' > /tmp/message.json
+              --arg html "$EMAIL_HTML" \
+              '{from: $from, to: [$to], subject: $subject, html: $html}')
 
-            if aws sesv2 send-email \
-              --from-email-address "MLS Today <${{ secrets.FROM_EMAIL }}>" \
-              --destination "{\"ToAddresses\":[\"$email\"]}" \
-              --content file:///tmp/message.json > /dev/null 2>&1; then
+            HTTP_STATUS=$(curl -s -o /tmp/resend_response.json -w "%{http_code}" \
+              -X POST https://api.resend.com/emails \
+              -H "Authorization: Bearer ${RESEND_API_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD")
+
+            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
               echo "Email sent successfully"
             else
-              echo "Failed to send email"
+              echo "Failed to send email (HTTP $HTTP_STATUS): $(cat /tmp/resend_response.json)"
               exit 1
             fi
-
-            rm -f /tmp/message.json
           done
 
           echo "All emails sent successfully"

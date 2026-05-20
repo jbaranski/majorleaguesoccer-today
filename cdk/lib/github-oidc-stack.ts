@@ -6,7 +6,6 @@ export interface GitHubOidcStackProps extends cdk.StackProps {
   githubOwner: string;
   githubRepo: string;
   githubBranch: string;
-  fromEmailDomain: string;
 }
 
 export class GitHubOidcStack extends cdk.Stack {
@@ -22,17 +21,6 @@ export class GitHubOidcStack extends cdk.Stack {
       clientIds: ['sts.amazonaws.com'],
       // GitHub's OIDC thumbprints
       thumbprints: ['6938fd4d98bab03faadb97b34396831e3780aea1']
-    });
-
-    // Create SES permissions policy
-    const sesPolicy = new iam.PolicyDocument({
-      statements: [
-        new iam.PolicyStatement({
-          effect: iam.Effect.ALLOW,
-          actions: ['ses:SendEmail'],
-          resources: [`arn:aws:ses:${this.region}:${this.account}:identity/*`]
-        })
-      ]
     });
 
     // Create DynamoDB permissions policy
@@ -52,7 +40,7 @@ export class GitHubOidcStack extends cdk.Stack {
     // Create IAM role for GitHub Actions
     this.role = new iam.Role(this, 'GitHubActionsRole', {
       roleName: `GitHubActions-${props.githubRepo}-Role`,
-      description: `Allows GitHub Actions in ${props.githubOwner}/${props.githubRepo} to send emails via AWS SES and query DynamoDB`,
+      description: `Allows GitHub Actions in ${props.githubOwner}/${props.githubRepo} to query DynamoDB for email subscribers`,
       assumedBy: new iam.WebIdentityPrincipal(this.oidcProvider.openIdConnectProviderArn, {
         StringEquals: {
           'token.actions.githubusercontent.com:sub': `repo:${props.githubOwner}/${props.githubRepo}:ref:refs/heads/${props.githubBranch}`,
@@ -60,7 +48,6 @@ export class GitHubOidcStack extends cdk.Stack {
         }
       }),
       inlinePolicies: {
-        SESEmailPolicy: sesPolicy,
         DynamoDBQueryPolicy: dynamoPolicy
       },
       maxSessionDuration: cdk.Duration.hours(1)

@@ -14,8 +14,7 @@ const awsRegion = process.env.CDK_AWS_REGION;
 const githubOwner = process.env.GITHUB_OWNER;
 const githubRepo = process.env.GITHUB_REPO;
 const githubBranch = process.env.GITHUB_BRANCH;
-const fromEmailDomain = process.env.FROM_EMAIL_DOMAIN;
-const required = [awsAccount, awsRegion, githubOwner, githubRepo, githubBranch, fromEmailDomain];
+const required = [awsAccount, awsRegion, githubOwner, githubRepo, githubBranch];
 
 required.forEach((envVar) => {
   if (!envVar) {
@@ -37,6 +36,5 @@ new GitHubOidcStack(app, 'MLSTodayGitHubOidcStack', {
   ...props,
   githubOwner: githubOwner!,
   githubRepo: githubRepo!,
-  githubBranch: githubBranch!,
-  fromEmailDomain: fromEmailDomain!
+  githubBranch: githubBranch!
 });
