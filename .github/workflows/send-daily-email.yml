@@ -57,7 +57,6 @@ jobs:
               ":active": {"BOOL": true}
             }')
 
-          # Extract subscribers from query result
           echo "Querying active subscribers"
 
           # Email content
