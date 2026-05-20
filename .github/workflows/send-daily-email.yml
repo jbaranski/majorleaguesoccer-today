@@ -83,6 +83,7 @@ jobs:
               '{from: $from, to: [$to], subject: $subject, html: $html}')
 
             HTTP_STATUS=$(curl -s -o /tmp/resend_response.json -w "%{http_code}" \
+              --max-time 30 \
               -X POST https://api.resend.com/emails \
               -H "Authorization: Bearer ${RESEND_API_KEY}" \
               -H "Content-Type: application/json" \

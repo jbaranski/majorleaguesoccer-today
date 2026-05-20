@@ -23,20 +23,6 @@ export class GitHubOidcStack extends cdk.Stack {
       thumbprints: ['6938fd4d98bab03faadb97b34396831e3780aea1']
     });
 
-    // Create DynamoDB permissions policy
-    const dynamoPolicy = new iam.PolicyDocument({
-      statements: [
-        new iam.PolicyStatement({
-          effect: iam.Effect.ALLOW,
-          actions: ['dynamodb:Query'],
-          resources: [
-            `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector`,
-            `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector/index/SiteIndex`
-          ]
-        })
-      ]
-    });
-
     // Create IAM role for GitHub Actions
     this.role = new iam.Role(this, 'GitHubActionsRole', {
       roleName: `GitHubActions-${props.githubRepo}-Role`,
@@ -47,11 +33,18 @@ export class GitHubOidcStack extends cdk.Stack {
           'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
         }
       }),
-      inlinePolicies: {
-        DynamoDBQueryPolicy: dynamoPolicy
-      },
       maxSessionDuration: cdk.Duration.hours(1)
     });
+
+    this.role.addToPrincipalPolicy(new iam.PolicyStatement({
+      sid: 'DynamoDBQuerySubscribers',
+      effect: iam.Effect.ALLOW,
+      actions: ['dynamodb:Query'],
+      resources: [
+        `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector`,
+        `arn:aws:dynamodb:${this.region}:${this.account}:table/EmailCollector/index/SiteIndex`
+      ]
+    }));
 
     // Output the role ARN for GitHub Secrets
     new cdk.CfnOutput(this, 'GitHubActionsRoleArn', {
