@@ -80,7 +80,12 @@ jobs:
               --arg to "$email" \
               --arg subject "$SUBJECT" \
               --arg html "$EMAIL_HTML" \
-              '{from: $from, to: [$to], subject: $subject, html: $html}')
+              --arg unsub "${UNSUBSCRIBE_URL}?id=${unsub_id}" \
+              '{from: $from, to: [$to], subject: $subject, html: $html,
+                headers: {
+                  "List-Unsubscribe": ("<" + $unsub + ">"),
+                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click"
+                }}')
 
             HTTP_STATUS=$(curl -s -o /tmp/resend_response.json -w "%{http_code}" \
               --max-time 30 \
