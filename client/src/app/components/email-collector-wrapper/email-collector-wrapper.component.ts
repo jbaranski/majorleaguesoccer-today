@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { EmailCollector, EmailCollectorConfig } from '@jeffs/email-collector';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-email-collector-wrapper',
   imports: [EmailCollector],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div style="text-align: center; margin-bottom: 16px;">
-      <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">Want these fixtures delivered to your inbox every morning?</p>
+    <div class="text-center mb-4">
+      <p class="text-sm text-gray-500 mb-4">Want these fixtures delivered to your inbox every morning?</p>
       <ec-email-collector [config]="emailConfig" />
     </div>
-  `,
-  styles: []
+  `
 })
 export class EmailCollectorWrapperComponent {
   emailConfig: EmailCollectorConfig = {
