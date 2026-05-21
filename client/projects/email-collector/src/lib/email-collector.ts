@@ -1,4 +1,4 @@
-import { Component, signal, input } from '@angular/core';
+import { Component, signal, input, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EmailCollectorConfig } from './email-collector-config';
@@ -6,6 +6,7 @@ import { EmailCollectorConfig } from './email-collector-config';
 @Component({
   selector: 'ec-email-collector',
   imports: [FormsModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './email-collector.html',
   styleUrl: './email-collector.css',
 })
@@ -40,7 +41,7 @@ export class EmailCollector {
         }),
       });
 
-      if (response.status === 201 || response.status == 200) {
+      if (response.status === 201 || response.status === 200) {
         this.showMessage('Successfully subscribed! Thank you.', 'success');
         this.email.set('');
       } else if (response.status === 400) {

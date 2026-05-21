@@ -20,7 +20,7 @@ export class MatchFormatter {
     });
   }
 
-  static groupByCompetition(matches: readonly MLSMatch[]): Map<string, MLSMatch[]> {
+  static groupByCompetition(matches: readonly MLSMatch[]): Map<string, readonly MLSMatch[]> {
     const groups = new Map<string, MLSMatch[]>();
 
     for (const match of matches) {
