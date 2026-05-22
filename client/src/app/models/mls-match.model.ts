@@ -10,10 +10,28 @@ export interface MLSMatch {
   readonly match_day: number;
   readonly season: number;
   readonly neutral_venue: boolean;
+  readonly home_team_goals?: number | null;
+  readonly away_team_goals?: number | null;
+  readonly home_team_penalty_goals?: number | null;
+  readonly away_team_penalty_goals?: number | null;
   [key: string]: unknown;
+}
+
+export interface GoalEvent {
+  readonly minute: string;
+  readonly playerName: string;
+  readonly side: 'home' | 'away';
+  readonly isOwnGoal: boolean;
+  readonly videoUrl?: string;
+}
+
+export interface MatchResult {
+  readonly match: MLSMatch;
+  readonly goalEvents: readonly GoalEvent[];
 }
 
 export interface MatchesData {
   readonly lastUpdated: string;
-  readonly matches: readonly MLSMatch[];
+  readonly todayMatches: readonly MLSMatch[];
+  readonly yesterdayResults: readonly MatchResult[];
 }

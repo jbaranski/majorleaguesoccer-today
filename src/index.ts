@@ -30,9 +30,23 @@ interface MLSMatchResponse {
   readonly schedule: readonly MLSMatch[];
 }
 
+interface GoalEventOutput {
+  readonly minute: string;
+  readonly playerName: string;
+  readonly side: 'home' | 'away';
+  readonly isOwnGoal: boolean;
+  readonly videoUrl?: string;
+}
+
+interface MatchResultOutput {
+  readonly match: MLSMatch;
+  readonly goalEvents: readonly GoalEventOutput[];
+}
+
 interface MatchesOutput {
   readonly lastUpdated: string;
-  readonly matches: readonly MLSMatch[];
+  readonly todayMatches: readonly MLSMatch[];
+  readonly yesterdayResults: readonly MatchResultOutput[];
 }
 
 interface GoalEvent {
@@ -739,12 +753,27 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
 </html>`;
 };
 
-const generateJSON = (matches: readonly MLSMatch[]): string => {
+const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
+  const minutesClose = (a: string, b: string): boolean =>
+    a === b || Math.abs(parseInt(a) - parseInt(b)) <= 5;
+
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
-    matches
+    todayMatches,
+    yesterdayResults: yesterdayResults.map(r => ({
+      match: r.match,
+      goalEvents: r.goalEvents.map(e => {
+        const video = r.goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
+        return {
+          minute: e.minute,
+          playerName: e.playerName,
+          side: e.side,
+          isOwnGoal: e.isOwnGoal,
+          ...(video ? { videoUrl: video.url } : {})
+        };
+      })
+    }))
   };
-
   return JSON.stringify(output);
 };
 
@@ -787,7 +816,7 @@ const main = async (): Promise<void> => {
     );
 
     const html = generateHTML(sortedTodayMatches, yesterdayResults);
-    const json = generateJSON(sortedTodayMatches);
+    const json = generateJSON(sortedTodayMatches, yesterdayResults);
 
     for (const { match, goalEvents, goalVideos } of yesterdayResults) {
       if (match.match_status !== 'finalWhistle') continue;
