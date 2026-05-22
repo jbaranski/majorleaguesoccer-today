@@ -25,7 +25,6 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
         }
       }
       @if (yesterdayCompetitions().size > 0) {
-        <hr class="border-0 border-t border-gray-200 my-6" />
         <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-1">Yesterday's Results</div>
         @for (entry of yesterdayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [results]="entry[1]" [isResult]="true" />
