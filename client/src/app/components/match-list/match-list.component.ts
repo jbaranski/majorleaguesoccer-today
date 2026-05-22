@@ -11,13 +11,13 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div class="text-center text-gray-500 text-sm mt-4 mb-2">Loading today's matches...</div>
+      <div class="text-center text-gray-500 text-base mt-4 mb-2">Loading today's matches...</div>
     } @else if (error()) {
-      <div class="text-center text-red-500 text-sm mt-4 mb-2">{{ error() }}</div>
+      <div class="text-center text-red-500 text-base mt-4 mb-2">{{ error() }}</div>
     } @else {
-      <div class="text-center text-gray-500 text-sm mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
+      <div class="text-center text-gray-500 text-base mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
       @if (competitions().size === 0) {
-        <div class="text-center text-gray-500 text-sm mt-4">No games scheduled for today</div>
+        <div class="text-center text-gray-500 text-base mt-4">No games scheduled for today</div>
       } @else {
         @for (competition of competitionEntries(); track competition[0]) {
           <app-competition-card
