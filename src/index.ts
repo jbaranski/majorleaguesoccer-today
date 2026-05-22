@@ -303,6 +303,19 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
               : `${homeGoals} - ${awayGoals}`
             : '? - ?';
 
+          // Build full goal list: linked goals from Brightcove + placeholders for goals without video
+          const homeVideos = goalVideos.filter(g => g.side === 'home');
+          const awayVideos = goalVideos.filter(g => g.side === 'away');
+          const homePlaceholders = Math.max(0, homeGoals - homeVideos.length);
+          const awayPlaceholders = Math.max(0, awayGoals - awayVideos.length);
+
+          const allGoalItems = [
+            ...homeVideos.map(g => `<div class="goal-item"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
+            ...Array.from({ length: homePlaceholders }, () => `<div class="goal-item"><span class="goal-no-video">⚽ Goal</span></div>`),
+            ...awayVideos.map(g => `<div class="goal-item goal-item-away"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
+            ...Array.from({ length: awayPlaceholders }, () => `<div class="goal-item goal-item-away"><span class="goal-no-video">Goal ⚽</span></div>`),
+          ];
+
           return `
           <div class="match">
             <div class="matchup result-matchup">
@@ -311,13 +324,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
                 : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong><span class="result-unknown">(result unknown)</span>`
               }
             </div>
-            ${goalVideos.length > 0 ? `
+            ${isFinal && allGoalItems.length > 0 ? `
             <div class="goals-list">
-              ${goalVideos.map(goal => `
-                <div class="goal-item${goal.side === 'away' ? ' goal-item-away' : ''}">
-                  <a href="${escapeHtml(goal.url)}" target="_blank" rel="noopener">${escapeHtml(goal.title)}</a>
-                </div>
-              `).join('')}
+              ${allGoalItems.join('')}
             </div>
             ` : ''}
           </div>
@@ -518,6 +527,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .goal-item-away {
             text-align: right;
+        }
+        .goal-no-video {
+            color: #6b7280;
         }
         .datetime {
             font-size: 13px;
