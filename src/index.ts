@@ -320,10 +320,11 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
       <div class="matches-list">
         ${competitionMatches.map(match => `
           <div class="match">
-            <div class="matchup">
-              <strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>
+            <div class="matchup result-matchup">
+              <strong class="result-team result-home">${escapeHtml(match.home_team_name)}</strong>
+              <span class="kickoff">${escapeHtml(formatTime(match.planned_kickoff_time))}</span>
+              <strong class="result-team result-away">${escapeHtml(match.away_team_name)}</strong>
             </div>
-            <div class="datetime">${escapeHtml(formatTime(match.planned_kickoff_time))}</div>
             <div class="venue">
               <div class="stadium">${escapeHtml(match.stadium_name)}, ${escapeHtml(match.stadium_city)}, ${escapeHtml(match.stadium_country)}</div>
               ${match.neutral_venue ? '<div class="details"><span class="neutral">Neutral Venue</span></div>' : ''}
@@ -579,6 +580,15 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             font-weight: 800;
             color: #111827;
             background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .kickoff {
+            flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2563eb;
+            background: #eff6ff;
             padding: 2px 8px;
             border-radius: 4px;
         }
