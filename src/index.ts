@@ -769,6 +769,13 @@ const main = async (): Promise<void> => {
       matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
 
+    console.error(`DEBUG: todayStr=${todayStr}, yesterdayStr=${yesterdayStr}`);
+    console.error(`DEBUG: Found ${todayMatches.length} matches for today, ${yesterdayMatches.length} for yesterday`);
+    if (todayMatches.length === 0) {
+      const allDates = new Set(data.schedule.map(m => matchDateStr(m)));
+      console.error(`DEBUG: Available dates in schedule: ${Array.from(allDates).sort().join(', ')}`);
+    }
+
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
