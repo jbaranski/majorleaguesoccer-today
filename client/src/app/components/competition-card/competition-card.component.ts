@@ -10,12 +10,12 @@ import { MatchRowComponent } from '../match-row/match-row.component';
   template: `
     <div class="border-2 border-gray-200 mb-4 overflow-hidden">
       <div class="bg-purple-100 pt-[10px] px-3 pb-[6px] sm:pt-3 sm:px-4 sm:pb-2 border-b-2 border-gray-200">
-        <div class="text-3xl font-bold uppercase tracking-[0.5px] mb-1 leading-[1.2] text-gray-800">{{ competition() }}</div>
-        <div class="text-2xl italic text-gray-600 mb-1">{{ formatDate() }}</div>
+        <div class="text-2xl font-bold uppercase tracking-[0.5px] mb-1 leading-[1.2] text-gray-800">{{ competition() }}</div>
+        <div class="text-lg italic text-gray-600 mb-1">{{ formatDate() }}</div>
         <div class="flex gap-2 items-center">
-          <span class="text-2xl font-medium text-gray-500">Match Day {{ getMatchDay() }}</span>
-          <span class="text-2xl text-gray-500">-</span>
-          <span class="text-2xl font-medium text-gray-500">{{ getSeason() }} Season</span>
+          <span class="text-lg font-medium text-gray-500">Match Day {{ getMatchDay() }}</span>
+          <span class="text-lg text-gray-500">-</span>
+          <span class="text-lg font-medium text-gray-500">{{ getSeason() }} Season</span>
         </div>
       </div>
       <div>

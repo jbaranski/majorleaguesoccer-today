@@ -499,7 +499,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-bottom: 0;
         }
         .competition-name {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -508,7 +508,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             color: #1f2937;
         }
         .competition-date {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 400;
             font-style: italic;
             color: #4b5563;
@@ -521,17 +521,17 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-bottom: 0;
         }
         .match-day {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 500;
             color: #6b7280;
         }
         .separator {
-            font-size: 24px;
+            font-size: 18px;
             color: #6b7280;
             font-weight: 500;
         }
         .season {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 500;
             color: #6b7280;
         }
@@ -550,7 +550,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             background: #f9fafb;
         }
         .matchup {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: #1f2937;
             margin-bottom: 4px;
@@ -576,7 +576,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .score {
             flex-shrink: 0;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             color: #111827;
             background: #f3f4f6;
@@ -585,7 +585,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .kickoff {
             flex-shrink: 0;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 600;
             color: #2563eb;
             background: #eff6ff;
@@ -593,7 +593,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             border-radius: 4px;
         }
         .result-unknown {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 400;
             color: #9ca3af;
             margin-left: 8px;
@@ -602,7 +602,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-top: 6px;
         }
         .goal-item {
-            font-size: 26px;
+            font-size: 20px;
             padding: 2px 0;
         }
         .goal-item a {
@@ -616,7 +616,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             text-align: right;
         }
         .datetime {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 500;
             color: #4b5563;
             margin-bottom: 4px;
@@ -625,13 +625,13 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-top: 2px;
         }
         .stadium {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 400;
             color: #6b7280;
             margin-bottom: 4px;
         }
         .details {
-            font-size: 24px;
+            font-size: 18px;
             color: #6b7280;
             font-weight: 500;
             margin-top: 2px;
@@ -639,7 +639,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .neutral {
             color: #d97706;
             font-weight: 600;
-            font-size: 24px;
+            font-size: 18px;
         }
         .gray {
             color: #9ca3af;
@@ -647,7 +647,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .last-updated {
             text-align: center;
             color: #6b7280;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 400;
             margin-top: 16px;
             margin-bottom: 8px;
@@ -690,7 +690,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .no-games {
             text-align: center;
             color: #6b7280;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 400;
             margin-top: 16px;
         }
