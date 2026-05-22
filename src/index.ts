@@ -262,7 +262,7 @@ const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
   });
 };
 
-const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
+const generateHTML = (tomorrowMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
   const escapeHtml = (str: string | number): string => {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -421,7 +421,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
   `;
   };
 
-  const todayHtml = generateTodayCompetitionsHtml(todayMatches);
+  const todayHtml = generateTodayCompetitionsHtml(tomorrowMatches);
   const yesterdayHtml = generateYesterdayResultsHtml(yesterdayResults);
 
   return `<!DOCTYPE html>
@@ -716,9 +716,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         <hr class="top-separator">
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
         ${yesterdayResults.length > 0 ? `${yesterdayHtml}<hr class="section-separator">` : ''}
-        ${todayMatches.length > 0
-          ? `<div class="section-header">Today's Games</div>${todayHtml}`
-          : '<div class="no-games">No games scheduled for today</div>'
+        ${tomorrowMatches.length > 0
+          ? `<div class="section-header">Tomorrow's Games</div>${todayHtml}`
+          : '<div class="no-games">No games scheduled for tomorrow</div>'
         }
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
@@ -753,7 +753,7 @@ const main = async (): Promise<void> => {
     const data = await getData(url);
 
     const now = getNow();
-    const todayStr = toETDateStr(now);
+    const tomorrowStr = toETDateStr(new Date(now.getTime() + 24 * 60 * 60 * 1000));
     const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
     // Use start_date (the authoritative match-day date) rather than planned_kickoff_time,
@@ -761,15 +761,15 @@ const main = async (): Promise<void> => {
     const matchDateStr = (match: MLSMatch): string =>
       (match.start_date ?? match.planned_kickoff_time).substring(0, 10);
 
-    const todayMatches = data.schedule.filter(match =>
-      matchDateStr(match) === todayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
+    const tomorrowMatches = data.schedule.filter(match =>
+      matchDateStr(match) === tomorrowStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
 
     const yesterdayMatches = data.schedule.filter(match =>
       matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
 
-    const sortedTodayMatches = sortMatches(todayMatches);
+    const sortedTomorrowMatches = sortMatches(tomorrowMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
@@ -785,8 +785,8 @@ const main = async (): Promise<void> => {
       })
     );
 
-    const html = generateHTML(sortedTodayMatches, yesterdayResults);
-    const json = generateJSON(sortedTodayMatches);
+    const html = generateHTML(sortedTomorrowMatches, yesterdayResults);
+    const json = generateJSON(sortedTomorrowMatches);
 
     for (const { match, goalEvents, goalVideos } of yesterdayResults) {
       if (match.match_status !== 'finalWhistle') continue;
