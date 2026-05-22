@@ -1,4 +1,4 @@
-import { MLSMatch } from '../models/mls-match.model';
+import { MLSMatch, MatchResult } from '../models/mls-match.model';
 
 export class MatchFormatter {
   static formatTime(isoString: string): string {
@@ -31,6 +31,16 @@ export class MatchFormatter {
       groups.get(competitionName)!.push(match);
     }
 
+    return groups;
+  }
+
+  static groupResultsByCompetition(results: readonly MatchResult[]): Map<string, readonly MatchResult[]> {
+    const groups = new Map<string, MatchResult[]>();
+    for (const result of results) {
+      const name = result.match.competition_name;
+      if (!groups.has(name)) groups.set(name, []);
+      groups.get(name)!.push(result);
+    }
     return groups;
   }
 }
