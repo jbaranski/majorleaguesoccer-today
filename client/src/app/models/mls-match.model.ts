@@ -1,4 +1,5 @@
 export interface MLSMatch {
+  readonly match_id: string;
   readonly competition_id: string;
   readonly competition_name: string;
   readonly home_team_name: string;

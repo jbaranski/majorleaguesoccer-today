@@ -8,7 +8,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <div class="px-3 py-[10px] sm:px-4 sm:py-3 border-b-2 border-border last:border-b-0 hover:bg-muted">
+    <div class="px-3 py-2.5 sm:px-4 sm:py-3 border-b-2 border-border last:border-b-0 hover:bg-muted">
       @if (isResult()) {
         <div class="flex items-center gap-2 text-2xl font-bold text-foreground leading-[1.4]">
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
@@ -17,7 +17,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
         </div>
         @if (goalEvents().length > 0) {
           <div class="mt-1.5">
-            @for (goal of goalEvents(); track $index) {
+            @for (goal of goalEvents(); track goal.playerName + goal.minute) {
               <div [class]="goal.side === 'away' ? 'text-xl py-0.5 text-right' : 'text-xl py-0.5'">
                 @if (goal.videoUrl) {
                   <a [href]="goal.videoUrl" target="_blank" rel="noopener" class="text-primary hover:underline">{{ goalLabel(goal) }}</a>
@@ -31,7 +31,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
       } @else {
         <div class="flex items-center gap-2 text-2xl font-bold text-foreground mb-1 leading-[1.4]">
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
-          <span class="flex-shrink-0 text-xl font-semibold text-primary bg-primary-subtle px-2 py-0.5 rounded">{{ formatTime(match().planned_kickoff_time) }}</span>
+          <span class="flex-shrink-0 text-xl font-semibold text-primary bg-primary-subtle px-2 py-0.5 rounded">{{ formattedKickoffTime() }}</span>
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-right">{{ match().away_team_name }}</strong>
         </div>
         <div class="mt-0.5">
@@ -62,11 +62,11 @@ export class MatchRowComponent {
     return `${home} - ${away}`;
   });
 
+  formattedKickoffTime = computed(() =>
+    MatchFormatter.formatTime(this.match().planned_kickoff_time)
+  );
+
   goalLabel(goal: GoalEvent): string {
     return `${goal.playerName}${goal.isOwnGoal ? ' (OG)' : ''}, ${goal.minute}'`;
-  }
-
-  formatTime(isoString: string): string {
-    return MatchFormatter.formatTime(isoString);
   }
 }

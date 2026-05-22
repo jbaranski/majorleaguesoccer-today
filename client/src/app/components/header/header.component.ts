@@ -5,7 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h1 class="text-foreground text-center text-4xl sm:text-[2.25rem] font-bold mb-2">Major League Soccer Today</h1>
+    <h1 class="text-foreground text-center text-4xl sm:text-4xl font-bold mb-2">Major League Soccer Today</h1>
   `
 })
 export class HeaderComponent {}

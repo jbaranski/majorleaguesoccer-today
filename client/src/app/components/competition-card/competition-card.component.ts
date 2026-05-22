@@ -11,20 +11,20 @@ import { MatchRowComponent } from '../match-row/match-row.component';
     <div class="border-2 border-border mb-4 overflow-hidden">
       <div [class]="headerClass()">
         <div class="text-2xl font-bold uppercase tracking-[0.5px] mb-1 leading-[1.2] text-foreground">{{ competition() }}</div>
-        <div class="text-lg italic text-muted-foreground mb-1">{{ formatDate() }}</div>
+        <div class="text-lg italic text-muted-foreground mb-1">{{ formattedDate() }}</div>
         <div class="flex gap-2 items-center">
-          <span class="text-lg font-medium text-muted-foreground">Match Day {{ getMatchDay() }}</span>
+          <span class="text-lg font-medium text-muted-foreground">Match Day {{ matchDay() }}</span>
           <span class="text-lg text-muted-foreground">-</span>
-          <span class="text-lg font-medium text-muted-foreground">{{ getSeason() }} Season</span>
+          <span class="text-lg font-medium text-muted-foreground">{{ season() }} Season</span>
         </div>
       </div>
       <div>
         @if (isResult()) {
-          @for (result of results(); track result.match['match_id']) {
+          @for (result of results(); track result.match.match_id) {
             <app-match-row [match]="result.match" [goalEvents]="result.goalEvents" [isResult]="true" />
           }
         } @else {
-          @for (match of matches(); track match['match_id']) {
+          @for (match of matches(); track match.match_id) {
             <app-match-row [match]="match" />
           }
         }
@@ -43,19 +43,15 @@ export class CompetitionCardComponent {
   );
 
   headerClass = computed(() =>
-    `${this.isResult() ? 'bg-card-result' : 'bg-card-header'} pt-[10px] px-3 pb-[6px] sm:pt-3 sm:px-4 sm:pb-2 border-b-2 border-border`
+    `${this.isResult() ? 'bg-card-result' : 'bg-card-header'} pt-2.5 px-3 pb-1.5 sm:pt-3 sm:px-4 sm:pb-2 border-b-2 border-border`
   );
 
-  formatDate(): string {
+  formattedDate = computed(() => {
     const first = this.firstMatch();
     return first ? MatchFormatter.formatDate(first.planned_kickoff_time) : '';
-  }
+  });
 
-  getMatchDay(): number {
-    return this.firstMatch()?.match_day ?? 0;
-  }
+  matchDay = computed(() => this.firstMatch()?.match_day ?? 0);
 
-  getSeason(): number {
-    return this.firstMatch()?.season ?? 0;
-  }
+  season = computed(() => this.firstMatch()?.season ?? 0);
 }

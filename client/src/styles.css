@@ -36,6 +36,9 @@
 
   /* Neutral venue badge — amber */
   --color-accent-amber: oklch(58% 0.15 65);
+
+  /* System font stack — maps to the font-sans utility */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* Dark mode variant — declared for future use, not activated */
@@ -43,10 +46,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    min-height: 100vh;
-    padding: 16px;
+    @apply bg-background text-foreground antialiased font-sans min-h-screen p-4;
   }
 }
 
