@@ -244,16 +244,6 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
   const generateYesterdayResultsHtml = (results: readonly MatchResult[]): string => {
     if (results.length === 0) return '';
 
-    // Debug: log first match to verify field names at runtime
-    const firstResult = results[0]!.match;
-    console.log('DEBUG yesterday match sample:', JSON.stringify({
-      match_id: firstResult.match_id,
-      home_team_name: firstResult.home_team_name,
-      home_team_goals: firstResult['home_team_goals'],
-      away_team_goals: firstResult['away_team_goals'],
-      match_status: firstResult['match_status'],
-    }));
-
     const matchesByCompetition = groupByCompetition(results.map(r => r.match));
     const resultsByMatchId = new Map(results.map(r => [r.match.match_id ?? r.match.planned_kickoff_time + r.match.home_team_name, r]));
 
@@ -286,7 +276,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
           <div class="match">
             <div class="matchup result-matchup">
               ${hasScore
-                ? `<strong>${escapeHtml(match.home_team_name)}</strong> <span class="score">${escapeHtml(match.home_team_goals!)} - ${escapeHtml(match.away_team_goals!)}</span> <strong>${escapeHtml(match.away_team_name)}</strong>`
+                ? `<strong class="result-team result-home">${escapeHtml(match.home_team_name)}</strong><span class="score">${escapeHtml(match.home_team_goals!)} - ${escapeHtml(match.away_team_goals!)}</span><strong class="result-team result-away">${escapeHtml(match.away_team_name)}</strong>`
                 : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>`
               }
             </div>
@@ -451,10 +441,23 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .result-matchup {
             display: flex;
             align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .result-team {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .result-home {
+            text-align: right;
+        }
+        .result-away {
+            text-align: left;
         }
         .score {
+            flex-shrink: 0;
             font-size: 16px;
             font-weight: 800;
             color: #111827;
@@ -617,13 +620,6 @@ const main = async (): Promise<void> => {
     const todayStr = toETDateStr(now);
     const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
-    console.log(`DEBUG dates: now=${now.toISOString()} todayStr=${todayStr} yesterdayStr=${yesterdayStr}`);
-    console.log(`DEBUG total schedule entries: ${data.schedule.length}`);
-    if (data.schedule.length > 0) {
-      const sample = data.schedule[0]!;
-      console.log(`DEBUG first schedule entry: start_date=${String(sample['start_date'])} planned_kickoff_time=${sample.planned_kickoff_time}`);
-    }
-
     // Use start_date (the authoritative match-day date) rather than planned_kickoff_time,
     // which crosses UTC midnight for late ET games and would misclassify them.
     const matchDateStr = (match: MLSMatch): string =>
@@ -636,8 +632,6 @@ const main = async (): Promise<void> => {
     const yesterdayMatches = data.schedule.filter(match =>
       matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
-
-    console.log(`DEBUG todayMatches=${todayMatches.length} yesterdayMatches=${yesterdayMatches.length}`);
 
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
