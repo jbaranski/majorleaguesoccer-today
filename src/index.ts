@@ -16,8 +16,11 @@ interface MLSMatch {
   readonly neutral_venue: boolean;
   readonly match_id?: string;
   readonly start_date?: string;
+  readonly match_status?: string;
   readonly home_team_goals?: number | null;
   readonly away_team_goals?: number | null;
+  readonly home_team_penalty_goals?: number | null;
+  readonly away_team_penalty_goals?: number | null;
   readonly home_team_three_letter_code?: string;
   readonly away_team_three_letter_code?: string;
   [key: string]: unknown;
@@ -288,14 +291,24 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
           const key = match.match_id ?? match.planned_kickoff_time + match.home_team_name;
           const result = resultsByMatchId.get(key);
           const goalVideos = result?.goalVideos ?? [];
-          const hasScore = match.home_team_goals != null && match.away_team_goals != null;
+          const isFinal = match.match_status === 'finalWhistle';
+          const homeGoals = match.home_team_goals ?? 0;
+          const awayGoals = match.away_team_goals ?? 0;
+          const homePk = match.home_team_penalty_goals ?? 0;
+          const awayPk = match.away_team_penalty_goals ?? 0;
+          const hasPenalties = (homePk > 0 || awayPk > 0) && homeGoals === awayGoals;
+          const scoreLabel = isFinal
+            ? hasPenalties
+              ? `${homeGoals} - ${awayGoals} (PKs: ${homePk}-${awayPk})`
+              : `${homeGoals} - ${awayGoals}`
+            : '? - ?';
 
           return `
           <div class="match">
             <div class="matchup result-matchup">
-              ${hasScore
-                ? `<strong class="result-team result-home">${escapeHtml(match.home_team_name)}</strong><span class="score">${escapeHtml(match.home_team_goals!)} - ${escapeHtml(match.away_team_goals!)}</span><strong class="result-team result-away">${escapeHtml(match.away_team_name)}</strong>`
-                : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>`
+              ${isFinal
+                ? `<strong class="result-team result-home">${escapeHtml(match.home_team_name)}</strong><span class="score">${escapeHtml(scoreLabel)}</span><strong class="result-team result-away">${escapeHtml(match.away_team_name)}</strong>`
+                : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong><span class="result-unknown">(result unknown)</span>`
               }
             </div>
             ${goalVideos.length > 0 ? `
@@ -483,6 +496,12 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             padding: 2px 8px;
             border-radius: 4px;
         }
+        .result-unknown {
+            font-size: 13px;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-left: 8px;
+        }
         .goals-list {
             margin-top: 6px;
         }
@@ -660,7 +679,7 @@ const main = async (): Promise<void> => {
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
       sortedYesterdayMatches.map(async match => ({
         match,
-        goalVideos: match.match_id
+        goalVideos: match.match_id && match.match_status === 'finalWhistle'
           ? await fetchGoalVideos(
               match.match_id,
               match.home_team_three_letter_code ?? '',
