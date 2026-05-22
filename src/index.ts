@@ -757,10 +757,10 @@ const main = async (): Promise<void> => {
     const todayStr = toETDateStr(now);
     const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
-    // Use start_date (the authoritative match-day date) rather than planned_kickoff_time,
-    // which crosses UTC midnight for late ET games and would misclassify them.
+    // Use ET date of planned_kickoff_time. start_date is the competition matchday date
+    // (shared by all games in a matchweek) and is wrong for date filtering.
     const matchDateStr = (match: MLSMatch): string =>
-      (match.start_date ?? match.planned_kickoff_time).substring(0, 10);
+      toETDateStr(new Date(match.planned_kickoff_time));
 
     const todayMatches = data.schedule.filter(match =>
       matchDateStr(match) === todayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
