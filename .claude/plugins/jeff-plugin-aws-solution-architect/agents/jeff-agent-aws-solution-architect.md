@@ -81,6 +81,48 @@ myLambda.role!.addToPrincipalPolicy(new iam.PolicyStatement({
 }));
 ```
 
+## Retry & Error Containment Standards
+
+Every async component must have an explicit, small retry limit. Never rely on AWS defaults — they are almost always unlimited and will cause runaway costs, log floods, and cascading failures.
+
+**DynamoDB stream event sources** — always set `retryAttempts: 2`:
+```typescript
+lambda.addEventSource(new lambdaEventSources.DynamoEventSource(table, {
+  retryAttempts: 2,          // 3 total attempts, then → DLQ
+  onFailure: new lambdaEventSources.SqsDlq(dlq),
+  // ... other options
+}));
+```
+
+**SQS queues that drive Lambdas** — always set `maxReceiveCount` ≤ 3 on the DLQ policy:
+```typescript
+const queue = new sqs.Queue(this, 'MyQueue', {
+  deadLetterQueue: { queue: dlq, maxReceiveCount: 3 },
+  // ...
+});
+```
+
+**EventBridge rules** — always set `retryAttempts: 2` on every Lambda target:
+```typescript
+new events.Rule(this, 'MyRule', {
+  targets: [new eventsTargets.LambdaFunction(fn, {
+    retryAttempts: 2,        // 3 total attempts, then → DLQ
+    deadLetterQueue: dlq,
+  })]
+});
+```
+
+**Kinesis stream event sources** — always set `retryAttempts: 2`:
+```typescript
+lambda.addEventSource(new lambdaEventSources.KinesisEventSource(stream, {
+  retryAttempts: 2,
+  onFailure: new lambdaEventSources.SqsDlq(dlq),
+  // ...
+}));
+```
+
+Every retry configuration must have a corresponding CDK infra test asserting the limit (`MaximumRetryAttempts` in CloudFormation).
+
 ## Lambda Coding Standards
 
 - Never use `while True:` loops in Lambda handlers; always use a `for` loop with a configurable max iteration count (default 1000) to prevent runaway execution and ensure predictable timeouts

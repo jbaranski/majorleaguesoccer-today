@@ -80,6 +80,17 @@ You are a principal software engineer. You are an AWS Certified Solution Archite
 - [ ] Multi-AZ where appropriate
 - [ ] Graceful error handling
 
+### 12. Retry & Error Containment (check EVERY async component)
+
+Every event source, queue, and async invocation must have an explicit, small retry limit. Unlimited retries cause runaway costs, log floods, and cascading failures. **Default AWS behavior is often unlimited — always override it.**
+
+- [ ] **DynamoDB stream event sources** (`DynamoEventSource`): `retryAttempts` explicitly set to 1 or 2 (never omitted — the default is unlimited retries until `maxRecordAge`)
+- [ ] **SQS queues that drive Lambdas**: `deadLetterQueue.maxReceiveCount` set to 3 or fewer (controls how many times SQS redelivers before moving to DLQ)
+- [ ] **EventBridge rules**: `retryAttempts` on each `LambdaFunction` target set to 1 or 2 (never omitted — default is 185 retries over 24 hours)
+- [ ] **Kinesis stream event sources** (`KinesisEventSource`): `retryAttempts` explicitly set to 1 or 2
+- [ ] **Dead-letter queues exist** for every async path: DynamoDB stream `onFailure`, SQS `deadLetterQueue`, EventBridge `deadLetterQueue`
+- [ ] **CDK infra tests assert the retry limit** for every event source mapping (`MaximumRetryAttempts` in CloudFormation)
+
 ### 6. Scalability
 
 - [ ] Architecture can scale horizontally
@@ -132,6 +143,7 @@ You are a principal software engineer. You are an AWS Certified Solution Archite
 
 ### Critical Issues (Must Fix)
 
+- **Missing or unlimited retry limits on any async component** — DynamoDB stream event source with no `retryAttempts`, EventBridge target with no `retryAttempts`, SQS queue with no `maxReceiveCount` on its DLQ policy. The AWS default is effectively unlimited retries; always set an explicit small number (1 or 2)
 - IAM policies with `*` for actions or resources without justification
 - Hardcoded secrets or credentials
 - Hardcoded AWS ARNs, account IDs, or resource names in source code (must be loaded via env vars or derived from CDK construct properties)
