@@ -618,6 +618,11 @@ const main = async (): Promise<void> => {
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
+    if (sortedYesterdayMatches.length > 0) {
+      const sampleKeys = Object.keys(sortedYesterdayMatches[0]!).join(', ');
+      console.log(`Yesterday match fields: ${sampleKeys}`);
+    }
+
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
       sortedYesterdayMatches.map(async match => ({
         match,
