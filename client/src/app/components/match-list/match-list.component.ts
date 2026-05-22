@@ -20,8 +20,9 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
       @if (todayCompetitions().size === 0) {
         <div class="text-center text-muted-foreground text-base py-8">No games scheduled for today</div>
       } @else {
-        <div class="border-b border-border pb-3 mb-5">
-          <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Today's Games</span>
+        <div class="flex items-center gap-2.5 mb-6">
+          <div class="w-[3px] h-5 bg-primary rounded-full flex-shrink-0"></div>
+          <span class="text-base font-bold text-foreground">Today's Games</span>
         </div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [matches]="entry[1]" />
@@ -29,8 +30,9 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
       }
 
       @if (yesterdayCompetitions().size > 0) {
-        <div class="border-b border-border pb-3 mt-10 mb-5">
-          <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Yesterday's Results</span>
+        <div class="flex items-center gap-2.5 mt-10 mb-6">
+          <div class="w-[3px] h-5 bg-primary rounded-full flex-shrink-0"></div>
+          <span class="text-base font-bold text-foreground">Yesterday's Results</span>
         </div>
         @for (entry of yesterdayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [results]="entry[1]" [isResult]="true" />
