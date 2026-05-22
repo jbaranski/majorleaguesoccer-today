@@ -8,38 +8,56 @@ import { MatchFormatter } from '../../utils/match-formatter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <div class="px-3 py-2.5 sm:px-4 sm:py-3 border-b-2 border-border last:border-b-0 hover:bg-muted">
-      @if (isResult()) {
-        <div class="flex items-center gap-2 text-2xl font-bold text-foreground leading-[1.4]">
-          <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
-          <span class="flex-shrink-0 text-[28px] font-extrabold text-foreground bg-muted px-2 py-0.5 rounded">{{ scoreLabel() }}</span>
-          <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-right">{{ match().away_team_name }}</strong>
-        </div>
-        @if (goalEvents().length > 0) {
-          <div class="mt-1.5">
-            @for (goal of goalEvents(); track goal.playerName + goal.minute) {
-              <div [class]="goal.side === 'away' ? 'text-xl py-0.5 text-right' : 'text-xl py-0.5'">
+    <div class="py-4 px-1 hover:bg-muted rounded-lg transition-colors">
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <span class="text-base font-semibold text-foreground leading-snug">{{ match().home_team_name }}</span>
+
+        @if (isResult()) {
+          <span class="text-base font-black text-score-fg bg-score-bg px-4 py-1.5 rounded-lg tabular-nums whitespace-nowrap">
+            {{ scoreLabel() }}
+          </span>
+        } @else {
+          <span class="text-sm font-bold text-kickoff-fg bg-kickoff-bg px-3 py-1.5 rounded-full whitespace-nowrap">
+            {{ formattedKickoffTime() }}
+          </span>
+        }
+
+        <span class="text-base font-semibold text-foreground leading-snug text-right">{{ match().away_team_name }}</span>
+      </div>
+
+      @if (isResult() && goalEvents().length > 0) {
+        <div class="grid grid-cols-[1fr_auto_1fr] gap-3 mt-2">
+          <div class="space-y-0.5">
+            @for (goal of homeGoals(); track goal.playerName + goal.minute) {
+              <div class="text-sm text-muted-foreground leading-snug">
                 @if (goal.videoUrl) {
                   <a [href]="goal.videoUrl" target="_blank" rel="noopener" class="text-primary hover:underline">{{ goalLabel(goal) }}</a>
                 } @else {
-                  <span>{{ goalLabel(goal) }}</span>
+                  {{ goalLabel(goal) }}
                 }
               </div>
             }
           </div>
-        }
-      } @else {
-        <div class="flex items-center gap-2 text-2xl font-bold text-foreground mb-1 leading-[1.4]">
-          <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
-          <span class="flex-shrink-0 text-xl font-semibold text-primary bg-primary-subtle px-2 py-0.5 rounded">{{ formattedKickoffTime() }}</span>
-          <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-right">{{ match().away_team_name }}</strong>
+          <div></div>
+          <div class="space-y-0.5 text-right">
+            @for (goal of awayGoals(); track goal.playerName + goal.minute) {
+              <div class="text-sm text-muted-foreground leading-snug">
+                @if (goal.videoUrl) {
+                  <a [href]="goal.videoUrl" target="_blank" rel="noopener" class="text-primary hover:underline">{{ goalLabel(goal) }}</a>
+                } @else {
+                  {{ goalLabel(goal) }}
+                }
+              </div>
+            }
+          </div>
         </div>
-        <div class="mt-0.5">
-          <div class="text-lg text-muted-foreground mb-1">{{ match().stadium_name }}, {{ match().stadium_city }}, {{ match().stadium_country }}</div>
+      }
+
+      @if (!isResult()) {
+        <div class="mt-1.5 text-sm text-muted-foreground">
+          {{ match().stadium_name }}, {{ match().stadium_city }}
           @if (match().neutral_venue) {
-            <div class="text-base text-muted-foreground font-medium mt-0.5">
-              <span class="text-accent-amber font-semibold text-base">Neutral Venue</span>
-            </div>
+            &nbsp;·&nbsp;<span class="text-accent-amber font-medium">Neutral Venue</span>
           }
         </div>
       }
@@ -50,6 +68,9 @@ export class MatchRowComponent {
   match = input.required<MLSMatch>();
   goalEvents = input<readonly GoalEvent[]>([]);
   isResult = input<boolean>(false);
+
+  homeGoals = computed(() => this.goalEvents().filter(g => g.side === 'home'));
+  awayGoals = computed(() => this.goalEvents().filter(g => g.side === 'away'));
 
   scoreLabel = computed(() => {
     const m = this.match();

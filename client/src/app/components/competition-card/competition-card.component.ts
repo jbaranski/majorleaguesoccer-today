@@ -8,17 +8,14 @@ import { MatchRowComponent } from '../match-row/match-row.component';
   imports: [MatchRowComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="border-2 border-border mb-4 overflow-hidden">
-      <div [class]="headerClass()">
-        <div class="text-2xl font-bold uppercase tracking-[0.5px] mb-1 leading-[1.2] text-foreground">{{ competition() }}</div>
-        <div class="text-lg italic text-muted-foreground mb-1">{{ formattedDate() }}</div>
-        <div class="flex gap-2 items-center">
-          <span class="text-lg font-medium text-muted-foreground">Match Day {{ matchDay() }}</span>
-          <span class="text-lg text-muted-foreground">-</span>
-          <span class="text-lg font-medium text-muted-foreground">{{ season() }} Season</span>
+    <div class="mb-8">
+      <div class="flex items-start gap-3 mb-3 pl-3 border-l-4 border-primary">
+        <div>
+          <div class="text-sm font-bold uppercase tracking-wider text-foreground leading-tight">{{ competition() }}</div>
+          <div class="text-xs text-muted-foreground mt-0.5">{{ formattedDate() }} &nbsp;·&nbsp; Match Day {{ matchDay() }} &nbsp;·&nbsp; {{ season() }}</div>
         </div>
       </div>
-      <div>
+      <div class="divide-y divide-border">
         @if (isResult()) {
           @for (result of results(); track result.match.match_id) {
             <app-match-row [match]="result.match" [goalEvents]="result.goalEvents" [isResult]="true" />
@@ -40,10 +37,6 @@ export class CompetitionCardComponent {
 
   private firstMatch = computed(() =>
     this.isResult() ? this.results()[0]?.match : this.matches()[0]
-  );
-
-  headerClass = computed(() =>
-    `${this.isResult() ? 'bg-card-result' : 'bg-card-header'} pt-2.5 px-3 pb-1.5 sm:pt-3 sm:px-4 sm:pb-2 border-b-2 border-border`
   );
 
   formattedDate = computed(() => {

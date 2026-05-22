@@ -11,22 +11,29 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div class="text-center text-muted-foreground text-xl mt-4 mb-2">Loading today's matches...</div>
+      <div class="text-center text-muted-foreground text-base py-12">Loading today's matches...</div>
     } @else if (error()) {
-      <div class="text-center text-destructive text-xl mt-4 mb-2">{{ error() }}</div>
+      <div class="text-center text-destructive text-base py-12">{{ error() }}</div>
     } @else {
-      <div class="text-center text-muted-foreground text-xl mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
+      <p class="text-sm text-muted-foreground text-center mb-8">Last updated: {{ lastUpdated() }}</p>
+
       @if (todayCompetitions().size === 0) {
-        <div class="text-center text-muted-foreground text-xl mt-4">No games scheduled for today</div>
+        <div class="text-center text-muted-foreground text-base py-8">No games scheduled for today</div>
       } @else {
-        <div class="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3 mt-1">Today's Games</div>
+        <div class="flex items-center gap-4 mb-6">
+          <h2 class="text-sm font-black uppercase tracking-widest text-foreground whitespace-nowrap">Today's Games</h2>
+          <div class="flex-1 h-px bg-border"></div>
+        </div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [matches]="entry[1]" />
         }
       }
+
       @if (yesterdayCompetitions().size > 0) {
-        <hr class="border-0 border-t border-border my-6" />
-        <div class="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3 mt-1">Yesterday's Results</div>
+        <div class="flex items-center gap-4 mt-10 mb-6">
+          <h2 class="text-sm font-black uppercase tracking-widest text-foreground whitespace-nowrap">Yesterday's Results</h2>
+          <div class="flex-1 h-px bg-border"></div>
+        </div>
         @for (entry of yesterdayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [results]="entry[1]" [isResult]="true" />
         }
