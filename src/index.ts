@@ -35,10 +35,33 @@ interface MatchesOutput {
   readonly matches: readonly MLSMatch[];
 }
 
-interface GoalVideo {
-  readonly title: string;
-  readonly url: string;
+interface GoalEvent {
+  readonly minute: string;
+  readonly playerName: string;
+  readonly teamName: string;
   readonly side: 'home' | 'away';
+  readonly isOwnGoal: boolean;
+}
+
+interface GoalVideo {
+  readonly url: string;
+  readonly minute: string;
+  readonly side: 'home' | 'away';
+}
+
+interface KeyEventRecord {
+  readonly type: string;
+  readonly sub_type?: string;
+  readonly event: {
+    readonly minute_of_play: string;
+    readonly player_first_name: string;
+    readonly player_last_name: string;
+    readonly team_name: string;
+  };
+}
+
+interface KeyEventsResponse {
+  readonly events: readonly KeyEventRecord[];
 }
 
 interface BrightcoveVideoItem {
@@ -56,6 +79,7 @@ interface BrightcoveResponse {
 
 interface MatchResult {
   readonly match: MLSMatch;
+  readonly goalEvents: readonly GoalEvent[];
   readonly goalVideos: readonly GoalVideo[];
 }
 
@@ -129,64 +153,72 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
   return await response.json() as MLSMatchResponse;
 };
 
-const parseGoalSide = (title: string, homeCode: string, awayCode: string): 'home' | 'away' => {
-  // Title: "Goal: [Player] vs. [OpponentCode], [minute]'" — opponent = team that conceded
-  // OpponentCode may contain dots (e.g. "D.C."), so capture [A-Z.] and normalize before comparing
-  const match = /vs\.\s+([A-Z.]+)/i.exec(title);
-  if (match) {
-    const opponentCode = match[1]!.replace(/\./g, '').toUpperCase();
-    const home = homeCode.replace(/\./g, '').toUpperCase();
-    const away = awayCode.replace(/\./g, '').toUpperCase();
-    if (opponentCode === home) return 'away';
-    if (opponentCode === away) return 'home';
+const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamName: string): Promise<readonly GoalEvent[]> => {
+  try {
+    const url = `https://stats-api.mlssoccer.com/matches/${matchId}/key_events?per_page=1000`;
+    const response = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'JEFF-Bot' } });
+    if (!response.ok) return [];
+    const data = await response.json() as KeyEventsResponse;
+    return data.events
+      .filter(e => e.sub_type === 'goals' || e.type === 'own_goals')
+      .map(e => {
+        const isOwnGoal = e.type === 'own_goals';
+        // For own goals the player's team conceded, so the scoring side is the opponent
+        const scoringTeam = isOwnGoal
+          ? (e.event.team_name === homeTeamName ? awayTeamName : homeTeamName)
+          : e.event.team_name;
+        return {
+          minute: e.event.minute_of_play,
+          playerName: `${e.event.player_first_name} ${e.event.player_last_name}`.trim(),
+          teamName: e.event.team_name,
+          side: scoringTeam === homeTeamName ? 'home' : 'away',
+          isOwnGoal
+        };
+      });
+  } catch {
+    return [];
   }
-  return 'home';
-};
-
-// Some items have malformed thumbnail titles (e.g. "TORgoal (1)") but valid slugs
-// like "goal-d-etienne-jr-vs-clt-22". Detect goals by slug pattern as fallback.
-const isGoalSlug = (slug: string): boolean => /^(pk-)?goal-/.test(slug);
-
-// Reconstruct a display title from a slug like "goal-d-etienne-jr-vs-clt-22"
-const titleFromSlug = (slug: string): string => {
-  const isPk = slug.startsWith('pk-goal-');
-  const body = slug.slice(isPk ? 'pk-goal-'.length : 'goal-'.length);
-  const vsIdx = body.indexOf('-vs-');
-  if (vsIdx === -1) return isPk ? 'PK Goal' : 'Goal';
-  const playerParts = body.slice(0, vsIdx).split('-');
-  const afterVs = body.slice(vsIdx + 4);
-  const opponent = afterVs.replace(/-\d+$/, '').replace(/-/g, '').toUpperCase();
-  const minute = (/-(\d+)$/.exec(afterVs) ?? [])[1] ?? '';
-  const player = playerParts
-    .map(p => p.length === 1 ? `${p.toUpperCase()}.` : p.charAt(0).toUpperCase() + p.slice(1))
-    .join(' ');
-  const prefix = isPk ? 'PK Goal' : 'Goal';
-  return minute ? `${prefix}: ${player} vs. ${opponent}, ${minute}'` : `${prefix}: ${player} vs. ${opponent}`;
 };
 
 const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: string): Promise<readonly GoalVideo[]> => {
   try {
     const url = `https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=${matchId}`;
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'JEFF-Bot'
-      }
-    });
+    const response = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'JEFF-Bot' } });
     if (!response.ok) return [];
-
     const data = await response.json() as BrightcoveResponse;
 
+    // Determine side from title "vs. [OpponentCode]" or from slug "goal-...-vs-{code}-{minute}"
+    const extractOpponentCode = (title: string, slug: string): string => {
+      const titleMatch = /vs\.\s+([A-Z.]+)/i.exec(title);
+      if (titleMatch) return titleMatch[1]!.replace(/\./g, '').toUpperCase();
+      const vsIdx = slug.indexOf('-vs-');
+      if (vsIdx !== -1) return slug.slice(vsIdx + 4).replace(/-\d+$/, '').replace(/-/g, '').toUpperCase();
+      return '';
+    };
+
+    const sideFromOpponent = (opponentCode: string): 'home' | 'away' => {
+      const home = homeCode.replace(/\./g, '').toUpperCase();
+      const away = awayCode.replace(/\./g, '').toUpperCase();
+      if (opponentCode === home) return 'away';
+      if (opponentCode === away) return 'home';
+      return 'home';
+    };
+
+    const minuteFromTitle = (title: string): string =>
+      (/,\s*(\d+(?:\+\d+)?)'/.exec(title) ?? [])[1] ?? '';
+    const minuteFromSlug = (slug: string): string =>
+      (/-(\d+)$/.exec(slug) ?? [])[1] ?? '';
+
     return data.items
-      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? '') || isGoalSlug(item.slug))
+      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-)?goal-/.test(item.slug))
       .map(item => {
-        const title = /^(pk )?goal:/i.test(item.thumbnail?.title ?? '')
-          ? item.thumbnail.title
-          : titleFromSlug(item.slug);
+        const title = item.thumbnail?.title ?? '';
+        const opponentCode = extractOpponentCode(title, item.slug);
+        const minute = minuteFromTitle(title) || minuteFromSlug(item.slug);
         return {
-          title,
           url: `https://www.mlssoccer.com/video/${item.slug}`,
-          side: parseGoalSide(title, homeCode, awayCode)
+          minute,
+          side: sideFromOpponent(opponentCode)
         };
       });
   } catch {
@@ -316,6 +348,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         ${competitionMatches.map(match => {
           const key = match.match_id ?? match.planned_kickoff_time + match.home_team_name;
           const result = resultsByMatchId.get(key);
+          const goalEvents = result?.goalEvents ?? [];
           const goalVideos = result?.goalVideos ?? [];
           const isFinal = match.match_status === 'finalWhistle';
           const homeGoals = match.home_team_goals ?? 0;
@@ -329,12 +362,16 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
               : `${homeGoals} - ${awayGoals}`
             : '? - ?';
 
-          const homeVideos = goalVideos.filter(g => g.side === 'home');
-          const awayVideos = goalVideos.filter(g => g.side === 'away');
-          const allGoalItems = [
-            ...homeVideos.map(g => `<div class="goal-item"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
-            ...awayVideos.map(g => `<div class="goal-item goal-item-away"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
-          ];
+          const renderGoal = (e: GoalEvent): string => {
+            const video = goalVideos.find(v => v.minute === e.minute && v.side === e.side);
+            const label = escapeHtml(`${e.playerName}${e.isOwnGoal ? ' (OG)' : ''}, ${e.minute}'`);
+            const cls = `goal-item${e.side === 'away' ? ' goal-item-away' : ''}`;
+            return video
+              ? `<div class="${cls}"><a href="${escapeHtml(video.url)}" target="_blank" rel="noopener">${label}</a></div>`
+              : `<div class="${cls}"><span>${label}</span></div>`;
+          };
+
+          const allGoalItems = goalEvents.map(renderGoal);
 
           return `
           <div class="match">
@@ -548,9 +585,6 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .goal-item-away {
             text-align: right;
         }
-        .goal-no-video {
-            color: #6b7280;
-        }
         .datetime {
             font-size: 13px;
             font-weight: 500;
@@ -709,33 +743,43 @@ const main = async (): Promise<void> => {
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
-      sortedYesterdayMatches.map(async match => ({
-        match,
-        goalVideos: match.match_id && match.match_status === 'finalWhistle'
-          ? await fetchGoalVideos(
-              match.match_id,
-              match.home_team_three_letter_code ?? '',
-              match.away_team_three_letter_code ?? ''
-            )
-          : []
-      }))
+      sortedYesterdayMatches.map(async match => {
+        if (!match.match_id || match.match_status !== 'finalWhistle') {
+          return { match, goalEvents: [], goalVideos: [] };
+        }
+        const [goalEvents, goalVideos] = await Promise.all([
+          fetchMatchEvents(match.match_id, match.home_team_name, match.away_team_name),
+          fetchGoalVideos(match.match_id, match.home_team_three_letter_code ?? '', match.away_team_three_letter_code ?? '')
+        ]);
+        return { match, goalEvents, goalVideos };
+      })
     );
 
     const html = generateHTML(sortedTodayMatches, yesterdayResults);
     const json = generateJSON(sortedTodayMatches);
 
-    for (const { match, goalVideos } of yesterdayResults) {
+    for (const { match, goalEvents, goalVideos } of yesterdayResults) {
       if (match.match_status !== 'finalWhistle') continue;
       const expectedHome = match.home_team_goals ?? 0;
       const expectedAway = match.away_team_goals ?? 0;
-      const foundHome = goalVideos.filter(g => g.side === 'home').length;
-      const foundAway = goalVideos.filter(g => g.side === 'away').length;
-      if (foundHome < expectedHome || foundAway < expectedAway) {
+      const eventsHome = goalEvents.filter(e => e.side === 'home').length;
+      const eventsAway = goalEvents.filter(e => e.side === 'away').length;
+      if (eventsHome !== expectedHome || eventsAway !== expectedAway) {
         console.warn(
-          `[WARN] Missing goal videos for ${match.match_id} ` +
+          `[WARN] Key events count mismatch for ${match.match_id} ` +
           `(${match.home_team_name} vs ${match.away_team_name}): ` +
-          `expected home=${expectedHome} away=${expectedAway}, ` +
-          `found home=${foundHome} away=${foundAway}`
+          `score home=${expectedHome} away=${expectedAway}, ` +
+          `events home=${eventsHome} away=${eventsAway}`
+        );
+      }
+      const videosHome = goalVideos.filter(v => v.side === 'home').length;
+      const videosAway = goalVideos.filter(v => v.side === 'away').length;
+      if (videosHome < eventsHome || videosAway < eventsAway) {
+        console.warn(
+          `[WARN] Missing Brightcove videos for ${match.match_id} ` +
+          `(${match.home_team_name} vs ${match.away_team_name}): ` +
+          `events home=${eventsHome} away=${eventsAway}, ` +
+          `videos home=${videosHome} away=${videosAway}`
         );
       }
     }
