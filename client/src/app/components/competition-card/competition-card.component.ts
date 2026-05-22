@@ -9,11 +9,9 @@ import { MatchRowComponent } from '../match-row/match-row.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mb-8">
-      <div class="flex items-start gap-3 mb-3 pl-3 border-l-4 border-primary">
-        <div>
-          <div class="text-sm font-bold uppercase tracking-wider text-foreground leading-tight">{{ competition() }}</div>
-          <div class="text-xs text-muted-foreground mt-0.5">{{ formattedDate() }} &nbsp;·&nbsp; Match Day {{ matchDay() }} &nbsp;·&nbsp; {{ season() }}</div>
-        </div>
+      <div class="mb-3">
+        <div class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{{ competition() }}</div>
+        <div class="text-xs text-muted-foreground mt-0.5">{{ formattedDate() }} &nbsp;·&nbsp; Match Day {{ matchDay() }} &nbsp;·&nbsp; {{ season() }}</div>
       </div>
       <div class="divide-y divide-border">
         @if (isResult()) {

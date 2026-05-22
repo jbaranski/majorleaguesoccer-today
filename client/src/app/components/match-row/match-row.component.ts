@@ -8,21 +8,28 @@ import { MatchFormatter } from '../../utils/match-formatter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
   template: `
-    <div class="py-4 px-1 hover:bg-muted rounded-lg transition-colors">
+    <div class="py-4 px-1">
       <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <span class="text-base font-semibold text-foreground leading-snug">{{ match().home_team_name }}</span>
+        <span class="text-lg font-semibold text-foreground leading-snug">{{ match().home_team_name }}</span>
 
         @if (isResult()) {
-          <span class="text-base font-black text-score-fg bg-score-bg px-4 py-1.5 rounded-lg tabular-nums whitespace-nowrap">
+          <span class="text-base font-semibold text-score-fg bg-score-bg px-4 py-1.5 rounded-lg tabular-nums whitespace-nowrap">
             {{ scoreLabel() }}
           </span>
         } @else {
-          <span class="text-sm font-bold text-kickoff-fg bg-kickoff-bg px-3 py-1.5 rounded-full whitespace-nowrap">
+          <span class="text-base font-semibold text-kickoff-fg bg-kickoff-bg px-4 py-1.5 rounded-lg whitespace-nowrap">
             {{ formattedKickoffTime() }}
           </span>
         }
 
-        <span class="text-base font-semibold text-foreground leading-snug text-right">{{ match().away_team_name }}</span>
+        <span class="text-lg font-semibold text-foreground leading-snug text-right">{{ match().away_team_name }}</span>
+      </div>
+
+      <div class="mt-1.5 text-sm text-muted-foreground">
+        {{ match().stadium_name }}, {{ match().stadium_city }}
+        @if (match().neutral_venue) {
+          &nbsp;·&nbsp;<span class="text-accent-amber font-medium">Neutral Venue</span>
+        }
       </div>
 
       @if (isResult() && goalEvents().length > 0) {
@@ -50,15 +57,6 @@ import { MatchFormatter } from '../../utils/match-formatter';
               </div>
             }
           </div>
-        </div>
-      }
-
-      @if (!isResult()) {
-        <div class="mt-1.5 text-sm text-muted-foreground">
-          {{ match().stadium_name }}, {{ match().stadium_city }}
-          @if (match().neutral_venue) {
-            &nbsp;·&nbsp;<span class="text-accent-amber font-medium">Neutral Venue</span>
-          }
         </div>
       }
     </div>
