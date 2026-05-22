@@ -143,6 +143,27 @@ const parseGoalSide = (title: string, homeCode: string, awayCode: string): 'home
   return 'home';
 };
 
+// Some items have malformed thumbnail titles (e.g. "TORgoal (1)") but valid slugs
+// like "goal-d-etienne-jr-vs-clt-22". Detect goals by slug pattern as fallback.
+const isGoalSlug = (slug: string): boolean => /^(pk-)?goal-/.test(slug);
+
+// Reconstruct a display title from a slug like "goal-d-etienne-jr-vs-clt-22"
+const titleFromSlug = (slug: string): string => {
+  const isPk = slug.startsWith('pk-goal-');
+  const body = slug.slice(isPk ? 'pk-goal-'.length : 'goal-'.length);
+  const vsIdx = body.indexOf('-vs-');
+  if (vsIdx === -1) return isPk ? 'PK Goal' : 'Goal';
+  const playerParts = body.slice(0, vsIdx).split('-');
+  const afterVs = body.slice(vsIdx + 4);
+  const opponent = afterVs.replace(/-\d+$/, '').replace(/-/g, '').toUpperCase();
+  const minute = (/-(\d+)$/.exec(afterVs) ?? [])[1] ?? '';
+  const player = playerParts
+    .map(p => p.length === 1 ? `${p.toUpperCase()}.` : p.charAt(0).toUpperCase() + p.slice(1))
+    .join(' ');
+  const prefix = isPk ? 'PK Goal' : 'Goal';
+  return minute ? `${prefix}: ${player} vs. ${opponent}, ${minute}'` : `${prefix}: ${player} vs. ${opponent}`;
+};
+
 const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: string): Promise<readonly GoalVideo[]> => {
   try {
     const url = `https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=${matchId}`;
@@ -157,12 +178,17 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
     const data = await response.json() as BrightcoveResponse;
 
     return data.items
-      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? ''))
-      .map(item => ({
-        title: item.thumbnail.title,
-        url: `https://www.mlssoccer.com/video/${item.slug}`,
-        side: parseGoalSide(item.thumbnail.title, homeCode, awayCode)
-      }));
+      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? '') || isGoalSlug(item.slug))
+      .map(item => {
+        const title = /^(pk )?goal:/i.test(item.thumbnail?.title ?? '')
+          ? item.thumbnail.title
+          : titleFromSlug(item.slug);
+        return {
+          title,
+          url: `https://www.mlssoccer.com/video/${item.slug}`,
+          side: parseGoalSide(title, homeCode, awayCode)
+        };
+      });
   } catch {
     return [];
   }
@@ -303,17 +329,11 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
               : `${homeGoals} - ${awayGoals}`
             : '? - ?';
 
-          // Build full goal list: linked goals from Brightcove + placeholders for goals without video
           const homeVideos = goalVideos.filter(g => g.side === 'home');
           const awayVideos = goalVideos.filter(g => g.side === 'away');
-          const homePlaceholders = Math.max(0, homeGoals - homeVideos.length);
-          const awayPlaceholders = Math.max(0, awayGoals - awayVideos.length);
-
           const allGoalItems = [
             ...homeVideos.map(g => `<div class="goal-item"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
-            ...Array.from({ length: homePlaceholders }, () => `<div class="goal-item"><span class="goal-no-video">⚽ Goal</span></div>`),
             ...awayVideos.map(g => `<div class="goal-item goal-item-away"><a href="${escapeHtml(g.url)}" target="_blank" rel="noopener">${escapeHtml(g.title)}</a></div>`),
-            ...Array.from({ length: awayPlaceholders }, () => `<div class="goal-item goal-item-away"><span class="goal-no-video">Goal ⚽</span></div>`),
           ];
 
           return `
