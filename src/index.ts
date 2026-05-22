@@ -417,6 +417,10 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
                 : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong><span class="result-unknown">(result unknown)</span>`
               }
             </div>
+            <div class="venue">
+              <div class="stadium">${escapeHtml(match.stadium_name)}, ${escapeHtml(match.stadium_city)}, ${escapeHtml(match.stadium_country)}</div>
+              ${match.neutral_venue ? '<div class="details"><span class="neutral">Neutral Venue</span></div>' : ''}
+            </div>
             ${hasScore && allGoalItems.length > 0 ? `
             <div class="goals-list">
               ${allGoalItems.join('')}
@@ -454,6 +458,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Major League Soccer Today</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -461,11 +468,14 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #ffffff;
             min-height: 100vh;
             padding: 16px;
             color: #1f2937;
+        }
+        input, button, select, textarea {
+            font-family: inherit;
         }
         .container {
             max-width: 672px;
@@ -478,24 +488,14 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             font-weight: 700;
             margin-bottom: 8px;
         }
-        .top-separator {
-            border: none;
-            border-top: 1px solid #e5e7eb;
-            margin: 24px 0;
-        }
         .section-header {
-            font-size: 1rem;
+            font-size: 0.875rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #374151;
             margin-bottom: 12px;
-            margin-top: 4px;
-        }
-        .section-separator {
-            border: none;
-            border-top: 1px solid #e5e7eb;
-            margin: 24px 0 16px 0;
+            margin-top: 32px;
         }
         .competition-card {
             border: 2px solid #e5e7eb;
@@ -514,7 +514,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-bottom: 0;
         }
         .competition-name {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -523,7 +523,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             color: #1f2937;
         }
         .competition-date {
-            font-size: 26px;
+            font-size: 16px;
             font-weight: 400;
             font-style: italic;
             color: #4b5563;
@@ -536,17 +536,17 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-bottom: 0;
         }
         .match-day {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 500;
             color: #6b7280;
         }
         .separator {
-            font-size: 18px;
+            font-size: 14px;
             color: #6b7280;
             font-weight: 500;
         }
         .season {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 500;
             color: #6b7280;
         }
@@ -556,16 +556,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .match {
             padding: 12px 16px;
             border-bottom: 2px solid #e5e7eb;
-            transition: background-color 0.2s ease;
-        }
-        .match:last-child {
-            border-bottom: none;
-        }
-        .match:hover {
-            background: #f9fafb;
         }
         .matchup {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             color: #1f2937;
             margin-bottom: 4px;
@@ -591,8 +584,8 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .score {
             flex-shrink: 0;
-            font-size: 28px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #111827;
             background: #f3f4f6;
             padding: 2px 8px;
@@ -602,23 +595,42 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             flex-shrink: 0;
             font-size: 20px;
             font-weight: 600;
-            color: #2563eb;
-            background: #eff6ff;
+            color: #111827;
+            background: #f3f4f6;
             padding: 2px 8px;
             border-radius: 4px;
         }
         .result-unknown {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 400;
             color: #9ca3af;
             margin-left: 8px;
         }
+        .venue {
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+        .stadium {
+            font-size: 14px;
+            font-weight: 400;
+            color: #6b7280;
+        }
+        .details {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .neutral {
+            color: #d97706;
+            font-weight: 600;
+            font-size: 14px;
+        }
         .goals-list {
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .goal-item {
-            font-size: 20px;
-            padding: 2px 0;
+            font-size: 16px;
         }
         .goal-item a {
             color: #2563eb;
@@ -630,39 +642,13 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .goal-item-away {
             text-align: right;
         }
-        .datetime {
-            font-size: 20px;
-            font-weight: 500;
-            color: #4b5563;
-            margin-bottom: 4px;
-        }
-        .venue {
-            margin-top: 2px;
-        }
-        .stadium {
-            font-size: 20px;
-            font-weight: 400;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-        .details {
-            font-size: 18px;
-            color: #6b7280;
-            font-weight: 500;
-            margin-top: 2px;
-        }
-        .neutral {
-            color: #d97706;
-            font-weight: 600;
-            font-size: 18px;
-        }
         .gray {
             color: #9ca3af;
         }
         .last-updated {
             text-align: center;
             color: #6b7280;
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 400;
             margin-top: 16px;
             margin-bottom: 8px;
@@ -670,7 +656,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .source-code {
             text-align: center;
             color: #6b7280;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 400;
             margin-top: 16px;
         }
@@ -690,7 +676,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .footer {
             text-align: center;
             color: #6b7280;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 300;
             margin-bottom: 0;
         }
@@ -705,7 +691,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .no-games {
             text-align: center;
             color: #6b7280;
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 400;
             margin-top: 16px;
         }
@@ -728,13 +714,12 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
-        <hr class="top-separator">
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
         ${todayMatches.length > 0
           ? `<div class="section-header">Today's Games</div>${todayHtml}`
           : '<div class="no-games">No games scheduled for today</div>'
         }
-        ${yesterdayResults.length > 0 ? `<hr class="section-separator">${yesterdayHtml}` : ''}
+        ${yesterdayResults.length > 0 ? yesterdayHtml : ''}
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
         </div>
@@ -743,9 +728,8 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         </div>
         <hr class="footer-separator">
         <div class="footer">
-          Copyright 2025,2026 Jeff Software |
-          <a href="mailto:mlstoday@jeffsoftware.com">mlstoday@jeffsoftware.com</a> |
-          <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">@jeffsoftware</a> |
+          Copy 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener">Jeff Software</a> |
+          <a href="mailto:admin@jeffsoftware.com">admin@jeffsoftware.com</a> |
           <a href="{{UNSUBSCRIBE_URL}}">Unsubscribe</a>
         </div>
     </div>
