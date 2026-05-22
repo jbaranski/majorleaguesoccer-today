@@ -465,14 +465,14 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             background: #ffffff;
             min-height: 100vh;
             padding: 16px;
-            color: #1f2937;
+            color: #1e293b;
         }
         .container {
             max-width: 672px;
             margin: 0 auto;
         }
         h1 {
-            color: #1f2937;
+            color: #1e293b;
             text-align: center;
             font-size: 2.25rem;
             font-weight: 700;
@@ -480,7 +480,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .top-separator {
             border: none;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #e2e8f0;
             margin: 24px 0;
         }
         .section-header {
@@ -488,27 +488,27 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #374151;
+            color: #64748b;
             margin-bottom: 12px;
             margin-top: 4px;
         }
         .section-separator {
             border: none;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #e2e8f0;
             margin: 24px 0 16px 0;
         }
         .competition-card {
-            border: 2px solid #e5e7eb;
+            border: 2px solid #e2e8f0;
             margin-bottom: 16px;
             overflow: hidden;
         }
         .competition-header {
-            background: #f3e8ff;
+            background: #ede9fe;
             padding: 12px 16px 8px 16px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e2e8f0;
         }
         .results-header {
-            background: #ecfdf5;
+            background: #f0fdf4;
         }
         .header-main {
             margin-bottom: 0;
@@ -520,13 +520,13 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             letter-spacing: 0.5px;
             margin-bottom: 4px;
             line-height: 1.2;
-            color: #1f2937;
+            color: #1e293b;
         }
         .competition-date {
             font-size: 26px;
             font-weight: 400;
             font-style: italic;
-            color: #4b5563;
+            color: #64748b;
             margin-bottom: 4px;
         }
         .header-meta {
@@ -538,36 +538,36 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .match-day {
             font-size: 18px;
             font-weight: 500;
-            color: #6b7280;
+            color: #64748b;
         }
         .separator {
             font-size: 18px;
-            color: #6b7280;
+            color: #64748b;
             font-weight: 500;
         }
         .season {
             font-size: 18px;
             font-weight: 500;
-            color: #6b7280;
+            color: #64748b;
         }
         .matches-list {
             padding: 0;
         }
         .match {
             padding: 12px 16px;
-            border-bottom: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e2e8f0;
             transition: background-color 0.2s ease;
         }
         .match:last-child {
             border-bottom: none;
         }
         .match:hover {
-            background: #f9fafb;
+            background: #f1f5f9;
         }
         .matchup {
             font-size: 24px;
             font-weight: 700;
-            color: #1f2937;
+            color: #1e293b;
             margin-bottom: 4px;
             line-height: 1.4;
         }
@@ -593,8 +593,8 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             flex-shrink: 0;
             font-size: 28px;
             font-weight: 800;
-            color: #111827;
-            background: #f3f4f6;
+            color: #1e293b;
+            background: #f1f5f9;
             padding: 2px 8px;
             border-radius: 4px;
         }
@@ -602,7 +602,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             flex-shrink: 0;
             font-size: 20px;
             font-weight: 600;
-            color: #2563eb;
+            color: #3b82f6;
             background: #eff6ff;
             padding: 2px 8px;
             border-radius: 4px;
@@ -610,7 +610,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .result-unknown {
             font-size: 20px;
             font-weight: 400;
-            color: #9ca3af;
+            color: #64748b;
             margin-left: 8px;
         }
         .goals-list {
@@ -621,7 +621,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             padding: 2px 0;
         }
         .goal-item a {
-            color: #2563eb;
+            color: #3b82f6;
             text-decoration: none;
         }
         .goal-item a:hover {
@@ -633,7 +633,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .datetime {
             font-size: 20px;
             font-weight: 500;
-            color: #4b5563;
+            color: #64748b;
             margin-bottom: 4px;
         }
         .venue {
@@ -642,12 +642,12 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .stadium {
             font-size: 20px;
             font-weight: 400;
-            color: #6b7280;
+            color: #64748b;
             margin-bottom: 4px;
         }
         .details {
             font-size: 18px;
-            color: #6b7280;
+            color: #64748b;
             font-weight: 500;
             margin-top: 2px;
         }
@@ -657,11 +657,11 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             font-size: 18px;
         }
         .gray {
-            color: #9ca3af;
+            color: #64748b;
         }
         .last-updated {
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 20px;
             font-weight: 400;
             margin-top: 16px;
@@ -669,7 +669,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .source-code {
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 18px;
             font-weight: 400;
             margin-top: 16px;
@@ -684,12 +684,12 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .footer-separator {
             border: none;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #e2e8f0;
             margin: 16px 0;
         }
         .footer {
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 16px;
             font-weight: 300;
             margin-bottom: 0;
@@ -704,7 +704,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .no-games {
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 20px;
             font-weight: 400;
             margin-top: 16px;
