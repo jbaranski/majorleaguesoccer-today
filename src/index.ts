@@ -724,6 +724,22 @@ const main = async (): Promise<void> => {
     const html = generateHTML(sortedTodayMatches, yesterdayResults);
     const json = generateJSON(sortedTodayMatches);
 
+    for (const { match, goalVideos } of yesterdayResults) {
+      if (match.match_status !== 'finalWhistle') continue;
+      const expectedHome = match.home_team_goals ?? 0;
+      const expectedAway = match.away_team_goals ?? 0;
+      const foundHome = goalVideos.filter(g => g.side === 'home').length;
+      const foundAway = goalVideos.filter(g => g.side === 'away').length;
+      if (foundHome < expectedHome || foundAway < expectedAway) {
+        console.warn(
+          `[WARN] Missing goal videos for ${match.match_id} ` +
+          `(${match.home_team_name} vs ${match.away_team_name}): ` +
+          `expected home=${expectedHome} away=${expectedAway}, ` +
+          `found home=${foundHome} away=${foundAway}`
+        );
+      }
+    }
+
     await writeFile(join(process.cwd(), 'index.html'), html, 'utf-8');
     await writeFile(join(process.cwd(), 'client', 'public', 'matches.json'), json, 'utf-8');
 
