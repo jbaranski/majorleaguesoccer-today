@@ -49,15 +49,19 @@ interface GoalVideo {
   readonly side: 'home' | 'away';
 }
 
+interface KeyEventScorer {
+  readonly player_first_name?: string;
+  readonly player_last_name?: string;
+  readonly player_alias?: string;
+  readonly team_name: string;
+}
+
 interface KeyEventRecord {
   readonly type: string;
   readonly sub_type?: string;
-  readonly event: {
+  readonly event: KeyEventScorer & {
     readonly minute_of_play: string;
-    readonly player_first_name?: string;
-    readonly player_last_name?: string;
-    readonly player_alias?: string;
-    readonly team_name: string;
+    readonly shot_at_goal?: KeyEventScorer;
   };
 }
 
@@ -164,15 +168,18 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
       .filter(e => e.sub_type === 'goals' || e.type === 'own_goals')
       .map(e => {
         const isOwnGoal = e.type === 'own_goals';
+        // Penalty events nest the actual scorer inside shot_at_goal; regular goals are at event level
+        const scorer: KeyEventScorer = e.event.shot_at_goal ?? e.event;
+        const fullName = `${scorer.player_first_name ?? ''} ${scorer.player_last_name ?? ''}`.trim();
+        const scoringTeamName = scorer.team_name;
         // For own goals the player's team conceded, so the scoring side is the opponent
         const scoringTeam = isOwnGoal
-          ? (e.event.team_name === homeTeamName ? awayTeamName : homeTeamName)
-          : e.event.team_name;
-        const fullName = `${e.event.player_first_name ?? ''} ${e.event.player_last_name ?? ''}`.trim();
+          ? (scoringTeamName === homeTeamName ? awayTeamName : homeTeamName)
+          : scoringTeamName;
         return {
           minute: e.event.minute_of_play,
-          playerName: fullName || e.event.player_alias || 'Unknown',
-          teamName: e.event.team_name,
+          playerName: fullName || scorer.player_alias || 'Unknown',
+          teamName: scoringTeamName,
           side: scoringTeam === homeTeamName ? 'home' : 'away',
           isOwnGoal
         };
