@@ -13,6 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Major League Soccer Today</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -20,11 +23,14 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #ffffff;
             min-height: 100vh;
             padding: 16px;
             color: #1f2937;
+        }
+        input, button, select, textarea {
+            font-family: inherit;
         }
         .container {
             max-width: 672px;
@@ -33,14 +39,18 @@
         h1 {
             color: #1f2937;
             text-align: center;
-            font-size: 1.875rem;
+            font-size: 2.25rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
-        .top-separator {
-            border: none;
-            border-top: 1px solid #e5e7eb;
-            margin: 24px 0;
+        .section-header {
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #374151;
+            margin-bottom: 12px;
+            margin-top: 32px;
         }
         .competition-card {
             border: 2px solid #e5e7eb;
@@ -52,11 +62,14 @@
             padding: 12px 16px 8px 16px;
             border-bottom: 2px solid #e5e7eb;
         }
+        .results-header {
+            background: #ecfdf5;
+        }
         .header-main {
             margin-bottom: 0;
         }
         .competition-name {
-            font-size: 14px;
+            font-size: 20px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -65,7 +78,7 @@
             color: #1f2937;
         }
         .competition-date {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             font-style: italic;
             color: #4b5563;
@@ -78,17 +91,17 @@
             margin-bottom: 0;
         }
         .match-day {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             color: #6b7280;
         }
         .separator {
-            font-size: 12px;
+            font-size: 14px;
             color: #6b7280;
             font-weight: 500;
         }
         .season {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 500;
             color: #6b7280;
         }
@@ -98,38 +111,67 @@
         .match {
             padding: 12px 16px;
             border-bottom: 2px solid #e5e7eb;
-            transition: background-color 0.2s ease;
-        }
-        .match:last-child {
-            border-bottom: none;
-        }
-        .match:hover {
-            background: #f9fafb;
         }
         .matchup {
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 700;
             color: #1f2937;
             margin-bottom: 4px;
             line-height: 1.4;
         }
-        .datetime {
-            font-size: 13px;
-            font-weight: 500;
-            color: #4b5563;
-            margin-bottom: 4px;
+        .result-matchup {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .result-team {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .result-home {
+            text-align: left;
+        }
+        .result-away {
+            text-align: right;
+        }
+        .score {
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .kickoff {
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .result-unknown {
+            font-size: 16px;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-left: 8px;
         }
         .venue {
             margin-top: 2px;
-        }
-        .stadium {
-            font-size: 13px;
-            font-weight: 400;
-            color: #6b7280;
             margin-bottom: 4px;
         }
+        .stadium {
+            font-size: 14px;
+            font-weight: 400;
+            color: #6b7280;
+        }
         .details {
-            font-size: 12px;
+            font-size: 14px;
             color: #6b7280;
             font-weight: 500;
             margin-top: 2px;
@@ -137,7 +179,23 @@
         .neutral {
             color: #d97706;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 14px;
+        }
+        .goals-list {
+            margin-top: 4px;
+        }
+        .goal-item {
+            font-size: 16px;
+        }
+        .goal-item a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .goal-item a:hover {
+            text-decoration: underline;
+        }
+        .goal-item-away {
+            text-align: right;
         }
         .gray {
             color: #9ca3af;
@@ -173,7 +231,7 @@
         .footer {
             text-align: center;
             color: #6b7280;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 300;
             margin-bottom: 0;
         }
@@ -197,7 +255,7 @@
                 padding: 0 8px;
             }
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
             }
             .competition-header {
                 padding: 10px 12px 6px 12px;
@@ -211,9 +269,8 @@
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
-        <hr class="top-separator">
         <div class="last-updated">Last updated: 5/22/2026</div>
-        
+        <div class="section-header">Today's Games</div>
     <div class="competition-card">
       <div class="competition-header">
         <div class="header-main">
@@ -229,10 +286,11 @@
       <div class="matches-list">
         
           <div class="match">
-            <div class="matchup">
-              <strong>Mexico vs Ghana</strong>
+            <div class="matchup result-matchup">
+              <strong class="result-team result-home">Mexico</strong>
+              <span class="kickoff">10:00 PM ET</span>
+              <strong class="result-team result-away">Ghana</strong>
             </div>
-            <div class="datetime">10:00 PM ET</div>
             <div class="venue">
               <div class="stadium">Estadio Cuauhtémoc, Puebla, Mexico</div>
               
@@ -242,6 +300,7 @@
       </div>
     </div>
   
+        
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
         </div>
@@ -250,9 +309,8 @@
         </div>
         <hr class="footer-separator">
         <div class="footer">
-          Copyright 2025,2026 Jeff Software |
-          <a href="mailto:mlstoday@jeffsoftware.com">mlstoday@jeffsoftware.com</a> |
-          <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">@jeffsoftware</a> |
+          Copy 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener">Jeff Software</a> |
+          <a href="mailto:admin@jeffsoftware.com">admin@jeffsoftware.com</a> |
           <a href="{{UNSUBSCRIBE_URL}}">Unsubscribe</a>
         </div>
     </div>
