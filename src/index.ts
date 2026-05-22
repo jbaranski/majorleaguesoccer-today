@@ -244,6 +244,16 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
   const generateYesterdayResultsHtml = (results: readonly MatchResult[]): string => {
     if (results.length === 0) return '';
 
+    // Debug: log first match to verify field names at runtime
+    const firstResult = results[0]!.match;
+    console.log('DEBUG yesterday match sample:', JSON.stringify({
+      match_id: firstResult.match_id,
+      home_team_name: firstResult.home_team_name,
+      home_team_goals: firstResult['home_team_goals'],
+      away_team_goals: firstResult['away_team_goals'],
+      match_status: firstResult['match_status'],
+    }));
+
     const matchesByCompetition = groupByCompetition(results.map(r => r.match));
     const resultsByMatchId = new Map(results.map(r => [r.match.match_id ?? r.match.planned_kickoff_time + r.match.home_team_name, r]));
 
