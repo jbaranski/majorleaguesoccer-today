@@ -18,6 +18,8 @@ interface MLSMatch {
   readonly start_date?: string;
   readonly home_team_goals?: number | null;
   readonly away_team_goals?: number | null;
+  readonly home_team_three_letter_code?: string;
+  readonly away_team_three_letter_code?: string;
   [key: string]: unknown;
 }
 
@@ -33,6 +35,7 @@ interface MatchesOutput {
 interface GoalVideo {
   readonly title: string;
   readonly url: string;
+  readonly side: 'home' | 'away';
 }
 
 interface BrightcoveVideoItem {
@@ -123,7 +126,18 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
   return await response.json() as MLSMatchResponse;
 };
 
-const fetchGoalVideos = async (matchId: string): Promise<readonly GoalVideo[]> => {
+const parseGoalSide = (title: string, homeCode: string, awayCode: string): 'home' | 'away' => {
+  // Title: "Goal: [Player] vs. [OpponentCode], [minute]'" — opponent = team that conceded
+  const match = /vs\.\s+([A-Z]+)/i.exec(title);
+  if (match) {
+    const opponentCode = match[1]!.toUpperCase();
+    if (opponentCode === homeCode.toUpperCase()) return 'away';
+    if (opponentCode === awayCode.toUpperCase()) return 'home';
+  }
+  return 'home';
+};
+
+const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: string): Promise<readonly GoalVideo[]> => {
   try {
     const url = `https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=${matchId}`;
     const response = await fetch(url, {
@@ -140,7 +154,8 @@ const fetchGoalVideos = async (matchId: string): Promise<readonly GoalVideo[]> =
       .filter(item => item.thumbnail?.title?.startsWith('Goal:'))
       .map(item => ({
         title: item.thumbnail.title,
-        url: `https://www.mlssoccer.com/video/${item.slug}`
+        url: `https://www.mlssoccer.com/video/${item.slug}`,
+        side: parseGoalSide(item.thumbnail.title, homeCode, awayCode)
       }));
   } catch {
     return [];
@@ -283,7 +298,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             ${goalVideos.length > 0 ? `
             <div class="goals-list">
               ${goalVideos.map(goal => `
-                <div class="goal-item">
+                <div class="goal-item${goal.side === 'away' ? ' goal-item-away' : ''}">
                   <a href="${escapeHtml(goal.url)}" target="_blank" rel="noopener">${escapeHtml(goal.title)}</a>
                 </div>
               `).join('')}
@@ -479,6 +494,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .goal-item a:hover {
             text-decoration: underline;
         }
+        .goal-item-away {
+            text-align: right;
+        }
         .datetime {
             font-size: 13px;
             font-weight: 500;
@@ -639,7 +657,13 @@ const main = async (): Promise<void> => {
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
       sortedYesterdayMatches.map(async match => ({
         match,
-        goalVideos: match.match_id ? await fetchGoalVideos(match.match_id) : []
+        goalVideos: match.match_id
+          ? await fetchGoalVideos(
+              match.match_id,
+              match.home_team_three_letter_code ?? '',
+              match.away_team_three_letter_code ?? ''
+            )
+          : []
       }))
     );
 
