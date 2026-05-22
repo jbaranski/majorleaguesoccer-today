@@ -7,8 +7,8 @@ import { environment } from '../../../environments/environment';
   imports: [EmailCollector],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="text-center mb-4">
-      <p class="text-sm text-gray-500 mb-4">Want these fixtures delivered to your inbox every morning?</p>
+    <div class="text-center mt-8 mb-4">
+      <p class="text-2xl text-gray-500 mb-4">Want these fixtures delivered to your inbox every morning?</p>
       <ec-email-collector [config]="emailConfig" />
     </div>
   `
