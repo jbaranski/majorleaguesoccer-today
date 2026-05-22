@@ -743,9 +743,8 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         </div>
         <hr class="footer-separator">
         <div class="footer">
-          Copyright 2025,2026 Jeff Software |
+          Copyright 2026 <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">Jeff Software</a> |
           <a href="mailto:mlstoday@jeffsoftware.com">mlstoday@jeffsoftware.com</a> |
-          <a href="https://twitter.com/jeffsoftware" target="_blank" rel="noopener">@jeffsoftware</a> |
           <a href="{{UNSUBSCRIBE_URL}}">Unsubscribe</a>
         </div>
     </div>
