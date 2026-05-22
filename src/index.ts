@@ -208,8 +208,16 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
 
     const minuteFromTitle = (title: string): string =>
       (/,\s*(\d+(?:\+\d+)?)'/.exec(title) ?? [])[1] ?? '';
-    const minuteFromSlug = (slug: string): string =>
-      (/-(\d+)$/.exec(slug) ?? [])[1] ?? '';
+    // Slug format: "goal-player-vs-team-45-1" (injury time) or "goal-player-vs-team-82"
+    // After -vs-, strip team code (letters) then take the remaining digits, converting
+    // hyphen-separated extra time back to "45+1" form.
+    const minuteFromSlug = (slug: string): string => {
+      const vsIdx = slug.indexOf('-vs-');
+      if (vsIdx === -1) return '';
+      const afterVs = slug.slice(vsIdx + 4);
+      const m = /(\d+(?:-\d+)?)$/.exec(afterVs);
+      return m ? m[1]!.replace(/-(\d+)$/, '+$1') : '';
+    };
 
     return data.items
       .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-)?goal-/.test(item.slug))
@@ -364,8 +372,11 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
               : `${homeGoals} - ${awayGoals}`
             : '? - ?';
 
+          const minutesClose = (a: string, b: string): boolean =>
+            a === b || Math.abs(parseInt(a) - parseInt(b)) <= 1;
+
           const renderGoal = (e: GoalEvent): string => {
-            const video = goalVideos.find(v => v.minute === e.minute && v.side === e.side);
+            const video = goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
             const label = escapeHtml(`${e.playerName}${e.isOwnGoal ? ' (OG)' : ''}, ${e.minute}'`);
             const cls = `goal-item${e.side === 'away' ? ' goal-item-away' : ''}`;
             return video
