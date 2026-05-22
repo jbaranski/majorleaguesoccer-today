@@ -26,7 +26,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
         @if (goalEvents().length > 0) {
           <div class="mt-0.5">
             @for (goal of goalEvents(); track $index) {
-              <div [class]="goal.side === 'away' ? 'text-base py-0.5 text-right' : 'text-base py-0.5'">
+              <div [class]="goal.side === 'away' ? 'text-base text-right' : 'text-base'">
                 @if (goal.videoUrl) {
                   <a [href]="goal.videoUrl" target="_blank" rel="noopener" class="text-blue-600 hover:underline">{{ goalLabel(goal) }}</a>
                 } @else {
