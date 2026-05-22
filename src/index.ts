@@ -451,10 +451,10 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             white-space: nowrap;
         }
         .result-home {
-            text-align: right;
+            text-align: left;
         }
         .result-away {
-            text-align: left;
+            text-align: right;
         }
         .score {
             flex-shrink: 0;
