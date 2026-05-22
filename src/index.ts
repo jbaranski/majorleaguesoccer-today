@@ -373,7 +373,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             : '? - ?';
 
           const minutesClose = (a: string, b: string): boolean =>
-            a === b || Math.abs(parseInt(a) - parseInt(b)) <= 1;
+            a === b || Math.abs(parseInt(a) - parseInt(b)) <= 5;
 
           const renderGoal = (e: GoalEvent): string => {
             const video = goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
