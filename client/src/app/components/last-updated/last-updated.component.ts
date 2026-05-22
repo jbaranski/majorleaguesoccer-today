@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-last-updated',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="text-center text-gray-500 text-2xl font-normal mt-4 mb-2">
+    <div class="text-center text-muted-foreground text-2xl font-normal mt-4 mb-2">
       Last updated: {{ date() }}
     </div>
   `,

@@ -1,11 +1,53 @@
 @import "tailwindcss";
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  background: #ffffff;
-  min-height: 100vh;
-  padding: 16px;
-  color: #1f2937;
+@theme {
+  /* Page background — pure white */
+  --color-background: oklch(100% 0 0);
+
+  /* Card surface — very light warm-neutral */
+  --color-card: oklch(98.5% 0.003 240);
+
+  /* Upcoming match card header — soft lavender-purple tint */
+  --color-card-header: oklch(93% 0.04 290);
+
+  /* Yesterday's results card header — soft green tint */
+  --color-card-result: oklch(95% 0.04 155);
+
+  /* Muted backgrounds — hover states, score badge bg */
+  --color-muted: oklch(96% 0.005 240);
+
+  /* Border color — all card/row borders */
+  --color-border: oklch(90% 0.01 240);
+
+  /* Primary text — near-black */
+  --color-foreground: oklch(20% 0.01 240);
+
+  /* Muted/secondary text */
+  --color-muted-foreground: oklch(50% 0.015 240);
+
+  /* Blue accent — kickoff time badge text, section labels */
+  --color-primary: oklch(52% 0.2 255);
+
+  /* Light blue tinted background for primary-accented badges */
+  --color-primary-subtle: oklch(94% 0.05 255);
+
+  /* Error / destructive text */
+  --color-destructive: oklch(55% 0.22 25);
+
+  /* Neutral venue badge — amber */
+  --color-accent-amber: oklch(58% 0.15 65);
+}
+
+/* Dark mode variant — declared for future use, not activated */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    min-height: 100vh;
+    padding: 16px;
+  }
 }
 
 /* These target Angular component host elements and cannot be expressed as Tailwind utility classes in templates */

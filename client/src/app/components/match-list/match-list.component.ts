@@ -11,22 +11,22 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div class="text-center text-gray-500 text-xl mt-4 mb-2">Loading today's matches...</div>
+      <div class="text-center text-muted-foreground text-xl mt-4 mb-2">Loading today's matches...</div>
     } @else if (error()) {
-      <div class="text-center text-red-500 text-xl mt-4 mb-2">{{ error() }}</div>
+      <div class="text-center text-destructive text-xl mt-4 mb-2">{{ error() }}</div>
     } @else {
-      <div class="text-center text-gray-500 text-xl mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
+      <div class="text-center text-muted-foreground text-xl mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
       @if (todayCompetitions().size === 0) {
-        <div class="text-center text-gray-500 text-xl mt-4">No games scheduled for today</div>
+        <div class="text-center text-muted-foreground text-xl mt-4">No games scheduled for today</div>
       } @else {
-        <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-1">Today's Games</div>
+        <div class="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3 mt-1">Today's Games</div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [matches]="entry[1]" />
         }
       }
       @if (yesterdayCompetitions().size > 0) {
-        <hr class="border-0 border-t border-gray-200 my-6" />
-        <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-1">Yesterday's Results</div>
+        <hr class="border-0 border-t border-border my-6" />
+        <div class="text-sm font-bold uppercase tracking-wide text-muted-foreground mb-3 mt-1">Yesterday's Results</div>
         @for (entry of yesterdayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [results]="entry[1]" [isResult]="true" />
         }
