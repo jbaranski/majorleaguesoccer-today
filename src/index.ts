@@ -154,7 +154,7 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
     const data = await response.json() as BrightcoveResponse;
 
     return data.items
-      .filter(item => item.thumbnail?.title?.startsWith('Goal:'))
+      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? ''))
       .map(item => ({
         title: item.thumbnail.title,
         url: `https://www.mlssoccer.com/video/${item.slug}`,
