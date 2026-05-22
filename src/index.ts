@@ -617,6 +617,13 @@ const main = async (): Promise<void> => {
     const todayStr = toETDateStr(now);
     const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
+    console.log(`DEBUG dates: now=${now.toISOString()} todayStr=${todayStr} yesterdayStr=${yesterdayStr}`);
+    console.log(`DEBUG total schedule entries: ${data.schedule.length}`);
+    if (data.schedule.length > 0) {
+      const sample = data.schedule[0]!;
+      console.log(`DEBUG first schedule entry: start_date=${String(sample['start_date'])} planned_kickoff_time=${sample.planned_kickoff_time}`);
+    }
+
     // Use start_date (the authoritative match-day date) rather than planned_kickoff_time,
     // which crosses UTC midnight for late ET games and would misclassify them.
     const matchDateStr = (match: MLSMatch): string =>
@@ -629,6 +636,8 @@ const main = async (): Promise<void> => {
     const yesterdayMatches = data.schedule.filter(match =>
       matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
+
+    console.log(`DEBUG todayMatches=${todayMatches.length} yesterdayMatches=${yesterdayMatches.length}`);
 
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
