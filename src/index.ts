@@ -14,9 +14,10 @@ interface MLSMatch {
   readonly match_day: number;
   readonly season: number;
   readonly neutral_venue: boolean;
-  readonly id?: string;
-  readonly home_score?: number | null;
-  readonly away_score?: number | null;
+  readonly match_id?: string;
+  readonly start_date?: string;
+  readonly home_team_goals?: number | null;
+  readonly away_team_goals?: number | null;
   [key: string]: unknown;
 }
 
@@ -84,20 +85,22 @@ const getCompetitionPriority = (competitionId: string): number => {
 
 const getNow = (): Date => {
   const mock = process.env['MOCK_DATE'];
-  return mock ? new Date(mock) : new Date();
+  // Use local noon so the ET date matches the date string given, regardless of system timezone
+  return mock ? new Date(`${mock}T12:00:00`) : new Date();
 };
 
+const toETDateStr = (date: Date): string =>
+  date.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+
 const getUrl = (): string => {
-  const today = getNow();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const now = getNow();
+  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
   const baseUrl = `https://stats-api.mlssoccer.com/matches/seasons/${SEASON}`;
   const params = new URLSearchParams({
-    'match_date[gte]': yesterday.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
-    'match_date[lte]': tomorrow.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[gte]': toETDateStr(yesterday),
+    'match_date[lte]': toETDateStr(tomorrow),
     'per_page': '1000',
     'sort': 'planned_kickoff_time:asc,home_team_name:asc'
   });
@@ -242,7 +245,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
     if (results.length === 0) return '';
 
     const matchesByCompetition = groupByCompetition(results.map(r => r.match));
-    const resultsByMatchId = new Map(results.map(r => [r.match.id ?? r.match.planned_kickoff_time + r.match.home_team_name, r]));
+    const resultsByMatchId = new Map(results.map(r => [r.match.match_id ?? r.match.planned_kickoff_time + r.match.home_team_name, r]));
 
     const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
       if (!competitionMatches || competitionMatches.length === 0) return '';
@@ -264,16 +267,16 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
       </div>
       <div class="matches-list">
         ${competitionMatches.map(match => {
-          const key = match.id ?? match.planned_kickoff_time + match.home_team_name;
+          const key = match.match_id ?? match.planned_kickoff_time + match.home_team_name;
           const result = resultsByMatchId.get(key);
           const goalVideos = result?.goalVideos ?? [];
-          const hasScore = match.home_score != null && match.away_score != null;
+          const hasScore = match.home_team_goals != null && match.away_team_goals != null;
 
           return `
           <div class="match">
             <div class="matchup result-matchup">
               ${hasScore
-                ? `<strong>${escapeHtml(match.home_team_name)}</strong> <span class="score">${escapeHtml(match.home_score!)} - ${escapeHtml(match.away_score!)}</span> <strong>${escapeHtml(match.away_team_name)}</strong>`
+                ? `<strong>${escapeHtml(match.home_team_name)}</strong> <span class="score">${escapeHtml(match.home_team_goals!)} - ${escapeHtml(match.away_team_goals!)}</span> <strong>${escapeHtml(match.away_team_name)}</strong>`
                 : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>`
               }
             </div>
@@ -601,37 +604,29 @@ const main = async (): Promise<void> => {
     const data = await getData(url);
 
     const now = getNow();
-    const startOfToday = new Date(now.toDateString());
-    const endOfToday = new Date(startOfToday.getTime() + (24 * 60 * 60 * 1000) - 1);
-    const startOfYesterday = new Date(startOfToday.getTime() - (24 * 60 * 60 * 1000));
-    const endOfYesterday = new Date(startOfToday.getTime() - 1);
+    const todayStr = toETDateStr(now);
+    const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
-    const todayMatches = data.schedule.filter(match => {
-      const matchTime = new Date(match.planned_kickoff_time);
-      const isToday = matchTime >= startOfToday && matchTime <= endOfToday;
-      const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
-      return isToday && isAllowedCompetition;
-    });
+    // Use start_date (the authoritative match-day date) rather than planned_kickoff_time,
+    // which crosses UTC midnight for late ET games and would misclassify them.
+    const matchDateStr = (match: MLSMatch): string =>
+      (match.start_date ?? match.planned_kickoff_time).substring(0, 10);
 
-    const yesterdayMatches = data.schedule.filter(match => {
-      const matchTime = new Date(match.planned_kickoff_time);
-      const isYesterday = matchTime >= startOfYesterday && matchTime <= endOfYesterday;
-      const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
-      return isYesterday && isAllowedCompetition;
-    });
+    const todayMatches = data.schedule.filter(match =>
+      matchDateStr(match) === todayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
+    );
+
+    const yesterdayMatches = data.schedule.filter(match =>
+      matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
+    );
 
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
-    if (sortedYesterdayMatches.length > 0) {
-      const sampleKeys = Object.keys(sortedYesterdayMatches[0]!).join(', ');
-      console.log(`Yesterday match fields: ${sampleKeys}`);
-    }
-
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
       sortedYesterdayMatches.map(async match => ({
         match,
-        goalVideos: match.id ? await fetchGoalVideos(match.id) : []
+        goalVideos: match.match_id ? await fetchGoalVideos(match.match_id) : []
       }))
     );
 
