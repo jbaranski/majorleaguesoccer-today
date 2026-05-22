@@ -459,7 +459,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         h1 {
             color: #1f2937;
             text-align: center;
-            font-size: 1.875rem;
+            font-size: 3.75rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -655,7 +655,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .source-code {
             text-align: center;
             color: #6b7280;
-            font-size: 28px;
+            font-size: 18px;
             font-weight: 400;
             margin-top: 16px;
         }
@@ -675,7 +675,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .footer {
             text-align: center;
             color: #6b7280;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: 300;
             margin-bottom: 0;
         }
