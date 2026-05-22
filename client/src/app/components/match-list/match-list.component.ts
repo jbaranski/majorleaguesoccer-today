@@ -19,7 +19,7 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
       @if (todayCompetitions().size === 0) {
         <div class="text-center text-gray-500 text-xl mt-4">No games scheduled for today</div>
       } @else {
-        <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-1">Today's Games</div>
+        <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-8">Today's Games</div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
           <app-competition-card [competition]="entry[0]" [matches]="entry[1]" />
         }
