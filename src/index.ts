@@ -715,11 +715,11 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         <h1>Major League Soccer Today</h1>
         <hr class="top-separator">
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
+        ${yesterdayResults.length > 0 ? `${yesterdayHtml}<hr class="section-separator">` : ''}
         ${todayMatches.length > 0
           ? `<div class="section-header">Today's Games</div>${todayHtml}`
           : '<div class="no-games">No games scheduled for today</div>'
         }
-        ${yesterdayResults.length > 0 ? `<hr class="section-separator">${yesterdayHtml}` : ''}
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
         </div>
