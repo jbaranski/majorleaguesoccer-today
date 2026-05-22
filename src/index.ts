@@ -82,8 +82,13 @@ const getCompetitionPriority = (competitionId: string): number => {
   return COMPETITION_PRIORITIES.get(competitionId) ?? Number.MAX_SAFE_INTEGER;
 };
 
+const getNow = (): Date => {
+  const mock = process.env['MOCK_DATE'];
+  return mock ? new Date(mock) : new Date();
+};
+
 const getUrl = (): string => {
-  const today = new Date();
+  const today = getNow();
   const yesterday = new Date(today);
   yesterday.setDate(yesterday.getDate() - 1);
   const tomorrow = new Date(today);
@@ -595,7 +600,7 @@ const main = async (): Promise<void> => {
     const url = getUrl();
     const data = await getData(url);
 
-    const now = new Date();
+    const now = getNow();
     const startOfToday = new Date(now.toDateString());
     const endOfToday = new Date(startOfToday.getTime() + (24 * 60 * 60 * 1000) - 1);
     const startOfYesterday = new Date(startOfToday.getTime() - (24 * 60 * 60 * 1000));
