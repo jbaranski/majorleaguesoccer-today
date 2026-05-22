@@ -14,6 +14,9 @@ interface MLSMatch {
   readonly match_day: number;
   readonly season: number;
   readonly neutral_venue: boolean;
+  readonly id?: string;
+  readonly home_score?: number | null;
+  readonly away_score?: number | null;
   [key: string]: unknown;
 }
 
@@ -24,6 +27,29 @@ interface MLSMatchResponse {
 interface MatchesOutput {
   readonly lastUpdated: string;
   readonly matches: readonly MLSMatch[];
+}
+
+interface GoalVideo {
+  readonly title: string;
+  readonly url: string;
+}
+
+interface BrightcoveVideoItem {
+  readonly slug: string;
+  readonly title: string;
+  readonly thumbnail: {
+    readonly title: string;
+    readonly slug: string;
+  };
+}
+
+interface BrightcoveResponse {
+  readonly items: readonly BrightcoveVideoItem[];
+}
+
+interface MatchResult {
+  readonly match: MLSMatch;
+  readonly goalVideos: readonly GoalVideo[];
 }
 
 // TODO: Input via Actions
@@ -89,7 +115,50 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
   return await response.json() as MLSMatchResponse;
 };
 
-const generateHTML = (matches: readonly MLSMatch[]): string => {
+const fetchGoalVideos = async (matchId: string): Promise<readonly GoalVideo[]> => {
+  try {
+    const url = `https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=${matchId}`;
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'JEFF-Bot'
+      }
+    });
+    if (!response.ok) return [];
+
+    const data = await response.json() as BrightcoveResponse;
+
+    return data.items
+      .filter(item => item.thumbnail?.title?.startsWith('Goal:'))
+      .map(item => ({
+        title: item.thumbnail.title,
+        url: `https://www.mlssoccer.com/video/${item.slug}`
+      }));
+  } catch {
+    return [];
+  }
+};
+
+const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
+  return [...matches].sort((a, b) => {
+    const priorityA = getCompetitionPriority(a.competition_id);
+    const priorityB = getCompetitionPriority(b.competition_id);
+
+    const priorityComparison = priorityA - priorityB;
+    if (priorityComparison !== 0) {
+      return priorityComparison;
+    }
+
+    const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
+    if (timeComparison !== 0) {
+      return timeComparison;
+    }
+
+    return a.home_team_name.localeCompare(b.home_team_name);
+  });
+};
+
+const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
   const escapeHtml = (str: string | number): string => {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -108,33 +177,35 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
     }) + ' ET';
   };
 
-  // Group matches by competition
-  const matchesByCompetition = new Map(
-    Object.entries(Object.groupBy(matches, match => match.competition_name))
-  );
-
-  // Generate HTML for each competition group
-  const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
-    if (!competitionMatches || competitionMatches.length === 0) return '';
-
-    // Get match day and season from first match (should be same for all in competition)
-    const firstMatch = competitionMatches[0]!;
-
-    // Format the date from the first match
-    const matchDate = new Date(firstMatch.planned_kickoff_time);
-    const formattedDate = matchDate.toLocaleDateString('en-US', {
+  const formatDate = (isoString: string): string => {
+    const date = new Date(isoString);
+    return date.toLocaleDateString('en-US', {
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
       timeZone: 'America/New_York'
     });
+  };
 
-    return `
+  // Group matches by competition
+  const groupByCompetition = (matches: readonly MLSMatch[]) =>
+    new Map(Object.entries(Object.groupBy(matches, match => match.competition_name)));
+
+  // Generate HTML for today's match cards
+  const generateTodayCompetitionsHtml = (matches: readonly MLSMatch[]): string => {
+    const matchesByCompetition = groupByCompetition(matches);
+
+    return Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
+      if (!competitionMatches || competitionMatches.length === 0) return '';
+
+      const firstMatch = competitionMatches[0]!;
+
+      return `
     <div class="competition-card">
       <div class="competition-header">
         <div class="header-main">
           <div class="competition-name">${escapeHtml(competitionName)}</div>
-          <div class="competition-date">${escapeHtml(formattedDate)}</div>
+          <div class="competition-date">${escapeHtml(formatDate(firstMatch.planned_kickoff_time))}</div>
         </div>
         <div class="header-meta">
           <span class="match-day">Match Day ${escapeHtml(firstMatch.match_day)}</span>
@@ -158,7 +229,74 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
       </div>
     </div>
   `;
-  }).join('');
+    }).join('');
+  };
+
+  // Generate HTML for yesterday's results
+  const generateYesterdayResultsHtml = (results: readonly MatchResult[]): string => {
+    if (results.length === 0) return '';
+
+    const matchesByCompetition = groupByCompetition(results.map(r => r.match));
+    const resultsByMatchId = new Map(results.map(r => [r.match.id ?? r.match.planned_kickoff_time + r.match.home_team_name, r]));
+
+    const competitionsHtml = Array.from(matchesByCompetition.entries()).map(([competitionName, competitionMatches]) => {
+      if (!competitionMatches || competitionMatches.length === 0) return '';
+
+      const firstMatch = competitionMatches[0]!;
+
+      return `
+    <div class="competition-card">
+      <div class="competition-header results-header">
+        <div class="header-main">
+          <div class="competition-name">${escapeHtml(competitionName)}</div>
+          <div class="competition-date">${escapeHtml(formatDate(firstMatch.planned_kickoff_time))}</div>
+        </div>
+        <div class="header-meta">
+          <span class="match-day">Match Day ${escapeHtml(firstMatch.match_day)}</span>
+          <span class="separator">-</span>
+          <span class="season">${escapeHtml(firstMatch.season)} Season</span>
+        </div>
+      </div>
+      <div class="matches-list">
+        ${competitionMatches.map(match => {
+          const key = match.id ?? match.planned_kickoff_time + match.home_team_name;
+          const result = resultsByMatchId.get(key);
+          const goalVideos = result?.goalVideos ?? [];
+          const hasScore = match.home_score != null && match.away_score != null;
+
+          return `
+          <div class="match">
+            <div class="matchup result-matchup">
+              ${hasScore
+                ? `<strong>${escapeHtml(match.home_team_name)}</strong> <span class="score">${escapeHtml(match.home_score!)} - ${escapeHtml(match.away_score!)}</span> <strong>${escapeHtml(match.away_team_name)}</strong>`
+                : `<strong>${escapeHtml(match.home_team_name)} vs ${escapeHtml(match.away_team_name)}</strong>`
+              }
+            </div>
+            ${goalVideos.length > 0 ? `
+            <div class="goals-list">
+              ${goalVideos.map(goal => `
+                <div class="goal-item">
+                  <a href="${escapeHtml(goal.url)}" target="_blank" rel="noopener">${escapeHtml(goal.title)}</a>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+          </div>
+        `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+    }).join('');
+
+    return `
+    <div class="section-header">Yesterday's Results</div>
+    ${competitionsHtml}
+  `;
+  };
+
+  const todayHtml = generateTodayCompetitionsHtml(todayMatches);
+  const yesterdayHtml = generateYesterdayResultsHtml(yesterdayResults);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -204,6 +342,20 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             border-top: 1px solid #e5e7eb;
             margin: 24px 0;
         }
+        .section-header {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #374151;
+            margin-bottom: 12px;
+            margin-top: 4px;
+        }
+        .section-separator {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 24px 0 16px 0;
+        }
         .competition-card {
             border: 2px solid #e5e7eb;
             margin-bottom: 16px;
@@ -213,6 +365,9 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             background: #f3e8ff;
             padding: 12px 16px 8px 16px;
             border-bottom: 2px solid #e5e7eb;
+        }
+        .results-header {
+            background: #ecfdf5;
         }
         .header-main {
             margin-bottom: 0;
@@ -274,6 +429,34 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
             color: #1f2937;
             margin-bottom: 4px;
             line-height: 1.4;
+        }
+        .result-matchup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .score {
+            font-size: 16px;
+            font-weight: 800;
+            color: #111827;
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .goals-list {
+            margin-top: 6px;
+        }
+        .goal-item {
+            font-size: 13px;
+            padding: 2px 0;
+        }
+        .goal-item a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .goal-item a:hover {
+            text-decoration: underline;
         }
         .datetime {
             font-size: 13px;
@@ -375,7 +558,11 @@ const generateHTML = (matches: readonly MLSMatch[]): string => {
         <h1>Major League Soccer Today</h1>
         <hr class="top-separator">
         <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
-        ${matches.length > 0 ? competitionsHtml : '<div class="no-games">No games scheduled for today</div>'}
+        ${todayMatches.length > 0
+          ? `<div class="section-header">Today's Games</div>${todayHtml}`
+          : '<div class="no-games">No games scheduled for today</div>'
+        }
+        ${yesterdayResults.length > 0 ? `<hr class="section-separator">${yesterdayHtml}` : ''}
         <div class="source-code">
           View on the web at <a href="https://mlstoday.jeffsoftware.com" target="_blank" rel="noopener">mlstoday.jeffsoftware.com</a>
         </div>
@@ -408,38 +595,38 @@ const main = async (): Promise<void> => {
     const url = getUrl();
     const data = await getData(url);
 
-    // Filter to today's 24-hour period and exclude unwanted competitions
-    // (must go a little wider fetching data or we can miss games depending on time of day run)
     const now = new Date();
     const startOfToday = new Date(now.toDateString());
     const endOfToday = new Date(startOfToday.getTime() + (24 * 60 * 60 * 1000) - 1);
+    const startOfYesterday = new Date(startOfToday.getTime() - (24 * 60 * 60 * 1000));
+    const endOfYesterday = new Date(startOfToday.getTime() - 1);
 
-    const filteredData = data.schedule.filter(match => {
+    const todayMatches = data.schedule.filter(match => {
       const matchTime = new Date(match.planned_kickoff_time);
       const isToday = matchTime >= startOfToday && matchTime <= endOfToday;
       const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
       return isToday && isAllowedCompetition;
     });
 
-    const sortedData = filteredData.sort((a, b) => {
-      const priorityA = getCompetitionPriority(a.competition_id);
-      const priorityB = getCompetitionPriority(b.competition_id);
-
-      const priorityComparison = priorityA - priorityB;
-      if (priorityComparison !== 0) {
-        return priorityComparison;
-      }
-
-      const timeComparison = a.planned_kickoff_time.localeCompare(b.planned_kickoff_time);
-      if (timeComparison !== 0) {
-         return timeComparison;
-      }
-
-      return a.home_team_name.localeCompare(b.home_team_name);
+    const yesterdayMatches = data.schedule.filter(match => {
+      const matchTime = new Date(match.planned_kickoff_time);
+      const isYesterday = matchTime >= startOfYesterday && matchTime <= endOfYesterday;
+      const isAllowedCompetition = !EXCLUDED_COMPETITION_IDS.has(match.competition_id);
+      return isYesterday && isAllowedCompetition;
     });
 
-    const html = generateHTML(sortedData);
-    const json = generateJSON(sortedData);
+    const sortedTodayMatches = sortMatches(todayMatches);
+    const sortedYesterdayMatches = sortMatches(yesterdayMatches);
+
+    const yesterdayResults: readonly MatchResult[] = await Promise.all(
+      sortedYesterdayMatches.map(async match => ({
+        match,
+        goalVideos: match.id ? await fetchGoalVideos(match.id) : []
+      }))
+    );
+
+    const html = generateHTML(sortedTodayMatches, yesterdayResults);
+    const json = generateJSON(sortedTodayMatches);
 
     await writeFile(join(process.cwd(), 'index.html'), html, 'utf-8');
     await writeFile(join(process.cwd(), 'client', 'public', 'matches.json'), json, 'utf-8');
