@@ -128,11 +128,14 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
 
 const parseGoalSide = (title: string, homeCode: string, awayCode: string): 'home' | 'away' => {
   // Title: "Goal: [Player] vs. [OpponentCode], [minute]'" — opponent = team that conceded
-  const match = /vs\.\s+([A-Z]+)/i.exec(title);
+  // OpponentCode may contain dots (e.g. "D.C."), so capture [A-Z.] and normalize before comparing
+  const match = /vs\.\s+([A-Z.]+)/i.exec(title);
   if (match) {
-    const opponentCode = match[1]!.toUpperCase();
-    if (opponentCode === homeCode.toUpperCase()) return 'away';
-    if (opponentCode === awayCode.toUpperCase()) return 'home';
+    const opponentCode = match[1]!.replace(/\./g, '').toUpperCase();
+    const home = homeCode.replace(/\./g, '').toUpperCase();
+    const away = awayCode.replace(/\./g, '').toUpperCase();
+    if (opponentCode === home) return 'away';
+    if (opponentCode === away) return 'home';
   }
   return 'home';
 };
