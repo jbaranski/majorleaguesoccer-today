@@ -460,7 +460,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         h1 {
             color: #1f2937;
             text-align: center;
-            font-size: 3.75rem;
+            font-size: 2.25rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -700,7 +700,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
                 padding: 0 8px;
             }
             h1 {
-                font-size: 3rem;
+                font-size: 1.75rem;
             }
             .competition-header {
                 padding: 10px 12px 6px 12px;
