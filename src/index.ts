@@ -54,8 +54,9 @@ interface KeyEventRecord {
   readonly sub_type?: string;
   readonly event: {
     readonly minute_of_play: string;
-    readonly player_first_name: string;
-    readonly player_last_name: string;
+    readonly player_first_name?: string;
+    readonly player_last_name?: string;
+    readonly player_alias?: string;
     readonly team_name: string;
   };
 }
@@ -167,9 +168,10 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
         const scoringTeam = isOwnGoal
           ? (e.event.team_name === homeTeamName ? awayTeamName : homeTeamName)
           : e.event.team_name;
+        const fullName = `${e.event.player_first_name ?? ''} ${e.event.player_last_name ?? ''}`.trim();
         return {
           minute: e.event.minute_of_play,
-          playerName: `${e.event.player_first_name} ${e.event.player_last_name}`.trim(),
+          playerName: fullName || e.event.player_alias || 'Unknown',
           teamName: e.event.team_name,
           side: scoringTeam === homeTeamName ? 'home' : 'away',
           isOwnGoal
