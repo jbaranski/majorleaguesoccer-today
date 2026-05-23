@@ -584,7 +584,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .score {
             flex-shrink: 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             color: #111827;
             background: #f3f4f6;
@@ -593,7 +593,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         }
         .kickoff {
             flex-shrink: 0;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             color: #111827;
             background: #f3f4f6;
@@ -648,7 +648,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .last-updated {
             text-align: center;
             color: #6b7280;
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 400;
             margin-top: 16px;
             margin-bottom: 8px;
@@ -656,7 +656,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         .source-code {
             text-align: center;
             color: #6b7280;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             margin-top: 16px;
         }
@@ -714,7 +714,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
-        <div class="last-updated">Last updated: ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</div>
+        <div class="last-updated">Last Updated: <em>${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</em></div>
         ${todayMatches.length > 0
           ? `<div class="section-header">Today's Games</div>${todayHtml}`
           : '<div class="no-games">No games scheduled for today</div>'
@@ -728,7 +728,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
         </div>
         <hr class="footer-separator">
         <div class="footer">
-          Copy 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener">Jeff Software</a> |
+          Copyright 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener">Jeff Software</a> |
           <a href="mailto:admin@jeffsoftware.com">admin@jeffsoftware.com</a> |
           <a href="{{UNSUBSCRIBE_URL}}">Unsubscribe</a>
         </div>
