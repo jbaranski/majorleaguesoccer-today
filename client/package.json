@@ -14,7 +14,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:client": "node dist/client/server/server.mjs",
-    "build:email": "ng build --configuration email"
+    "build:email": "ng build --configuration email",
+    "preview:email": "npm run build:lib && npm run build:email && npx serve dist/client/browser -l 4201"
   },
   "prettier": {
     "printWidth": 100,

@@ -74,6 +74,10 @@
                 {
                   "replace": "src/app/components/footer/footer.component.ts",
                   "with": "src/app/components/footer/footer.email.component.ts"
+                },
+                {
+                  "replace": "src/app/components/last-updated/last-updated.component.ts",
+                  "with": "src/app/components/last-updated/last-updated.email.component.ts"
                 }
               ]
             }
