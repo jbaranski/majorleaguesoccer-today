@@ -57,16 +57,15 @@ jobs:
               ":active": {"BOOL": true}
             }')
 
-          SUBSCRIBER_COUNT=$(echo "$QUERY_RESULT" | jq '.Items | length')
-          echo "Found $SUBSCRIBER_COUNT active subscribers"
+          echo "Subscribers fetched successfully"
 
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
+          SEND_FAILED=0
 
           while read -r item; do
             email=$(echo "$item" | jq -r '.email.S')
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
-            echo "Sending to subscriber (email hidden for privacy)"
 
             EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${UNSUBSCRIBE_URL}?id=${unsub_id}}"
 
@@ -89,13 +88,15 @@ jobs:
               -H "Content-Type: application/json" \
               -d "$PAYLOAD")
 
-            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
-              echo "Email sent successfully"
-            else
-              echo "Failed to send email (HTTP $HTTP_STATUS)"
-              exit 1
+            if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
+              SEND_FAILED=1
             fi
           done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
+
+          if [ "$SEND_FAILED" -eq 1 ]; then
+            echo "One or more emails failed to send"
+            exit 1
+          fi
 
           echo "All emails sent successfully"
 
