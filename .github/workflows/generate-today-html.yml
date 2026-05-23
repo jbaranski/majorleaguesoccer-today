@@ -32,6 +32,9 @@ jobs:
       - name: Install Angular dependencies
         run: npm ci
         working-directory: client
+      - name: Build Angular email-collector library
+        run: npm run build:lib
+        working-directory: client
       - name: Build Angular email pre-render
         run: npm run build:email
         working-directory: client

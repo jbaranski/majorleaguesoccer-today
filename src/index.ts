@@ -14,6 +14,12 @@ interface MLSMatch {
   readonly match_day: number;
   readonly season: number;
   readonly neutral_venue: boolean;
+  readonly match_id?: string;
+  readonly match_status?: string;
+  readonly home_team_goals?: number;
+  readonly away_team_goals?: number;
+  readonly home_team_three_letter_code?: string;
+  readonly away_team_three_letter_code?: string;
   [key: string]: unknown;
 }
 
@@ -21,9 +27,61 @@ interface MLSMatchResponse {
   readonly schedule: readonly MLSMatch[];
 }
 
+interface GoalEvent {
+  readonly minute: string;
+  readonly playerName: string;
+  readonly teamName: string;
+  readonly side: 'home' | 'away';
+  readonly isOwnGoal: boolean;
+}
+
+interface GoalVideo {
+  readonly url: string;
+  readonly minute: string;
+  readonly side: 'home' | 'away';
+}
+
+interface MatchResult {
+  readonly match: MLSMatch;
+  readonly goalEvents: readonly GoalEvent[];
+  readonly goalVideos: readonly GoalVideo[];
+}
+
+interface KeyEventScorer {
+  readonly player_first_name?: string;
+  readonly player_last_name?: string;
+  readonly player_alias?: string;
+  readonly team_name: string;
+}
+
+interface KeyEvent {
+  readonly type: string;
+  readonly sub_type: string;
+  readonly event: KeyEventScorer & {
+    readonly minute_of_play: string;
+    readonly shot_at_goal?: KeyEventScorer;
+  };
+}
+
+interface KeyEventsResponse {
+  readonly events: readonly KeyEvent[];
+}
+
+interface BrightcoveItem {
+  readonly slug: string;
+  readonly thumbnail?: {
+    readonly title?: string;
+  };
+}
+
+interface BrightcoveResponse {
+  readonly items: readonly BrightcoveItem[];
+}
+
 interface MatchesOutput {
   readonly lastUpdated: string;
   readonly matches: readonly MLSMatch[];
+  readonly yesterdayResults: readonly MatchResult[];
 }
 
 // TODO: Input via Actions
@@ -56,17 +114,31 @@ const getCompetitionPriority = (competitionId: string): number => {
   return COMPETITION_PRIORITIES.get(competitionId) ?? Number.MAX_SAFE_INTEGER;
 };
 
-const getUrl = (): string => {
-  const today = new Date();
-  const yesterday = new Date(today);
+// Returns the current date, or a Date anchored to DATE_OVERRIDE if set (format: YYYY-MM-DD).
+// Uses noon UTC so the resulting ET date is always correct regardless of DST.
+const getNow = (): Date => {
+  const override = process.env['DATE_OVERRIDE']?.trim();
+  if (override) {
+    return new Date(`${override}T17:00:00.000Z`); // noon ET in UTC, DST-safe
+  }
+  return new Date();
+};
+
+// Converts any Date to a YYYY-MM-DD string in ET, regardless of system TZ.
+const toETDateStr = (date: Date): string => {
+  return date.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+};
+
+const getUrl = (now: Date): string => {
+  const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  const tomorrow = new Date(today);
+  const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const baseUrl = `https://stats-api.mlssoccer.com/matches/seasons/${SEASON}`;
   const params = new URLSearchParams({
-    'match_date[gte]': yesterday.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
-    'match_date[lte]': tomorrow.toLocaleDateString('en-CA'), // Returns YYYY-MM-DD format
+    'match_date[gte]': yesterday.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }),
+    'match_date[lte]': tomorrow.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }),
     'per_page': '1000',
     'sort': 'planned_kickoff_time:asc,home_team_name:asc'
   });
@@ -113,7 +185,7 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
           teamName: scoringTeamName,
           side: scoringTeam === homeTeamName ? 'home' : 'away',
           isOwnGoal
-        };
+        } satisfies GoalEvent;
       });
   } catch {
     return [];
@@ -167,7 +239,7 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
           url: `https://www.mlssoccer.com/video/${item.slug}`,
           minute,
           side: sideFromOpponent(opponentCode)
-        };
+        } satisfies GoalVideo;
       });
   } catch {
     return [];
@@ -194,12 +266,10 @@ const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
 };
 
 const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
-  const minutesClose = (a: string, b: string): boolean =>
-    a === b || Math.abs(parseInt(a) - parseInt(b)) <= 5;
-
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
-    matches
+    matches: todayMatches,
+    yesterdayResults
   };
 
   return JSON.stringify(output);
@@ -207,10 +277,10 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
 
 const main = async (): Promise<void> => {
   try {
-    const url = getUrl();
+    const now = getNow();
+    const url = getUrl(now);
     const data = await getData(url);
 
-    const now = getNow();
     const todayStr = toETDateStr(now);
     const yesterdayStr = toETDateStr(new Date(now.getTime() - 24 * 60 * 60 * 1000));
 
@@ -243,9 +313,7 @@ const main = async (): Promise<void> => {
       })
     );
 
-    const json = generateJSON(sortedTodayMatches, yesterdayResults);
-
-    for (const { match, goalEvents, goalVideos } of yesterdayResults) {
+    for (const { match, goalEvents } of yesterdayResults) {
       if (match.match_status !== 'finalWhistle') continue;
       const expectedHome = match.home_team_goals ?? 0;
       const expectedAway = match.away_team_goals ?? 0;
@@ -259,6 +327,9 @@ const main = async (): Promise<void> => {
           `events home=${eventsHome} away=${eventsAway}`
         );
       }
+    }
+
+    const json = generateJSON(sortedTodayMatches, yesterdayResults);
 
     await writeFile(join(process.cwd(), 'client', 'public', 'matches.json'), json, 'utf-8');
 

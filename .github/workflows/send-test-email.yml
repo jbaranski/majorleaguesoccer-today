@@ -1,0 +1,78 @@
+name: send_test_email
+
+on:
+  workflow_dispatch:
+    inputs:
+      to_email:
+        description: 'Email address to send the test to'
+        required: true
+        type: string
+      skip_fixture_check:
+        description: 'Send even if matches.json has no fixtures'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  send-test-email:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for OIDC
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Check for fixtures
+        id: check-fixtures
+        run: |
+          MATCH_COUNT=$(jq '.matches | length' client/public/matches.json)
+          echo "Found $MATCH_COUNT fixtures"
+          if [ "$MATCH_COUNT" -eq 0 ] && [ "${{ inputs.skip_fixture_check }}" != "true" ]; then
+            echo "No fixtures and skip_fixture_check=false, skipping send"
+            echo "should_send=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_send=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure AWS credentials
+        if: steps.check-fixtures.outputs.should_send == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: MLS-Today-SendTestEmail-GithubAction
+          retry-max-attempts: 1
+
+      - name: Send test email
+        if: steps.check-fixtures.outputs.should_send == 'true'
+        run: |
+          set -euo pipefail
+
+          TO_EMAIL="${{ inputs.to_email }}"
+          SUBJECT="[TEST] Major League Soccer Today - $(date +'%A, %B %d, %Y')"
+          BASE_HTML=$(cat client/dist/client/browser/index.html)
+
+          # Replace unsubscribe placeholder with a static test value
+          EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/TEST_UNSUBSCRIBE_PLACEHOLDER}"
+
+          HTML_CONTENT="$(echo "$EMAIL_HTML" | jq -Rs .)"
+          jq -n \
+            --arg subject "$SUBJECT" \
+            --argjson html "$HTML_CONTENT" \
+            '{
+              Simple: {
+                Subject: { Data: $subject },
+                Body: { Html: { Data: $html } }
+              }
+            }' > /tmp/message.json
+
+          if aws sesv2 send-email \
+            --from-email-address "MLS Today <${{ secrets.FROM_EMAIL }}>" \
+            --destination "{\"ToAddresses\":[\"$TO_EMAIL\"]}" \
+            --content file:///tmp/message.json > /dev/null 2>&1; then
+            echo "Test email sent successfully to $TO_EMAIL"
+          else
+            echo "Failed to send test email"
+            exit 1
+          fi
