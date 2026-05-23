@@ -3,6 +3,8 @@ name: jeff-tailwind-ui-ux-reviewer
 description: Expert reviewer for Tailwind CSS v4 UI/UX implementations, design system compliance, and component quality. Use for reviewing frontend code, design token usage, and Tailwind v4 patterns.
 skills:
   - jeff-skill-tailwind-design-system
+  - jeff-skill-angular-project
+  - jeff-skill-angular-aws-cognito
 ---
 
 ## Startup Acknowledgment

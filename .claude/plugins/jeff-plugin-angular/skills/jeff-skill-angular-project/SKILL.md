@@ -47,12 +47,10 @@ Before proceeding:
 
 ## Integration with Other Skills
 
-- **jeff-skill-error-debugging-rca**: Use when debugging errors or test failuresAngular projects or related tools
+- **jeff-skill-error-debugging-rca**: Use when debugging errors or test failures in Angular projects or related tools
+- **jeff-skill-angular-aws-cognito**: Integrate AWS Cognito authentication into the Angular app
+- **jeff-skill-tailwind-design-system**: Apply Tailwind v4 design tokens, component patterns, and theming after initial project setup
 
 ## Additional resources
 
 - Refer to the Angular documentation if you need help: https://angular.io/docs
-
-## Integration with Other Skills
-
-- **jeff-skill-angular-aws-cognito**: Angular test creation and standards reference
