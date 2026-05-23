@@ -24,7 +24,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -52,6 +54,28 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "email": {
+              "server": "src/main.server.ts",
+              "prerender": true,
+              "ssr": {
+                "entry": "src/server.ts"
+              },
+              "outputHashing": "none",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/services/match-data.service.ts",
+                  "with": "src/app/services/match-data.email.service.ts"
+                },
+                {
+                  "replace": "src/app/app.ts",
+                  "with": "src/app/app.email.ts"
+                },
+                {
+                  "replace": "src/app/components/footer/footer.component.ts",
+                  "with": "src/app/components/footer/footer.email.component.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
