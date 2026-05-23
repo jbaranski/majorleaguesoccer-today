@@ -4,20 +4,21 @@ import { MatchDataService } from '../../services/match-data.service';
 import { MLSMatch, MatchResult } from '../../models/mls-match.model';
 import { MatchFormatter } from '../../utils/match-formatter';
 import { CompetitionCardComponent } from '../competition-card/competition-card.component';
+import { LastUpdatedComponent } from '../last-updated/last-updated.component';
 
 @Component({
   selector: 'app-match-list',
-  imports: [CompetitionCardComponent],
+  imports: [CompetitionCardComponent, LastUpdatedComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div class="text-center text-gray-500 text-xl mt-4 mb-2">Loading today's matches...</div>
+      <div class="text-center text-gray-500 text-base mt-4 mb-2">Loading today's matches...</div>
     } @else if (error()) {
-      <div class="text-center text-red-500 text-xl mt-4 mb-2">{{ error() }}</div>
+      <div class="text-center text-red-500 text-base mt-4 mb-2">{{ error() }}</div>
     } @else {
-      <div class="text-center text-gray-500 text-xl mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
+      <app-last-updated [date]="lastUpdated()" />
       @if (todayCompetitions().size === 0) {
-        <div class="text-center text-gray-500 text-xl mt-4">No games scheduled for today</div>
+        <div class="text-center text-gray-500 text-base mt-4">No games scheduled for today</div>
       } @else {
         <div class="text-sm font-bold uppercase tracking-wide text-gray-700 mb-3 mt-8">Today's Games</div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
