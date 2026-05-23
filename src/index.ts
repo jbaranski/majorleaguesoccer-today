@@ -80,7 +80,7 @@ interface BrightcoveResponse {
 
 interface MatchesOutput {
   readonly lastUpdated: string;
-  readonly matches: readonly MLSMatch[];
+  readonly todayMatches: readonly MLSMatch[];
   readonly yesterdayResults: readonly MatchResult[];
 }
 
@@ -268,7 +268,7 @@ const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
 const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
-    matches: todayMatches,
+    todayMatches,
     yesterdayResults
   };
 
