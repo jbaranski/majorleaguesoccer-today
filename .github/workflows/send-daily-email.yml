@@ -61,36 +61,16 @@ jobs:
 
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
+          export SUBJECT BASE_HTML
           SEND_FAILED=0
 
           while read -r item; do
             email=$(echo "$item" | jq -r '.email.S')
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
 
-            EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${UNSUBSCRIBE_URL}?id=${unsub_id}}"
-
-            PAYLOAD=$(jq -n \
-              --arg from "MLS Today <${FROM_EMAIL}>" \
-              --arg to "$email" \
-              --arg subject "$SUBJECT" \
-              --arg html "$EMAIL_HTML" \
-              --arg unsub "${UNSUBSCRIBE_URL}?id=${unsub_id}" \
-              '{from: $from, to: [$to], subject: $subject, html: $html,
-                headers: {
-                  "List-Unsubscribe": ("<" + $unsub + ">"),
-                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click"
-                }}')
-
-            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-              --max-time 30 \
-              -X POST https://api.resend.com/emails \
-              -H "Authorization: Bearer ${RESEND_API_KEY}" \
-              -H "Content-Type: application/json" \
-              -d "$PAYLOAD")
-
-            if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
-              SEND_FAILED=1
-            fi
+            TO_EMAIL="$email" \
+            UNSUBSCRIBE_URL="${UNSUBSCRIBE_URL}?id=${unsub_id}" \
+            bash scripts/send-resend-email.sh || SEND_FAILED=1
           done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
 
           if [ "$SEND_FAILED" -eq 1 ]; then

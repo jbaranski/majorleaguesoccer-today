@@ -86,26 +86,12 @@ jobs:
           fi
           SUBJECT="[TEST] Major League Soccer Today - ${SUBJECT_DATE}"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
+          UNSUBSCRIBE_URL="TEST_UNSUBSCRIBE_PLACEHOLDER"
+          export SUBJECT BASE_HTML UNSUBSCRIBE_URL
 
-          EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/TEST_UNSUBSCRIBE_PLACEHOLDER}"
-
-          PAYLOAD=$(jq -n \
-            --arg from "MLS Today <${FROM_EMAIL}>" \
-            --arg to "$TO_EMAIL" \
-            --arg subject "$SUBJECT" \
-            --arg html "$EMAIL_HTML" \
-            '{from: $from, to: [$to], subject: $subject, html: $html}')
-
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            --max-time 30 \
-            -X POST https://api.resend.com/emails \
-            -H "Authorization: Bearer ${RESEND_API_KEY}" \
-            -H "Content-Type: application/json" \
-            -d "$PAYLOAD")
-
-          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
-            echo "Test email sent successfully to $TO_EMAIL"
+          if bash scripts/send-resend-email.sh; then
+            echo "Test email sent successfully to ${TO_EMAIL}"
           else
-            echo "Failed to send test email (HTTP $HTTP_STATUS)"
+            echo "Failed to send test email"
             exit 1
           fi
