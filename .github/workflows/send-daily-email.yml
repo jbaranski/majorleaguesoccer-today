@@ -63,7 +63,7 @@ jobs:
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
 
-          echo "$QUERY_RESULT" | jq -c '.Items[]' | while read -r item; do
+          while read -r item; do
             email=$(echo "$item" | jq -r '.email.S')
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
             echo "Sending to subscriber (email hidden for privacy)"
@@ -95,7 +95,7 @@ jobs:
               echo "Failed to send email (HTTP $HTTP_STATUS)"
               exit 1
             fi
-          done
+          done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
 
           echo "All emails sent successfully"
 

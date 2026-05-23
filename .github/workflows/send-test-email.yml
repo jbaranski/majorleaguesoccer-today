@@ -74,11 +74,17 @@ jobs:
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          TO_EMAIL: ${{ inputs.to_email }}
+          DATE_OVERRIDE: ${{ inputs.date }}
         run: |
           set -euo pipefail
 
-          TO_EMAIL="${{ inputs.to_email }}"
-          SUBJECT="[TEST] Major League Soccer Today - $(date +'%A, %B %d, %Y')"
+          if [ -n "${DATE_OVERRIDE}" ]; then
+            SUBJECT_DATE=$(date -d "${DATE_OVERRIDE}" +'%A, %B %d, %Y')
+          else
+            SUBJECT_DATE=$(date +'%A, %B %d, %Y')
+          fi
+          SUBJECT="[TEST] Major League Soccer Today - ${SUBJECT_DATE}"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
 
           EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/TEST_UNSUBSCRIBE_PLACEHOLDER}"
