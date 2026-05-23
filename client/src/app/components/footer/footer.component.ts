@@ -13,7 +13,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     </div>
     <div class="text-center text-gray-500 text-sm font-light">
       Copyright 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener" class="text-blue-500 hover:underline font-normal">Jeff Software</a> |
-      <a href="mailto:admin@jeffsoftware.com" class="text-blue-500 hover:underline font-normal">admin@jeffsoftware.com</a>
     </div>
   `
 })
