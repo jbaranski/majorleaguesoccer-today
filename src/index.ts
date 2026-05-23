@@ -653,6 +653,9 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
             margin-top: 16px;
             margin-bottom: 8px;
         }
+        .italic {
+            font-style: italic;
+        }
         .source-code {
             text-align: center;
             color: #6b7280;
@@ -714,7 +717,7 @@ const generateHTML = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
 <body>
     <div class="container">
         <h1>Major League Soccer Today</h1>
-        <div class="last-updated">Last Updated: <i>${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</i></div>
+        <div class="last-updated">Last Updated: <span class="italic">${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}</span></div>
         ${todayMatches.length > 0
           ? `<div class="section-header">Today's Games</div>${todayHtml}`
           : '<div class="no-games">No games scheduled for today</div>'
