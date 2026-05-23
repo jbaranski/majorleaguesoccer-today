@@ -39,6 +39,10 @@ jobs:
 
       - name: Send daily email to subscribers
         if: steps.check-fixtures.outputs.has_fixtures == 'true'
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          UNSUBSCRIBE_URL: ${{ secrets.UNSUBSCRIBE_URL }}
         run: |
           set -euo pipefail
 
@@ -53,45 +57,26 @@ jobs:
               ":active": {"BOOL": true}
             }')
 
-          # Extract subscribers from query result
-          SUBSCRIBER_COUNT=$(echo "$QUERY_RESULT" | jq '.Items | length')
-          echo "Found $SUBSCRIBER_COUNT active subscribers"
+          echo "Subscribers fetched successfully"
 
-          # Email content
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
           BASE_HTML=$(cat client/dist/client/browser/index.html)
+          export SUBJECT BASE_HTML
+          SEND_FAILED=0
 
-          # Send individual emails to each subscriber
           while read -r item; do
             email=$(echo "$item" | jq -r '.email.S')
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
-            echo "Sending to subscriber (email hidden for privacy)"
 
-            # Replace unsubscribe placeholder with subscriber-specific link
-            EMAIL_HTML="${BASE_HTML//\{\{UNSUBSCRIBE_URL\}\}/${{ secrets.UNSUBSCRIBE_URL }}?id=${unsub_id}}"
-
-            # Create message content using jq to handle HTML properly
-            HTML_CONTENT="$(echo "$EMAIL_HTML" | jq -Rs .)"
-            jq -n \
-              --arg subject "$SUBJECT" \
-              --argjson html "$HTML_CONTENT" \
-              '{
-                Simple: {
-                  Subject: { Data: $subject },
-                  Body: { Html: { Data: $html } }
-                }
-              }' > /tmp/message.json
-
-            if aws sesv2 send-email \
-              --from-email-address "MLS Today <${{ secrets.FROM_EMAIL }}>" \
-              --destination "{\"ToAddresses\":[\"$email\"]}" \
-              --content file:///tmp/message.json > /dev/null 2>&1; then
-              echo "Email sent successfully"
-            else
-              echo "Failed to send email"
-              exit 1
-            fi
+            TO_EMAIL="$email" \
+            UNSUBSCRIBE_URL="${UNSUBSCRIBE_URL}?id=${unsub_id}" \
+            bash scripts/send-resend-email.sh || SEND_FAILED=1
           done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
+
+          if [ "$SEND_FAILED" -eq 1 ]; then
+            echo "One or more emails failed to send"
+            exit 1
+          fi
 
           echo "All emails sent successfully"
 
