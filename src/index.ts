@@ -78,10 +78,24 @@ interface BrightcoveResponse {
   readonly items: readonly BrightcoveItem[];
 }
 
+interface GoalEventOutput {
+  readonly minute: string;
+  readonly playerName: string;
+  readonly teamName: string;
+  readonly side: 'home' | 'away';
+  readonly isOwnGoal: boolean;
+  readonly videoUrl?: string;
+}
+
+interface MatchResultOutput {
+  readonly match: MLSMatch;
+  readonly goalEvents: readonly GoalEventOutput[];
+}
+
 interface MatchesOutput {
   readonly lastUpdated: string;
   readonly todayMatches: readonly MLSMatch[];
-  readonly yesterdayResults: readonly MatchResult[];
+  readonly yesterdayResults: readonly MatchResultOutput[];
 }
 
 // TODO: Input via Actions
@@ -272,13 +286,24 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
     todayMatches,
-    yesterdayResults: yesterdayResults.map(r => ({
-      match: r.match,
-      goalEvents: r.goalEvents.map(e => {
-        const video = r.goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
-        return { ...e, videoUrl: video?.url };
-      })
-    }))
+    yesterdayResults: yesterdayResults.map(r => {
+      const result: MatchResultOutput = {
+        match: r.match,
+        goalEvents: r.goalEvents.map(e => {
+          const video = r.goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
+          const event: GoalEventOutput = {
+            minute: e.minute,
+            playerName: e.playerName,
+            teamName: e.teamName,
+            side: e.side,
+            isOwnGoal: e.isOwnGoal,
+            ...(video && { videoUrl: video.url })
+          };
+          return event;
+        })
+      };
+      return result;
+    })
   };
 
   return JSON.stringify(output);
