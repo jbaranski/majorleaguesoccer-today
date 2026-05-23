@@ -19,7 +19,7 @@ jobs:
       - name: Check for fixtures
         id: check-fixtures
         run: |
-          MATCH_COUNT=$(jq '.matches | length' client/public/matches.json)
+          MATCH_COUNT=$(jq '.todayMatches | length' client/public/matches.json)
           echo "Found $MATCH_COUNT fixtures for today"
           if [ "$MATCH_COUNT" -eq 0 ]; then
             echo "No fixtures today, skipping email send"
