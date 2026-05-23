@@ -16,3 +16,7 @@ Thumbs.db
 node_modules
 .cdk.staging
 cdk.out
+
+# Generated artifacts — force-committed by CI via git add -f
+client/public/matches.json
+client/dist/client/browser/index.html

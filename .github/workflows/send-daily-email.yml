@@ -59,10 +59,10 @@ jobs:
 
           # Email content
           SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
-          BASE_HTML=$(cat index.html)
+          BASE_HTML=$(cat client/dist/client/browser/index.html)
 
           # Send individual emails to each subscriber
-          echo "$QUERY_RESULT" | jq -c '.Items[]' | while read -r item; do
+          while read -r item; do
             email=$(echo "$item" | jq -r '.email.S')
             unsub_id=$(echo "$item" | jq -r '.unsubscribe.S')
             echo "Sending to subscriber (email hidden for privacy)"
@@ -91,9 +91,7 @@ jobs:
               echo "Failed to send email"
               exit 1
             fi
-
-            rm -f /tmp/message.json
-          done
+          done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
 
           echo "All emails sent successfully"
 

@@ -25,15 +25,23 @@ jobs:
         run: npm ci
       - name: Build TypeScript
         run: npm run build
-      - name: Generate HTML file
+      - name: Generate matches.json
         env:
           TZ: America/New_York
         run: npm run start
+      - name: Install Angular dependencies
+        run: npm ci
+        working-directory: client
+      - name: Build Angular email pre-render
+        run: npm run build:email
+        working-directory: client
       - name: Commit generated files if changed
         run: |-
           git diff
           git config --global user.email "actions@users.noreply.github.com"
           git config --global user.name "JEFF-bot"
-          git add -A
-          git commit -m "Updated index.html and matches.json with today's games" || exit 0
+          # Force-add generated artifacts — both are in .gitignore but committed intentionally
+          git add -f client/public/matches.json
+          git add -f client/dist/client/browser/index.html
+          git commit -m "Updated matches.json and pre-rendered index.html with today's games" || exit 0
           git push
