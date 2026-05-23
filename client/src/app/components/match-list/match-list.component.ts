@@ -15,6 +15,7 @@ import { CompetitionCardComponent } from '../competition-card/competition-card.c
     } @else if (error()) {
       <div class="text-center text-red-500 text-xl mt-4 mb-2">{{ error() }}</div>
     } @else {
+      <div class="text-center text-gray-500 text-xl mt-4 mb-2">Last updated: {{ lastUpdated() }}</div>
       @if (todayCompetitions().size === 0) {
         <div class="text-center text-gray-500 text-xl mt-4">No games scheduled for today</div>
       } @else {
@@ -38,6 +39,7 @@ export class MatchListComponent implements OnInit {
 
   loading = signal(true);
   error = signal<string>('');
+  lastUpdated = signal<string>('');
   todayCompetitions = signal<Map<string, readonly MLSMatch[]>>(new Map());
   yesterdayCompetitions = signal<Map<string, readonly MatchResult[]>>(new Map());
 
@@ -51,6 +53,7 @@ export class MatchListComponent implements OnInit {
         next: (data) => {
           this.todayCompetitions.set(MatchFormatter.groupByCompetition(data.todayMatches));
           this.yesterdayCompetitions.set(MatchFormatter.groupResultsByCompetition(data.yesterdayResults));
+          this.lastUpdated.set(data.lastUpdated);
           this.loading.set(false);
         },
         error: (err) => {
