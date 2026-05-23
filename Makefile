@@ -27,5 +27,5 @@ build-local:
 	npm ci
 	npm run build
 	TZ=America/New_York DATE_OVERRIDE=$(DATE) node dist/index.js
-	cd client && npm ci && npm run build:email
+	cd client && npm ci && npm run build:lib && npm run build:email
 	@echo "Done — open client/dist/client/browser/index.html in your browser"
