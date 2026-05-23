@@ -5,7 +5,7 @@ import { Component, input } from '@angular/core';
   imports: [],
   template: `
     <div class="text-center text-gray-500 text-base font-normal mt-4 mb-2">
-      Last Updated: <i>{{ date() }}</i>
+      Last Updated: <span class="italic">{{ date() }}</span>
     </div>
   `,
   styles: []
