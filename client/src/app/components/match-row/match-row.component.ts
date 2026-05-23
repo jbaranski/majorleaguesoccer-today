@@ -12,7 +12,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
       @if (isResult()) {
         <div class="flex items-center gap-2 text-lg font-bold text-gray-800 leading-[1.4]">
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
-          <span class="flex-shrink-0 text-xl font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{{ scoreLabel() }}</span>
+          <span class="flex-shrink-0 text-lg font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{{ scoreLabel() }}</span>
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-right">{{ match().away_team_name }}</strong>
         </div>
         <div class="mt-0.5">
@@ -39,7 +39,7 @@ import { MatchFormatter } from '../../utils/match-formatter';
       } @else {
         <div class="flex items-center gap-2 text-lg font-bold text-gray-800 mb-1 leading-[1.4]">
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-left">{{ match().home_team_name }}</strong>
-          <span class="flex-shrink-0 text-xl font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{{ formatTime(match().planned_kickoff_time) }}</span>
+          <span class="flex-shrink-0 text-lg font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded">{{ formatTime(match().planned_kickoff_time) }}</span>
           <strong class="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-right">{{ match().away_team_name }}</strong>
         </div>
         <div class="mt-0.5">
