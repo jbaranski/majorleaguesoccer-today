@@ -90,7 +90,7 @@ jobs:
           export SUBJECT BASE_HTML UNSUBSCRIBE_URL
 
           if bash scripts/send-resend-email.sh; then
-            echo "Test email sent successfully to ${TO_EMAIL}"
+            echo "Test email sent successfully"
           else
             echo "Failed to send test email"
             exit 1
