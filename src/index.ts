@@ -266,10 +266,19 @@ const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
 };
 
 const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
+  const minutesClose = (a: string, b: string): boolean =>
+    a === b || Math.abs(parseInt(a) - parseInt(b)) <= 5;
+
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
     todayMatches,
-    yesterdayResults
+    yesterdayResults: yesterdayResults.map(r => ({
+      match: r.match,
+      goalEvents: r.goalEvents.map(e => {
+        const video = r.goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
+        return { ...e, videoUrl: video?.url };
+      })
+    }))
   };
 
   return JSON.stringify(output);
