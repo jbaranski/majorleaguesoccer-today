@@ -244,7 +244,7 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
     };
 
     return data.items
-      .filter(item => /^(pk )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-)?goal-/.test(item.slug))
+      .filter(item => /^(pk |own )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-|own-)?goal-/.test(item.slug))
       .map(item => {
         const title = item.thumbnail?.title ?? '';
         const opponentCode = extractOpponentCode(title, item.slug);
