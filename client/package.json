@@ -14,6 +14,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:client": "node dist/client/server/server.mjs",
+    "build:website": "ng build --configuration website",
     "build:email": "ng build --configuration email",
     "preview:email": "npm run build:lib && npm run build:email && npx serve dist/client/browser -l 4201"
   },

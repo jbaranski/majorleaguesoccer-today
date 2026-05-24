@@ -55,6 +55,14 @@
               "extractLicenses": false,
               "sourceMap": true
             },
+            "website": {
+              "server": "src/main.server.ts",
+              "prerender": true,
+              "ssr": {
+                "entry": "src/server.ts"
+              },
+              "outputHashing": "none"
+            },
             "email": {
               "server": "src/main.server.ts",
               "prerender": true,
