@@ -62,22 +62,11 @@
                 "entry": "src/server.ts"
               },
               "outputHashing": "none",
+              "styles": [],
               "fileReplacements": [
-                {
-                  "replace": "src/app/services/match-data.service.ts",
-                  "with": "src/app/services/match-data.email.service.ts"
-                },
                 {
                   "replace": "src/app/app.ts",
                   "with": "src/app/app.email.ts"
-                },
-                {
-                  "replace": "src/app/components/footer/footer.component.ts",
-                  "with": "src/app/components/footer/footer.email.component.ts"
-                },
-                {
-                  "replace": "src/app/components/last-updated/last-updated.component.ts",
-                  "with": "src/app/components/last-updated/last-updated.email.component.ts"
                 }
               ]
             }
