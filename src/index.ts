@@ -280,8 +280,14 @@ const sortMatches = (matches: readonly MLSMatch[]): readonly MLSMatch[] => {
 };
 
 const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: readonly MatchResult[]): string => {
-  const minutesClose = (a: string, b: string): boolean =>
-    a === b || Math.abs(parseInt(a) - parseInt(b)) <= 5;
+  const parseMinute = (m: string): number => {
+    const plus = m.indexOf('+');
+    if (plus === -1) return parseInt(m, 10);
+    return parseInt(m.slice(0, plus), 10) + parseInt(m.slice(plus + 1), 10);
+  };
+
+  const minuteDiff = (a: string, b: string): number =>
+    Math.abs(parseMinute(a) - parseMinute(b));
 
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
@@ -290,7 +296,12 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
       const result: MatchResultOutput = {
         match: r.match,
         goalEvents: r.goalEvents.map(e => {
-          const video = r.goalVideos.find(v => v.side === e.side && minutesClose(v.minute, e.minute));
+          const video = r.goalVideos
+            .filter(v => v.side === e.side && minuteDiff(v.minute, e.minute) <= 5)
+            .reduce((best: GoalVideo | null, v) => {
+              if (!best) return v;
+              return minuteDiff(v.minute, e.minute) < minuteDiff(best.minute, e.minute) ? v : best;
+            }, null) ?? undefined;
           const event: GoalEventOutput = {
             minute: e.minute,
             playerName: e.playerName,
