@@ -18,16 +18,7 @@ jobs:
 
       - name: Check for fixtures
         id: check-fixtures
-        run: |
-          MATCH_COUNT=$(jq '.todayMatches | length' client/public/matches.json)
-          YESTERDAY_COUNT=$(jq '.yesterdayResults | length' client/public/matches.json)
-          echo "Found $MATCH_COUNT fixtures for today, $YESTERDAY_COUNT results from yesterday"
-          if [ "$MATCH_COUNT" -eq 0 ] && [ "$YESTERDAY_COUNT" -eq 0 ]; then
-            echo "No fixtures today and no results from yesterday, skipping email send"
-            echo "has_fixtures=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_fixtures=true" >> "$GITHUB_OUTPUT"
-          fi
+        run: bash scripts/check-fixtures.sh
 
       - name: Configure AWS credentials
         if: steps.check-fixtures.outputs.has_fixtures == 'true'
@@ -60,9 +51,6 @@ jobs:
 
           echo "Subscribers fetched successfully"
 
-          SUBJECT="Major League Soccer Today - $(date +'%A, %B %d, %Y')"
-          BASE_HTML=$(cat client/dist/client/browser/index.html)
-          export SUBJECT BASE_HTML
           SEND_FAILED=0
 
           while read -r item; do
@@ -71,10 +59,10 @@ jobs:
 
             TO_EMAIL="$email" \
             UNSUBSCRIBE_URL="${UNSUBSCRIBE_URL}?id=${unsub_id}" \
-            bash scripts/send-resend-email.sh || SEND_FAILED=1
+            bash scripts/send-email.sh || SEND_FAILED=1
           done < <(echo "$QUERY_RESULT" | jq -c '.Items[]')
 
-          if [ "$SEND_FAILED" -eq 1 ]; then
+          if [[ "$SEND_FAILED" -eq 1 ]]; then
             echo "One or more emails failed to send"
             exit 1
           fi
