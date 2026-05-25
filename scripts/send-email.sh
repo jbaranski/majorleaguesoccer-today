@@ -48,6 +48,11 @@ fi
 
 BASE_HTML=$(< "${HTML_PATH}")
 
+# Strip <script> tags — email clients block scripts and checkers flag them as dangerous
+BASE_HTML=$(printf '%s' "${BASE_HTML}" | sed -Ez \
+  -e 's|<script\b[^>]*/>||g' \
+  -e 's|<script\b[^>]*>[^<]*</script>||g')
+
 # Compute subject date
 if [[ -n "${DATE_OVERRIDE}" ]]; then
   if date --version > /dev/null 2>&1; then
