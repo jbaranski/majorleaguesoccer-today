@@ -12,6 +12,11 @@ IFS=$'\n\t'
 readonly SKIP_FIXTURE_CHECK="${SKIP_FIXTURE_CHECK:-false}"
 readonly MATCHES_JSON_PATH="${MATCHES_JSON_PATH:-client/public/matches.json}"
 
+if [[ "${SKIP_FIXTURE_CHECK}" != "true" ]] && [[ "${SKIP_FIXTURE_CHECK}" != "false" ]]; then
+  echo "Error: SKIP_FIXTURE_CHECK must be 'true' or 'false', got '${SKIP_FIXTURE_CHECK}'" >&2
+  exit 1
+fi
+
 if [[ "${SKIP_FIXTURE_CHECK}" == "true" ]]; then
   echo "Fixture check skipped (SKIP_FIXTURE_CHECK=true)"
   if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
@@ -22,6 +27,11 @@ fi
 
 if [[ ! -f "${MATCHES_JSON_PATH}" ]]; then
   echo "Error: matches.json not found at '${MATCHES_JSON_PATH}'" >&2
+  exit 1
+fi
+
+if ! jq -e 'has("todayMatches") and has("yesterdayResults")' "${MATCHES_JSON_PATH}" > /dev/null; then
+  echo "Error: matches.json is missing required keys (todayMatches, yesterdayResults)" >&2
   exit 1
 fi
 

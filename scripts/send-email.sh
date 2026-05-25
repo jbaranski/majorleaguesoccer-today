@@ -19,6 +19,11 @@ readonly IS_TEST="${IS_TEST:-false}"
 readonly DATE_OVERRIDE="${DATE_OVERRIDE:-}"
 readonly HTML_PATH="${HTML_PATH:-client/dist/client/browser/index.html}"
 
+if [[ -n "${DATE_OVERRIDE}" ]] && ! [[ "${DATE_OVERRIDE}" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+  echo "Error: DATE_OVERRIDE must be YYYY-MM-DD, got '${DATE_OVERRIDE}'" >&2
+  exit 1
+fi
+
 # Validate IS_TEST value
 if [[ "${IS_TEST}" != "true" ]] && [[ "${IS_TEST}" != "false" ]]; then
   echo "Error: IS_TEST must be 'true' or 'false', got '${IS_TEST}'" >&2
@@ -45,7 +50,11 @@ BASE_HTML=$(< "${HTML_PATH}")
 
 # Compute subject date
 if [[ -n "${DATE_OVERRIDE}" ]]; then
-  SUBJECT_DATE=$(date -d "${DATE_OVERRIDE}" +'%A, %B %d, %Y')
+  if date --version > /dev/null 2>&1; then
+    SUBJECT_DATE=$(date -d "${DATE_OVERRIDE}" +'%A, %B %d, %Y')
+  else
+    SUBJECT_DATE=$(date -jf '%Y-%m-%d' "${DATE_OVERRIDE}" +'%A, %B %d, %Y')
+  fi
 else
   SUBJECT_DATE=$(date +'%A, %B %d, %Y')
 fi
