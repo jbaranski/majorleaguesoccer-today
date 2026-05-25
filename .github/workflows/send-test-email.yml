@@ -64,7 +64,9 @@ jobs:
         run: bash scripts/check-fixtures.sh
 
       - name: Mask sensitive inputs
-        run: echo "::add-mask::${{ inputs.to_email }}"
+        env:
+          TO_EMAIL: ${{ inputs.to_email }}
+        run: echo "::add-mask::$TO_EMAIL"
 
       - name: Send test email
         if: steps.check-fixtures.outputs.has_fixtures == 'true'
