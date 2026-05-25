@@ -59,39 +59,19 @@ jobs:
 
       - name: Check for fixtures
         id: check-fixtures
-        run: |
-          MATCH_COUNT=$(jq '.todayMatches | length' client/public/matches.json)
-          echo "Found $MATCH_COUNT fixtures"
-          if [ "$MATCH_COUNT" -eq 0 ] && [ "${{ inputs.skip_fixture_check }}" != "true" ]; then
-            echo "No fixtures and skip_fixture_check=false, skipping send"
-            echo "should_send=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_send=true" >> "$GITHUB_OUTPUT"
-          fi
+        env:
+          SKIP_FIXTURE_CHECK: ${{ inputs.skip_fixture_check }}
+        run: bash scripts/check-fixtures.sh
 
       - name: Send test email
-        if: steps.check-fixtures.outputs.should_send == 'true'
+        if: steps.check-fixtures.outputs.has_fixtures == 'true'
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           TO_EMAIL: ${{ inputs.to_email }}
           DATE_OVERRIDE: ${{ inputs.date }}
+          IS_TEST: "true"
         run: |
           set -euo pipefail
-
-          if [ -n "${DATE_OVERRIDE}" ]; then
-            SUBJECT_DATE=$(date -d "${DATE_OVERRIDE}" +'%A, %B %d, %Y')
-          else
-            SUBJECT_DATE=$(date +'%A, %B %d, %Y')
-          fi
-          SUBJECT="[TEST] Major League Soccer Today - ${SUBJECT_DATE}"
-          BASE_HTML=$(cat client/dist/client/browser/index.html)
-          UNSUBSCRIBE_URL="TEST_UNSUBSCRIBE_PLACEHOLDER"
-          export SUBJECT BASE_HTML UNSUBSCRIBE_URL
-
-          if bash scripts/send-resend-email.sh; then
-            echo "Test email sent successfully"
-          else
-            echo "Failed to send test email"
-            exit 1
-          fi
+          bash scripts/send-email.sh
+          echo "Test email sent successfully"
