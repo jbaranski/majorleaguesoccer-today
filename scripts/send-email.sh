@@ -48,6 +48,16 @@ fi
 
 BASE_HTML=$(< "${HTML_PATH}")
 
+# Strip <script> tags — email clients block scripts and checkers flag them as dangerous
+BASE_HTML=$(python3 -c "
+import re, sys
+html = sys.stdin.read()
+# Match both paired <script>...</script> and self-closing <script/>
+html = re.sub(r'<script\b[^>]*/>', '', html, flags=re.IGNORECASE)
+html = re.sub(r'<script\b[^>]*>.*?</script>', '', html, flags=re.DOTALL | re.IGNORECASE)
+print(html, end='')
+" <<< "${BASE_HTML}")
+
 # Compute subject date
 if [[ -n "${DATE_OVERRIDE}" ]]; then
   if date --version > /dev/null 2>&1; then
