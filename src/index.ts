@@ -182,7 +182,7 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
     if (!response.ok) return [];
     const data = await response.json() as KeyEventsResponse;
     return data.events
-      .filter(e => e.sub_type === 'goals' || e.type === 'own_goals')
+      .filter(e => (e.sub_type === 'goals' || e.type === 'own_goals') && e.event.minute_of_play)
       .map(e => {
         const isOwnGoal = e.type === 'own_goals';
         // Penalty events nest the actual scorer inside shot_at_goal; regular goals are at event level
