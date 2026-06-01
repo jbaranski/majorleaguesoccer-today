@@ -64,6 +64,7 @@ export class MatchRowComponent {
   });
 
   goalLabel(goal: GoalEvent): string {
+    if (goal.isShootout) return `${goal.playerName} (Shootout)`;
     const minutePart = goal.minute ? `, ${goal.minute}'` : '';
     return `${goal.playerName}${goal.isOwnGoal ? ' (OG)' : ''}${minutePart}`;
   }

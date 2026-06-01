@@ -22,6 +22,7 @@ export interface GoalEvent {
   readonly playerName: string;
   readonly side: 'home' | 'away';
   readonly isOwnGoal: boolean;
+  readonly isShootout?: boolean;
   readonly videoUrl?: string;
 }
 

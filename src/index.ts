@@ -28,11 +28,12 @@ interface MLSMatchResponse {
 }
 
 interface GoalEvent {
-  readonly minute: string;
+  readonly minute?: string;
   readonly playerName: string;
   readonly teamName: string;
   readonly side: 'home' | 'away';
   readonly isOwnGoal: boolean;
+  readonly isShootout: boolean;
 }
 
 interface GoalVideo {
@@ -79,11 +80,12 @@ interface BrightcoveResponse {
 }
 
 interface GoalEventOutput {
-  readonly minute: string;
+  readonly minute?: string;
   readonly playerName: string;
   readonly teamName: string;
   readonly side: 'home' | 'away';
   readonly isOwnGoal: boolean;
+  readonly isShootout: boolean;
   readonly videoUrl?: string;
 }
 
@@ -182,9 +184,10 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
     if (!response.ok) return [];
     const data = await response.json() as KeyEventsResponse;
     return data.events
-      .filter(e => (e.sub_type === 'goals' || e.type === 'own_goals') && e.event.minute_of_play)
+      .filter(e => e.sub_type === 'goals' || e.type === 'own_goals')
       .map(e => {
         const isOwnGoal = e.type === 'own_goals';
+        const isShootout = !e.event.minute_of_play;
         // Penalty events nest the actual scorer inside shot_at_goal; regular goals are at event level
         const scorer: KeyEventScorer = e.event.shot_at_goal ?? e.event;
         const fullName = `${scorer.player_first_name ?? ''} ${scorer.player_last_name ?? ''}`.trim();
@@ -194,11 +197,12 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
           ? (scoringTeamName === homeTeamName ? awayTeamName : homeTeamName)
           : scoringTeamName;
         return {
-          minute: e.event.minute_of_play,
+          minute: e.event.minute_of_play || undefined,
           playerName: fullName || scorer.player_alias || 'Unknown',
           teamName: scoringTeamName,
           side: scoringTeam === homeTeamName ? 'home' : 'away',
-          isOwnGoal
+          isOwnGoal,
+          isShootout
         } satisfies GoalEvent;
       });
   } catch {
@@ -296,18 +300,19 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
       const result: MatchResultOutput = {
         match: r.match,
         goalEvents: r.goalEvents.map(e => {
-          const video = r.goalVideos
-            .filter(v => v.side === e.side && minuteDiff(v.minute, e.minute) <= 5)
+          const video = e.minute ? r.goalVideos
+            .filter(v => v.side === e.side && minuteDiff(v.minute, e.minute!) <= 5)
             .reduce((best: GoalVideo | null, v) => {
               if (!best) return v;
-              return minuteDiff(v.minute, e.minute) < minuteDiff(best.minute, e.minute) ? v : best;
-            }, null) ?? undefined;
+              return minuteDiff(v.minute, e.minute!) < minuteDiff(best.minute, e.minute!) ? v : best;
+            }, null) ?? undefined : undefined;
           const event: GoalEventOutput = {
             minute: e.minute,
             playerName: e.playerName,
             teamName: e.teamName,
             side: e.side,
             isOwnGoal: e.isOwnGoal,
+            isShootout: e.isShootout,
             ...(video && { videoUrl: video.url })
           };
           return event;
