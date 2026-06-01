@@ -64,7 +64,9 @@ export class MatchRowComponent {
   });
 
   goalLabel(goal: GoalEvent): string {
-    return `${goal.playerName}${goal.isOwnGoal ? ' (OG)' : ''}, ${goal.minute}'`;
+    if (goal.isShootout) return `${goal.playerName} (PK shootout scorer)`;
+    const minutePart = goal.minute ? `, ${goal.minute}'` : '';
+    return `${goal.playerName}${goal.isOwnGoal ? ' (OG)' : ''}${minutePart}`;
   }
 
   formatTime(isoString: string): string {
