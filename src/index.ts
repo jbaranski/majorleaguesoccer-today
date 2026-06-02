@@ -197,7 +197,7 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
           ? (scoringTeamName === homeTeamName ? awayTeamName : homeTeamName)
           : scoringTeamName;
         return {
-          minute: e.event.minute_of_play || undefined,
+          ...(e.event.minute_of_play ? { minute: e.event.minute_of_play } : {}),
           playerName: fullName || scorer.player_alias || 'Unknown',
           teamName: scoringTeamName,
           side: scoringTeam === homeTeamName ? 'home' : 'away',
@@ -307,7 +307,7 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
               return minuteDiff(v.minute, e.minute!) < minuteDiff(best.minute, e.minute!) ? v : best;
             }, null) ?? undefined : undefined;
           const event: GoalEventOutput = {
-            minute: e.minute,
+            ...(e.minute !== undefined ? { minute: e.minute } : {}),
             playerName: e.playerName,
             teamName: e.teamName,
             side: e.side,
