@@ -13,6 +13,7 @@
     "build:all": "npm run build:lib && npm run build:prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "update-csp": "node scripts/update-csp-hash.js",
     "prettier:check": "prettier --check .",
     "serve:ssr:client": "node dist/client/server/server.mjs",
     "build:email": "ng build --configuration email",
