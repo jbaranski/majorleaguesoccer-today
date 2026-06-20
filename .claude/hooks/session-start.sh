@@ -5,12 +5,18 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
-# Install Node 24 (matches CI) via nvm and set as default
-export NVM_DIR="/opt/nvm"
-# shellcheck source=/dev/null
-source "$NVM_DIR/nvm.sh"
-nvm install 24
-nvm alias default 24
+# Install n (Node version manager) using the existing Node/npm
+npm install -g n
+
+# Install Node 24 to /usr/local (n's default prefix)
+n 24
+
+# Prepend /usr/local/bin so Node 24 shadows the container's older Node —
+# must be set in both this process and the env file for future shell invocations
+export PATH="/usr/local/bin:$PATH"
+if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
+  echo 'export PATH="/usr/local/bin:$PATH"' >> "$CLAUDE_ENV_FILE"
+fi
 
 # Playwright ships with chromium-1228 but the container has chromium-1194.
 # Symlink the installed binary so tests can find it without a network download.
@@ -20,8 +26,7 @@ if [ ! -f "$CHROMIUM_TARGET" ]; then
   ln -sf /opt/pw-browsers/chromium-1194/chrome-linux/chrome "$CHROMIUM_TARGET"
 fi
 
-# Root TypeScript project
-npm install --prefix "$CLAUDE_PROJECT_DIR"
-
-# Angular client
-npm install --prefix "$CLAUDE_PROJECT_DIR/client"
+# Install project dependencies with Node 24
+cd "$CLAUDE_PROJECT_DIR" && npm ci
+cd "$CLAUDE_PROJECT_DIR/cdk" && npm ci
+cd "$CLAUDE_PROJECT_DIR/client" && npm ci
