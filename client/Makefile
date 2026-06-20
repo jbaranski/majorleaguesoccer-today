@@ -1,6 +1,9 @@
-.PHONY: all build test deploy
+.PHONY: all build test lint deploy
 
-all: test build
+all: lint test build
+
+lint:
+	npm run prettier:check
 
 test:
 	npx ng test --watch=false --browsers=ChromeHeadlessNoSandbox
