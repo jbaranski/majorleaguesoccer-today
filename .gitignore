@@ -12,7 +12,6 @@ Thumbs.db
 
 *.js
 !jest.config.js
-!client/public/posthog-init.js
 *.d.ts
 node_modules
 .cdk.staging

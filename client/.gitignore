@@ -42,3 +42,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Allow build scripts even though root .gitignore blocks *.js
+!scripts/*.js
