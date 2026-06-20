@@ -1,4 +1,4 @@
-import { Component, signal, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EmailCollectorConfig } from './email-collector-config';
@@ -7,7 +7,6 @@ import { EmailCollectorConfig } from './email-collector-config';
   selector: 'ec-email-collector',
   imports: [FormsModule, CommonModule],
   templateUrl: './email-collector.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './email-collector.css',
 })
 export class EmailCollector {

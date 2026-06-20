@@ -1,4 +1,4 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-last-updated',
@@ -8,7 +8,6 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
       Last Updated: <span class="italic">{{ date() }}</span>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.Eager,
   styles: []
 })
 export class LastUpdatedComponent {
