@@ -21,7 +21,7 @@ if [ ! -f "$CHROMIUM_TARGET" ]; then
 fi
 
 # Root TypeScript project
-npm install --prefix "$CLAUDE_PROJECT_DIR"
+npm ci --prefix "$CLAUDE_PROJECT_DIR"
 
 # Angular client
-npm install --prefix "$CLAUDE_PROJECT_DIR/client"
+npm ci --prefix "$CLAUDE_PROJECT_DIR/client"
