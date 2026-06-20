@@ -3,11 +3,13 @@ import { MLSMatch, MatchResult } from '../models/mls-match.model';
 export class MatchFormatter {
   static formatTime(isoString: string): string {
     const date = new Date(isoString);
-    return date.toLocaleString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'America/New_York'
-    }) + ' ET';
+    return (
+      date.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'America/New_York',
+      }) + ' ET'
+    );
   }
 
   static formatDate(isoString: string): string {
@@ -16,7 +18,7 @@ export class MatchFormatter {
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
-      timeZone: 'America/New_York'
+      timeZone: 'America/New_York',
     });
   }
 
@@ -34,7 +36,9 @@ export class MatchFormatter {
     return groups;
   }
 
-  static groupResultsByCompetition(results: readonly MatchResult[]): Map<string, readonly MatchResult[]> {
+  static groupResultsByCompetition(
+    results: readonly MatchResult[],
+  ): Map<string, readonly MatchResult[]> {
     const groups = new Map<string, MatchResult[]>();
     for (const result of results) {
       const name = result.match.competition_name;

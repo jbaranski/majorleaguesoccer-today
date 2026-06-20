@@ -4,15 +4,11 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "resolveJsonModule": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "src/**/*.spec.ts"
-  ],
+  "exclude": ["src/**/*.spec.ts"],
   "angularCompilerOptions": {
     "extendedDiagnostics": {
       "checks": {

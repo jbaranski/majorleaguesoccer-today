@@ -9,7 +9,7 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.Eager,
-  styles: []
+  styles: [],
 })
 export class LastUpdatedComponent {
   date = input.required<string>();
