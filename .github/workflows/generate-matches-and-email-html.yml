@@ -1,4 +1,4 @@
-name: generate_today_html
+name: generate-matches-and-email-html
 
 on:
   push:
