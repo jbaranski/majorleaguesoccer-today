@@ -221,7 +221,7 @@ Paste the PostHog snippet as the first inline `<script>` in `<head>`. Add a comm
 Add a headers block for `/*`. The `sha256-...` value covers the PostHog inline script; `'unsafe-hashes'` covers Beasties' `<link onload="...">` handlers. Add a comment so future editors know only the first `sha256-` token is replaced by the automation script:
 
 ```toml
-# script-src: first sha256 = inline PostHog snippet (replaced by `npm run update-csp` — keep it first).
+# CRITICAL: PostHog sha256 MUST be first — `npm run update-csp` replaces only the first sha256 token.
 # Second sha256 = Beasties CSS preload handler (this.media='all') — static, never changes, do not remove.
 [[headers]]
   for = "/*"
