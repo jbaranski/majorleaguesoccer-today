@@ -7,13 +7,25 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   template: `
     <hr class="border-0 border-t border-gray-200 my-4" />
     <div class="text-center text-gray-500 text-base mt-4 mb-3">
-      <a href="https://github.com/jbaranski/majorleaguesoccer-today" target="_blank" rel="noopener"
-        class="text-blue-500 hover:underline">Source code</a>
+      <a
+        href="https://github.com/jbaranski/majorleaguesoccer-today"
+        target="_blank"
+        rel="noopener"
+        class="text-blue-500 hover:underline"
+        >Source code</a
+      >
       used to generate the daily fixture list is free and open source :)
     </div>
     <div class="text-center text-gray-500 text-sm font-light">
-      Copyright 2026 <a href="https://www.jeffsoftware.com" target="_blank" rel="noopener" class="text-blue-500 hover:underline font-normal">Jeff Software</a>
+      Copyright 2026
+      <a
+        href="https://www.jeffsoftware.com"
+        target="_blank"
+        rel="noopener"
+        class="text-blue-500 hover:underline font-normal"
+        >Jeff Software</a
+      >
     </div>
-  `
+  `,
 })
 export class FooterComponent {}

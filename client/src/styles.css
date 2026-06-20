@@ -1,7 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   background: #ffffff;
   min-height: 100vh;
   padding: 16px;
@@ -9,7 +14,10 @@ body {
 }
 
 /* Ensure form elements inherit the page font — browsers don't do this by default */
-input, button, select, textarea {
+input,
+button,
+select,
+textarea {
   font-family: inherit;
 }
 
