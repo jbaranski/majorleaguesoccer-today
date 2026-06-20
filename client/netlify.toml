@@ -4,9 +4,8 @@
   to = "/index.html"
   status = 200
 
-# script-src: 'unsafe-hashes' is required for Angular's Beasties CSS preload <link onload="..."> handlers.
-# The sha256 hash covers the inline PostHog snippet in src/index.html.
-# Only the first 'sha256-...' token here is replaced by `npm run update-csp` — do not reorder.
+# script-src: first sha256 = inline PostHog snippet (replaced by `npm run update-csp` — keep it first).
+# Second sha256 = Beasties CSS preload handler (this.media='all') — static, do not remove.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -14,7 +13,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy ="default-src 'self'; script-src 'self' 'unsafe-hashes' 'sha256-7SMKoT+j4sGdSAHF5WJq4Vh6CaGQ7kkb7P6wOwb7Xf8=' https://p.jeffsoftware.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://emailcollector.jeffsoftware.com https://p.jeffsoftware.com; object-src 'none'; frame-ancestors 'none'"
+    Content-Security-Policy ="default-src 'self'; script-src 'self' 'unsafe-hashes' 'sha256-7SMKoT+j4sGdSAHF5WJq4Vh6CaGQ7kkb7P6wOwb7Xf8=' 'sha256-MhtPZXr7+LpJUY5qtMutB+qWfQtMaPccfe7QXtCcEYc=' https://p.jeffsoftware.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://emailcollector.jeffsoftware.com https://p.jeffsoftware.com; object-src 'none'; frame-ancestors 'none'"
 
 # index.html: browser must always revalidate; Netlify CDN holds it durably
 [[headers]]
