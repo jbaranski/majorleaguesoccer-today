@@ -73,12 +73,14 @@ wordbankTable.grantWriteData(myLambda);
 wordbankTable.grantStreamRead(myLambda);
 
 // GOOD — exact actions only
-myLambda.role!.addToPrincipalPolicy(new iam.PolicyStatement({
-  sid: 'WordBankTableUpdate',
-  effect: iam.Effect.ALLOW,
-  actions: ['dynamodb:UpdateItem'],
-  resources: [wordbankTable.tableArn]
-}));
+myLambda.role!.addToPrincipalPolicy(
+  new iam.PolicyStatement({
+    sid: 'WordBankTableUpdate',
+    effect: iam.Effect.ALLOW,
+    actions: ['dynamodb:UpdateItem'],
+    resources: [wordbankTable.tableArn]
+  })
+);
 ```
 
 ## Retry & Error Containment Standards
@@ -86,42 +88,60 @@ myLambda.role!.addToPrincipalPolicy(new iam.PolicyStatement({
 Every async component must have an explicit, small retry limit. Never rely on AWS defaults — they are almost always unlimited and will cause runaway costs, log floods, and cascading failures.
 
 **DynamoDB stream event sources** — always set `retryAttempts: 2`:
+
 ```typescript
-lambda.addEventSource(new lambdaEventSources.DynamoEventSource(table, {
-  retryAttempts: 2,          // 3 total attempts, then → DLQ
-  onFailure: new lambdaEventSources.SqsDlq(dlq),
-  // ... other options
-}));
+lambda.addEventSource(
+  new lambdaEventSources.DynamoEventSource(table, {
+    retryAttempts: 2, // 3 total attempts, then → DLQ
+    onFailure: new lambdaEventSources.SqsDlq(dlq)
+    // ... other options
+  })
+);
 ```
 
 **SQS queues that drive Lambdas** — always set `maxReceiveCount` ≤ 3 on the DLQ policy:
+
 ```typescript
 const queue = new sqs.Queue(this, 'MyQueue', {
-  deadLetterQueue: { queue: dlq, maxReceiveCount: 3 },
+  deadLetterQueue: { queue: dlq, maxReceiveCount: 3 }
   // ...
 });
 ```
 
 **EventBridge rules** — always set `retryAttempts: 2` on every Lambda target:
+
 ```typescript
 new events.Rule(this, 'MyRule', {
-  targets: [new eventsTargets.LambdaFunction(fn, {
-    retryAttempts: 2,        // 3 total attempts, then → DLQ
-    deadLetterQueue: dlq,
-  })]
+  targets: [
+    new eventsTargets.LambdaFunction(fn, {
+      retryAttempts: 2, // 3 total attempts, then → DLQ
+      deadLetterQueue: dlq
+    })
+  ]
 });
 ```
 
 **Kinesis stream event sources** — always set `retryAttempts: 2`:
+
 ```typescript
-lambda.addEventSource(new lambdaEventSources.KinesisEventSource(stream, {
-  retryAttempts: 2,
-  onFailure: new lambdaEventSources.SqsDlq(dlq),
-  // ...
-}));
+lambda.addEventSource(
+  new lambdaEventSources.KinesisEventSource(stream, {
+    retryAttempts: 2,
+    onFailure: new lambdaEventSources.SqsDlq(dlq)
+    // ...
+  })
+);
 ```
 
 Every retry configuration must have a corresponding CDK infra test asserting the limit (`MaximumRetryAttempts` in CloudFormation).
+
+## Node/npm Standards
+
+When working in CDK or Lambda TypeScript projects:
+
+- **Use `npm ci`** in CI pipelines, fresh checkouts, and Claude Code web sessions — installs exactly what is in `package-lock.json`, never modifies the lock file.
+- **Use `npm install <package>`** only when intentionally adding or updating a dependency.
+- **Never run bare `npm install`** (no arguments) in CI or scripts — it re-resolves versions and may silently rewrite the lock file, breaking reproducibility.
 
 ## Lambda Coding Standards
 

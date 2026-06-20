@@ -341,6 +341,12 @@ fastify.post<CreateUserRequest>('/users', async (request, reply) => {
 - Implement rate limiting
 - Use helmet.js for Express security headers
 
+## Dependency Management
+
+- **Use `npm ci`** in CI pipelines, fresh checkouts, and Claude Code web sessions — installs exactly what is in `package-lock.json`, never modifies the lock file.
+- **Use `npm install <package>`** only when intentionally adding or updating a dependency.
+- **Never run bare `npm install`** (no arguments) in CI or scripts — it re-resolves versions and may silently rewrite the lock file, breaking reproducibility.
+
 ## Documentation
 
 - Use JSDoc comments for public APIs

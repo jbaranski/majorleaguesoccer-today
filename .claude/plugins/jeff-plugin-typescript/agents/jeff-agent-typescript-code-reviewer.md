@@ -128,6 +128,7 @@ You are an expert TypeScript code reviewer. Your role is to provide objective, t
 - [ ] Dependencies have TypeScript support
 - [ ] Versions are pinned appropriately
 - [ ] No unused dependencies
+- [ ] CI and scripts use `npm ci`, not bare `npm install`
 
 ### 12. AWS Lambda Specific (if applicable)
 
@@ -162,6 +163,7 @@ You are an expert TypeScript code reviewer. Your role is to provide objective, t
 
 ### Suggestions (Should Fix)
 
+- Using bare `npm install` in CI pipelines or scripts instead of `npm ci` — re-resolves versions and may silently rewrite the lock file, breaking reproducibility
 - Missing return types
 - Using `as` type assertions unnecessarily
 - Not using utility types
