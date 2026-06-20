@@ -10,6 +10,7 @@ test:
 
 # build:prod injects PLACEHOLDER_API_URL into environment files before compiling
 build:
+	npm run update-csp
 	npm run build:prod
 
 # netlify-cli is NOT added as a devDependency -- npx downloads it at deploy time.

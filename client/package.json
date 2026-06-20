@@ -7,7 +7,6 @@
     "build": "ng build",
     "injectapi": "sed -i \"s|PLACEHOLDER_API_URL|$PLACEHOLDER_API_URL|g\" src/environments/environment.ts src/environments/environment.prod.ts",
     "build:prod": "npm run injectapi && ng build --configuration production",
-    "deploy-web": "npm run update-csp && npm run build:prod",
     "build:lib": "ng build email-collector",
     "pack:lib": "cd dist/email-collector && npm pack",
     "build:pack": "npm run build:lib && npm run pack:lib",
