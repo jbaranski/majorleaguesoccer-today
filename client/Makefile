@@ -6,7 +6,7 @@ lint:
 	npm run prettier:check
 
 test:
-	npx ng test --watch=false --browsers=ChromeHeadlessNoSandbox
+	PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers xvfb-run --auto-servernum npx ng test --watch=false --browsers=chromium
 
 # build:prod injects PLACEHOLDER_API_URL into environment files before compiling
 build:
