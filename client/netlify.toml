@@ -1,7 +1,3 @@
-[build]
-  command = "npm run deploy-web"
-  publish = "dist/client/browser"
-
 # SPA catch-all: all Angular routes serve index.html (status 200 = rewrite, not redirect)
 [[redirects]]
   from = "/*"
