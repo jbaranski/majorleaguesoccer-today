@@ -12,12 +12,10 @@
       />
     </div>
 
-    <button type="submit" [disabled]="isSubmitting()">
-      {{ isSubmitting() ? 'Subscribing...' : 'Subscribe' }}
-    </button>
+    <button type="submit" [disabled]="isSubmitting()">{{ isSubmitting() ? 'Subscribing...' : 'Subscribe' }}</button>
   </form>
 
   @if (messageType()) {
-    <div class="ec-message ec-message-{{ messageType() }}">{{ message() }}</div>
+  <div class="ec-message ec-message-{{ messageType() }}">{{ message() }}</div>
   }
 </div>

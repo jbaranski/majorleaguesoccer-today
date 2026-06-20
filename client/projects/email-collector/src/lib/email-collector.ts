@@ -8,7 +8,7 @@ import { EmailCollectorConfig } from './email-collector-config';
   imports: [FormsModule, CommonModule],
   templateUrl: './email-collector.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  styleUrl: './email-collector.css',
+  styleUrl: './email-collector.css'
 })
 export class EmailCollector {
   config = input.required<EmailCollectorConfig>();
@@ -33,12 +33,12 @@ export class EmailCollector {
       const response = await fetch(`${this.config().apiUrl}/subscribe`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: emailValue,
-          site: this.config().site,
-        }),
+          site: this.config().site
+        })
       });
 
       if (response.status === 201 || response.status == 200) {

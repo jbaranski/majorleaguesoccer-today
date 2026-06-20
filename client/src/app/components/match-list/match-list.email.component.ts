@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  signal,
-  inject,
-  computed,
-  ChangeDetectionStrategy,
-  DestroyRef,
-} from '@angular/core';
+import { Component, OnInit, signal, inject, computed, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatchDataService } from '../../services/match-data.email.service';
 import { MLSMatch, MatchResult } from '../../models/mls-match.model';
@@ -22,22 +14,16 @@ const SECTION_HEADER = `font-size: 14px; font-weight: bold; text-transform: uppe
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div
-        style="text-align: center; color: #6b7280; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};"
-      >
+      <div style="text-align: center; color: #6b7280; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};">
         Loading today's matches...
       </div>
     } @else if (error()) {
-      <div
-        style="text-align: center; color: #ef4444; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};"
-      >
+      <div style="text-align: center; color: #ef4444; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};">
         {{ error() }}
       </div>
     } @else {
       @if (todayCompetitions().size === 0) {
-        <div
-          style="text-align: center; color: #6b7280; font-size: 16px; margin-top: 16px; font-family: ${FONT};"
-        >
+        <div style="text-align: center; color: #6b7280; font-size: 16px; margin-top: 16px; font-family: ${FONT};">
           No games scheduled for today
         </div>
       } @else {
@@ -53,7 +39,7 @@ const SECTION_HEADER = `font-size: 14px; font-weight: bold; text-transform: uppe
         }
       }
     }
-  `,
+  `
 })
 export class MatchListComponent implements OnInit {
   private matchDataService = inject(MatchDataService);
@@ -74,16 +60,14 @@ export class MatchListComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.todayCompetitions.set(MatchFormatter.groupByCompetition(data.todayMatches));
-          this.yesterdayCompetitions.set(
-            MatchFormatter.groupResultsByCompetition(data.yesterdayResults),
-          );
+          this.yesterdayCompetitions.set(MatchFormatter.groupResultsByCompetition(data.yesterdayResults));
           this.loading.set(false);
         },
         error: (err) => {
           console.error('Error fetching matches:', err);
           this.error.set('Failed to load match data. Please try again later.');
           this.loading.set(false);
-        },
+        }
       });
   }
 }

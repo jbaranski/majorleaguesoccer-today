@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { MatchesData } from '../models/mls-match.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MatchDataService {
   private http = inject(HttpClient);

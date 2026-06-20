@@ -1,2 +1,3 @@
 scripts/update-csp-hash.js
 public/matches.json
+src/index.html

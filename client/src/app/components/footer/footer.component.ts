@@ -26,6 +26,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
         >Jeff Software</a
       >
     </div>
-  `,
+  `
 })
 export class FooterComponent {}
