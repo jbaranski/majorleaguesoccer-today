@@ -14,7 +14,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy ="default-src 'self'; script-src 'self' 'unsafe-hashes' 'sha256-SUOYcVtxfnJSDPFulR49JXeCV3V/vmvoYp+y3kEExZc=' https://p.jeffsoftware.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://fd6061vved.execute-api.us-east-1.amazonaws.com https://emailcollector.jeffsoftware.com https://p.jeffsoftware.com; object-src 'none'; frame-ancestors 'none'"
+    Content-Security-Policy ="default-src 'self'; script-src 'self' 'unsafe-hashes' 'sha256-SUOYcVtxfnJSDPFulR49JXeCV3V/vmvoYp+y3kEExZc=' https://p.jeffsoftware.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://emailcollector.jeffsoftware.com https://p.jeffsoftware.com; object-src 'none'; frame-ancestors 'none'"
 
 # index.html: browser must always revalidate; Netlify CDN holds it durably
 [[headers]]
