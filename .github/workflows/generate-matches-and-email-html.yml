@@ -1,4 +1,4 @@
-name: generate_today_html
+name: generate-matches-and-email-html
 
 on:
   push:
@@ -38,6 +38,9 @@ jobs:
       - name: Build Angular email pre-render
         run: npm run build:email
         working-directory: client
+      - name: Update CSP hash in netlify.toml
+        run: npm run update-csp
+        working-directory: client
       - name: Commit generated files if changed
         run: |-
           git diff
@@ -46,5 +49,6 @@ jobs:
           # Force-add generated artifacts — both are in .gitignore but committed intentionally
           git add -f client/public/matches.json
           git add -f client/dist/client/browser/index.html
+          git add client/netlify.toml
           git commit -m "Updated matches.json and pre-rendered index.html with today's games" || exit 0
           git push
