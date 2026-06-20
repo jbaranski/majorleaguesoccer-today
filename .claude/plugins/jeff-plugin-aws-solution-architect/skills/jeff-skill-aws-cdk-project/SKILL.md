@@ -16,6 +16,7 @@ Before proceeding:
    - "TypeScript latest version [current-year]"
    - "vitest latest version [current-year]"
    - "constructs library latest version [current-year]"
+   - Visit https://nodejs.org/en to find the current Node.js LTS major version (look for the "LTS" badge)
    - Update all version numbers in examples below with verified versions
    - DO NOT skip this step. DO NOT guess at version numbers.
 
@@ -127,6 +128,38 @@ Also always include `source-map-support` as a `devDependencies` for better error
   ...
 }
 ```
+
+### Node Version Enforcement
+
+Create `.nvmrc` at the repo root with the current Node LTS major version (visit https://nodejs.org/en and look for the "LTS" badge):
+
+```
+<NODE_LTS>
+```
+
+Create `.npmrc` in `cdk/` to enforce the Node version:
+
+```
+engine-strict=true
+```
+
+Add an `engines` field to `cdk/package.json` (replacing `<NODE_LTS>` with the current LTS major version):
+
+```json
+"engines": {
+  "node": ">= <NODE_LTS>.0.0"
+}
+```
+
+With `engine-strict=true`, any `npm` command on the wrong Node version will error immediately instead of silently corrupting the lock file.
+
+Configure the session-start hook using the `session-start-hook` skill so that Claude Code web sessions automatically install the current Node LTS version at container startup.
+
+### npm ci vs npm install
+
+- **Use `npm ci`** in CI pipelines, fresh checkouts, and Claude Code web sessions. It installs exactly what is in `package-lock.json`, never modifies the lock file, and fails fast if the lock file is missing or inconsistent.
+- **Use `npm install <package>`** only when intentionally adding or updating a dependency.
+- **Never run bare `npm install`** (no arguments) in CI or fresh environments — it re-resolves versions and may silently rewrite the lock file, which defeats reproducibility and can break CI.
 
 ### Scripts
 
@@ -248,6 +281,7 @@ new lambda.Function(this, 'process_order_function', { ... });
 ```
 
 This applies to:
+
 - Stack IDs passed to `new MyStack(app, 'StackId', ...)`
 - Construct IDs passed to `super(scope, 'ConstructId')` and `new SomeConstruct(this, 'ConstructId', ...)`
 - All logical resource IDs passed to AWS CDK resource constructors
@@ -263,7 +297,7 @@ Always set `removalPolicy: cdk.RemovalPolicy.DESTROY` on all resources. This pre
 ```typescript
 const table = new dynamodb.Table(this, 'MyTable', {
   partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
-  removalPolicy: cdk.RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY
 });
 ```
 
@@ -276,7 +310,7 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 
 const logGroup = new logs.LogGroup(this, 'MyLogGroup', {
   retention: logs.RetentionDays.FIVE_DAYS,
-  removalPolicy: cdk.RemovalPolicy.DESTROY,
+  removalPolicy: cdk.RemovalPolicy.DESTROY
 });
 ```
 

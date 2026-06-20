@@ -132,6 +132,7 @@ Every event source, queue, and async invocation must have an explicit, small ret
 - [ ] Using latest stable CDK version
 - [ ] TypeScript types properly used
 - [ ] No deprecated CDK patterns
+- [ ] CI and scripts use `npm ci`, not bare `npm install`
 
 ### 11. Graviton Optimization
 
@@ -161,6 +162,7 @@ Every event source, queue, and async invocation must have an explicit, small ret
 
 ### Suggestions (Should Fix)
 
+- Using bare `npm install` in CI pipelines or scripts instead of `npm ci` — re-resolves versions and may silently rewrite the lock file, breaking reproducibility
 - CDK construct IDs or resource logical IDs not using PascalCase (e.g. `'my-table'`, `'apiLogs'`, `'process_order'`)
 - No budget alarms configured
 - Missing tags for cost allocation
