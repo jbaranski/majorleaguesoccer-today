@@ -22,12 +22,24 @@ const SECTION_HEADER = `font-size: 14px; font-weight: bold; text-transform: uppe
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
-      <div style="text-align: center; color: #6b7280; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};">Loading today's matches...</div>
+      <div
+        style="text-align: center; color: #6b7280; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};"
+      >
+        Loading today's matches...
+      </div>
     } @else if (error()) {
-      <div style="text-align: center; color: #ef4444; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};">{{ error() }}</div>
+      <div
+        style="text-align: center; color: #ef4444; font-size: 16px; margin: 16px 0 8px; font-family: ${FONT};"
+      >
+        {{ error() }}
+      </div>
     } @else {
       @if (todayCompetitions().size === 0) {
-        <div style="text-align: center; color: #6b7280; font-size: 16px; margin-top: 16px; font-family: ${FONT};">No games scheduled for today</div>
+        <div
+          style="text-align: center; color: #6b7280; font-size: 16px; margin-top: 16px; font-family: ${FONT};"
+        >
+          No games scheduled for today
+        </div>
       } @else {
         <div style="${SECTION_HEADER}">Today's Games</div>
         @for (entry of todayCompetitionEntries(); track entry[0]) {
@@ -63,7 +75,7 @@ export class MatchListComponent implements OnInit {
         next: (data) => {
           this.todayCompetitions.set(MatchFormatter.groupByCompetition(data.todayMatches));
           this.yesterdayCompetitions.set(
-            MatchFormatter.groupResultsByCompetition(data.yesterdayResults)
+            MatchFormatter.groupResultsByCompetition(data.yesterdayResults),
           );
           this.loading.set(false);
         },

@@ -6,7 +6,13 @@
     "type": "git",
     "url": "file:../../../"
   },
-  "keywords": ["angular", "email", "collector", "form", "component"],
+  "keywords": [
+    "angular",
+    "email",
+    "collector",
+    "form",
+    "component"
+  ],
   "author": "",
   "license": "MIT",
   "peerDependencies": {

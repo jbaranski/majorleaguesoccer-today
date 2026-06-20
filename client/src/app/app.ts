@@ -6,12 +6,7 @@ import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    HeaderComponent,
-    MatchListComponent,
-    EmailCollectorWrapperComponent,
-    FooterComponent
-  ],
+  imports: [HeaderComponent, MatchListComponent, EmailCollectorWrapperComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.css',
