@@ -1,6 +1,9 @@
 {
   "name": "mls-email-cdk",
   "version": "0.1.0",
+  "engines": {
+    "node": ">= 24.0.0"
+  },
   "bin": {
     "cdk": "bin/cdk.js"
   },
