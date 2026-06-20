@@ -12,7 +12,6 @@ Thumbs.db
 
 *.js
 !jest.config.js
-!client/scripts/*.js
 *.d.ts
 node_modules
 .cdk.staging
