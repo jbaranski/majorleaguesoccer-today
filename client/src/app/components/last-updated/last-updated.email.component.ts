@@ -4,7 +4,7 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
   selector: 'app-last-updated',
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ``,
+  template: ``
 })
 export class LastUpdatedComponent {
   date = input.required<string>();

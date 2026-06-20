@@ -8,7 +8,7 @@ describe('EmailCollector', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmailCollector],
+      imports: [EmailCollector]
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmailCollector);

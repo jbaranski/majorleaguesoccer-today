@@ -4,7 +4,7 @@ import { MatchesData } from '../models/mls-match.model';
 import matchesData from '../../../public/matches.json';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MatchDataService {
   fetchMatches(): Observable<MatchesData> {

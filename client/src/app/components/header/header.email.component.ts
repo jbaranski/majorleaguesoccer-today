@@ -10,6 +10,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     >
       Major League Soccer Today
     </h1>
-  `,
+  `
 })
 export class HeaderComponent {}

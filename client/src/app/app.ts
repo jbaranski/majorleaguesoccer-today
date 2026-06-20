@@ -9,6 +9,6 @@ import { FooterComponent } from './components/footer/footer.component';
   imports: [HeaderComponent, MatchListComponent, EmailCollectorWrapperComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.css'
 })
 export class App {}
