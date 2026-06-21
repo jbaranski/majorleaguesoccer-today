@@ -25,7 +25,7 @@ We support all major Major League Soccer competitions and tournaments:
 | FIFA Club World Cup                  | Tournament |
 | CONCACAF Nations League              | Tournament |
 
-_Note: We exclude MLS NEXT Pro games and test matches to focus on top-level professional competitions. But if this is something you'd like to see us support please let us know._
+*Note:* We exclude MLS NEXT Pro games and test matches to focus on top-level professional competitions. But if this is something you'd like to see us support please let us know._
 
 ## Will you sell or share my email address if I subscribe to your newsletter?
 
