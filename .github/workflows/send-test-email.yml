@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: '24'
           cache: npm
 
       - name: Install dependencies
@@ -75,7 +75,7 @@ jobs:
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           TO_EMAIL: ${{ inputs.to_email }}
           DATE_OVERRIDE: ${{ inputs.date }}
-          IS_TEST: "true"
+          IS_TEST: 'true'
         run: |
           set -euo pipefail
           bash scripts/send-email.sh

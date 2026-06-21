@@ -2,7 +2,7 @@ name: deploy-web
 
 on:
   workflow_run:
-    workflows: ["generate-matches-and-email-html"]
+    workflows: ['generate-matches-and-email-html']
     types: [completed]
   workflow_dispatch: # also triggerable ad-hoc from the GitHub Actions UI
 
@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: '24'
           cache: npm
           cache-dependency-path: client/package-lock.json
 

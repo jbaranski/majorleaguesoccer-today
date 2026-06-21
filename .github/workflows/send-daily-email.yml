@@ -3,7 +3,7 @@ name: send_daily_email
 on:
   schedule:
     # Runs at 5:30 AM EDT (9:30 UTC) every day
-    - cron: "30 9 * * *"
+    - cron: '30 9 * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write  # Required for OIDC
+      id-token: write # Required for OIDC
     steps:
       - name: Check out repo
         uses: actions/checkout@v7
@@ -68,4 +68,3 @@ jobs:
           fi
 
           echo "All emails sent successfully"
-
