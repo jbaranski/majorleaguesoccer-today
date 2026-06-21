@@ -1,4 +1,3 @@
-
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -104,12 +103,7 @@ interface MatchesOutput {
 const SEASON = 'MLS-SEA-0001KA';
 
 // TODO: Input via Actions
-const EXCLUDED_COMPETITION_IDS = new Set([
-  'MLS-COM-000003',
-  'MLS-COM-000004',
-  'MLS-COM-00002R',
-  'MLS-COM-00002X'
-]);
+const EXCLUDED_COMPETITION_IDS = new Set(['MLS-COM-000003', 'MLS-COM-000004', 'MLS-COM-00002R', 'MLS-COM-00002X']);
 
 const COMPETITION_PRIORITIES = new Map([
   ['MLS-COM-000001', 1], // Major League Soccer - Regular Season
@@ -123,7 +117,7 @@ const COMPETITION_PRIORITIES = new Map([
   ['MLS-COM-00002W', 9], // Copa America
   ['MLS-COM-00002Z', 10], // CONCACAF Nations League
   ['MLS-COM-00000K', 11], // CONCACAF Champions Cup
-  ['MLS-COM-00002S', 12], // Club Friendly Matches
+  ['MLS-COM-00002S', 12] // Club Friendly Matches
 ]);
 
 const getCompetitionPriority = (competitionId: string): number => {
@@ -155,8 +149,8 @@ const getUrl = (now: Date): string => {
   const params = new URLSearchParams({
     'match_date[gte]': yesterday.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }),
     'match_date[lte]': tomorrow.toLocaleDateString('en-CA', { timeZone: 'America/New_York' }),
-    'per_page': '1000',
-    'sort': 'planned_kickoff_time:asc,home_team_name:asc'
+    per_page: '1000',
+    sort: 'planned_kickoff_time:asc,home_team_name:asc'
   });
 
   return `${baseUrl}?${params.toString()}`;
@@ -165,7 +159,7 @@ const getUrl = (now: Date): string => {
 const getData = async (url: string): Promise<MLSMatchResponse> => {
   const response = await fetch(url, {
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'User-Agent': 'JEFF-Bot'
     }
   });
@@ -174,18 +168,22 @@ const getData = async (url: string): Promise<MLSMatchResponse> => {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
 
-  return await response.json() as MLSMatchResponse;
+  return (await response.json()) as MLSMatchResponse;
 };
 
-const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamName: string): Promise<readonly GoalEvent[]> => {
+const fetchMatchEvents = async (
+  matchId: string,
+  homeTeamName: string,
+  awayTeamName: string
+): Promise<readonly GoalEvent[]> => {
   try {
     const url = `https://stats-api.mlssoccer.com/matches/${matchId}/key_events?per_page=1000`;
-    const response = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'JEFF-Bot' } });
+    const response = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'JEFF-Bot' } });
     if (!response.ok) return [];
-    const data = await response.json() as KeyEventsResponse;
+    const data = (await response.json()) as KeyEventsResponse;
     return data.events
-      .filter(e => e.sub_type === 'goals' || e.type === 'own_goals')
-      .map(e => {
+      .filter((e) => e.sub_type === 'goals' || e.type === 'own_goals')
+      .map((e) => {
         const isOwnGoal = e.type === 'own_goals';
         const isShootout = !e.event.minute_of_play;
         // Penalty events nest the actual scorer inside shot_at_goal; regular goals are at event level
@@ -194,7 +192,9 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
         const scoringTeamName = scorer.team_name;
         // For own goals the player's team conceded, so the scoring side is the opponent
         const scoringTeam = isOwnGoal
-          ? (scoringTeamName === homeTeamName ? awayTeamName : homeTeamName)
+          ? scoringTeamName === homeTeamName
+            ? awayTeamName
+            : homeTeamName
           : scoringTeamName;
         return {
           ...(e.event.minute_of_play ? { minute: e.event.minute_of_play } : {}),
@@ -213,16 +213,21 @@ const fetchMatchEvents = async (matchId: string, homeTeamName: string, awayTeamN
 const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: string): Promise<readonly GoalVideo[]> => {
   try {
     const url = `https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=${matchId}`;
-    const response = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'JEFF-Bot' } });
+    const response = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'JEFF-Bot' } });
     if (!response.ok) return [];
-    const data = await response.json() as BrightcoveResponse;
+    const data = (await response.json()) as BrightcoveResponse;
 
     // Determine side from title "vs. [OpponentCode]" or from slug "goal-...-vs-{code}-{minute}"
     const extractOpponentCode = (title: string, slug: string): string => {
       const titleMatch = /vs\.\s+([A-Z.]+)/i.exec(title);
       if (titleMatch) return titleMatch[1]!.replace(/\./g, '').toUpperCase();
       const vsIdx = slug.indexOf('-vs-');
-      if (vsIdx !== -1) return slug.slice(vsIdx + 4).replace(/-\d+$/, '').replace(/-/g, '').toUpperCase();
+      if (vsIdx !== -1)
+        return slug
+          .slice(vsIdx + 4)
+          .replace(/-\d+$/, '')
+          .replace(/-/g, '')
+          .toUpperCase();
       return '';
     };
 
@@ -234,8 +239,7 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
       return 'home';
     };
 
-    const minuteFromTitle = (title: string): string =>
-      (/,\s*(\d+(?:\+\d+)?)'/.exec(title) ?? [])[1] ?? '';
+    const minuteFromTitle = (title: string): string => (/,\s*(\d+(?:\+\d+)?)'/.exec(title) ?? [])[1] ?? '';
     // Slug format: "goal-player-vs-team-45-1" (injury time) or "goal-player-vs-team-82"
     // After -vs-, strip team code (letters) then take the remaining digits, converting
     // hyphen-separated extra time back to "45+1" form.
@@ -248,8 +252,8 @@ const fetchGoalVideos = async (matchId: string, homeCode: string, awayCode: stri
     };
 
     return data.items
-      .filter(item => /^(pk |own )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-|own-)?goal-/.test(item.slug))
-      .map(item => {
+      .filter((item) => /^(pk |own )?goal:/i.test(item.thumbnail?.title ?? '') || /^(pk-|own-)?goal-/.test(item.slug))
+      .map((item) => {
         const title = item.thumbnail?.title ?? '';
         const opponentCode = extractOpponentCode(title, item.slug);
         const minute = minuteFromTitle(title) || minuteFromSlug(item.slug);
@@ -290,22 +294,23 @@ const generateJSON = (todayMatches: readonly MLSMatch[], yesterdayResults: reado
     return parseInt(m.slice(0, plus), 10) + parseInt(m.slice(plus + 1), 10);
   };
 
-  const minuteDiff = (a: string, b: string): number =>
-    Math.abs(parseMinute(a) - parseMinute(b));
+  const minuteDiff = (a: string, b: string): number => Math.abs(parseMinute(a) - parseMinute(b));
 
   const output: MatchesOutput = {
     lastUpdated: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
     todayMatches,
-    yesterdayResults: yesterdayResults.map(r => {
+    yesterdayResults: yesterdayResults.map((r) => {
       const result: MatchResultOutput = {
         match: r.match,
-        goalEvents: r.goalEvents.map(e => {
-          const video = e.minute ? r.goalVideos
-            .filter(v => v.side === e.side && minuteDiff(v.minute, e.minute!) <= 5)
-            .reduce((best: GoalVideo | null, v) => {
-              if (!best) return v;
-              return minuteDiff(v.minute, e.minute!) < minuteDiff(best.minute, e.minute!) ? v : best;
-            }, null) ?? undefined : undefined;
+        goalEvents: r.goalEvents.map((e) => {
+          const video = e.minute
+            ? (r.goalVideos
+                .filter((v) => v.side === e.side && minuteDiff(v.minute, e.minute!) <= 5)
+                .reduce((best: GoalVideo | null, v) => {
+                  if (!best) return v;
+                  return minuteDiff(v.minute, e.minute!) < minuteDiff(best.minute, e.minute!) ? v : best;
+                }, null) ?? undefined)
+            : undefined;
           const event: GoalEventOutput = {
             ...(e.minute !== undefined ? { minute: e.minute } : {}),
             playerName: e.playerName,
@@ -336,28 +341,31 @@ const main = async (): Promise<void> => {
 
     // Use ET date of planned_kickoff_time. start_date is the competition matchday date
     // (shared by all games in a matchweek) and is wrong for date filtering.
-    const matchDateStr = (match: MLSMatch): string =>
-      toETDateStr(new Date(match.planned_kickoff_time));
+    const matchDateStr = (match: MLSMatch): string => toETDateStr(new Date(match.planned_kickoff_time));
 
-    const todayMatches = data.schedule.filter(match =>
-      matchDateStr(match) === todayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
+    const todayMatches = data.schedule.filter(
+      (match) => matchDateStr(match) === todayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
 
-    const yesterdayMatches = data.schedule.filter(match =>
-      matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
+    const yesterdayMatches = data.schedule.filter(
+      (match) => matchDateStr(match) === yesterdayStr && !EXCLUDED_COMPETITION_IDS.has(match.competition_id)
     );
 
     const sortedTodayMatches = sortMatches(todayMatches);
     const sortedYesterdayMatches = sortMatches(yesterdayMatches);
 
     const yesterdayResults: readonly MatchResult[] = await Promise.all(
-      sortedYesterdayMatches.map(async match => {
+      sortedYesterdayMatches.map(async (match) => {
         if (!match.match_id) {
           return { match, goalEvents: [], goalVideos: [] };
         }
         const [goalEvents, goalVideos] = await Promise.all([
           fetchMatchEvents(match.match_id, match.home_team_name, match.away_team_name),
-          fetchGoalVideos(match.match_id, match.home_team_three_letter_code ?? '', match.away_team_three_letter_code ?? '')
+          fetchGoalVideos(
+            match.match_id,
+            match.home_team_three_letter_code ?? '',
+            match.away_team_three_letter_code ?? ''
+          )
         ]);
         return { match, goalEvents, goalVideos };
       })
@@ -367,14 +375,14 @@ const main = async (): Promise<void> => {
       if (match.match_status !== 'finalWhistle') continue;
       const expectedHome = match.home_team_goals ?? 0;
       const expectedAway = match.away_team_goals ?? 0;
-      const eventsHome = goalEvents.filter(e => e.side === 'home').length;
-      const eventsAway = goalEvents.filter(e => e.side === 'away').length;
+      const eventsHome = goalEvents.filter((e) => e.side === 'home').length;
+      const eventsAway = goalEvents.filter((e) => e.side === 'away').length;
       if (eventsHome !== expectedHome || eventsAway !== expectedAway) {
         console.warn(
           `[WARN] Key events count mismatch for ${match.match_id} ` +
-          `(${match.home_team_name} vs ${match.away_team_name}): ` +
-          `score home=${expectedHome} away=${expectedAway}, ` +
-          `events home=${eventsHome} away=${eventsAway}`
+            `(${match.home_team_name} vs ${match.away_team_name}): ` +
+            `score home=${expectedHome} away=${expectedAway}, ` +
+            `events home=${eventsHome} away=${eventsAway}`
         );
       }
     }
