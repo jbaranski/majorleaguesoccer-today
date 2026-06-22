@@ -16,7 +16,7 @@
     "prettier:check": "npx prettier --check ."
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.0",
     "typescript": "^5.5.0"
   },
   "keywords": [
