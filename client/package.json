@@ -31,7 +31,7 @@
     "@angular/core": "^22.0.2",
     "@angular/forms": "^22.0.2",
     "@angular/platform-browser": "^22.0.2",
-    "@angular/platform-server": "^22.0.2",
+    "@angular/platform-server": "^22.0.3",
     "@angular/router": "^22.0.2",
     "@angular/ssr": "^22.0.4",
     "express": "^5.1.0",
