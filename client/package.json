@@ -45,13 +45,13 @@
     "@tailwindcss/postcss": "^4.3.2",
     "@types/express": "^5.0.1",
     "@types/node": "^26.1.0",
-    "@vitest/browser-playwright": "^4.1.9",
+    "@vitest/browser-playwright": "^4.1.10",
     "jsdom": "^29.1.1",
     "ng-packagr": "^22.0.1",
     "postcss": "^8.5.16",
     "prettier": "^3.9.4",
     "tailwindcss": "^4.3.2",
     "typescript": "~6.0.3",
-    "vitest": "^4.0.8"
+    "vitest": "^4.1.10"
   }
 }
