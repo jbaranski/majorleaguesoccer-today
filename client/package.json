@@ -48,7 +48,7 @@
     "@vitest/browser-playwright": "^4.1.10",
     "jsdom": "^29.1.1",
     "ng-packagr": "^22.0.1",
-    "postcss": "^8.5.16",
+    "postcss": "^8.5.18",
     "prettier": "^3.9.5",
     "tailwindcss": "^4.3.2",
     "typescript": "~6.0.3",
