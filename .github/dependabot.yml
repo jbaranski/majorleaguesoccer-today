@@ -3,24 +3,44 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'npm'
     directory: '/cdk'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'npm'
     directory: '/client'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'npm'
     directory: '/client/projects/email-collector'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
