@@ -33,14 +33,14 @@
     "@angular/platform-browser": "^22.0.8",
     "@angular/platform-server": "^22.0.8",
     "@angular/router": "^22.0.8",
-    "@angular/ssr": "^22.0.7",
+    "@angular/ssr": "^22.0.8",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular/build": "^22.0.7",
-    "@angular/cli": "^22.0.7",
+    "@angular/build": "^22.0.8",
+    "@angular/cli": "^22.0.8",
     "@angular/compiler-cli": "^22.0.8",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/express": "^5.0.1",
