@@ -45,7 +45,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/express": "^5.0.1",
     "@types/node": "^26.2.0",
-    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/browser-playwright": "^4.1.11",
     "jsdom": "^30.0.1",
     "ng-packagr": "^22.1.1",
     "postcss": "^8.5.26",
