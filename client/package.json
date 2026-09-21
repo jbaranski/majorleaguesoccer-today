@@ -50,7 +50,7 @@
     "ng-packagr": "^22.1.1",
     "playwright": "^1.63.0",
     "postcss": "^8.5.28",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.8",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "vitest": "^5.0.0"
