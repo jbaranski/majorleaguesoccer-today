@@ -1,0 +1,49 @@
+name: pr-check-web
+
+# Catches CSP breakage (e.g. a dependency update that changes Angular's inline scripts)
+# before it reaches production.
+on:
+  pull_request:
+    paths:
+      - 'client/**'
+      - '.github/workflows/pr-check-web.yml'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Angular -- lint, build & CSP check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: make lint
+
+      - name: Build
+        run: npm run build:lib && npm run build:prod
+        env:
+          # Dummy value: the API is only called on form submit, which the smoke test never does.
+          PLACEHOLDER_API_URL: https://api.example.invalid
+
+      - name: Verify netlify.toml CSP hashes match the build
+        run: npm run update-csp -- --check
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: CSP smoke test
+        run: npm run smoke:csp

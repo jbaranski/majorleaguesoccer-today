@@ -39,6 +39,9 @@ jobs:
       - name: Test
         run: make test
 
+      - name: Install Chromium for CSP smoke test
+        run: npx playwright install --with-deps chromium
+
       - name: Deploy
         run: make deploy
         env:
@@ -53,5 +56,5 @@ jobs:
           git config user.name "JEFF-bot"
           git config user.email "actions@users.noreply.github.com"
           git add client/netlify.toml
-          git commit -m "chore: update PostHog CSP hash [skip ci]"
+          git commit -m "chore: update CSP script-src hashes [skip ci]"
           git push
