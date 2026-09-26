@@ -14,6 +14,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "update-csp": "node scripts/update-csp-hash.js",
+    "smoke:csp": "node scripts/csp-smoke-test.js",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "serve:ssr:client": "node dist/client/server/server.mjs",
