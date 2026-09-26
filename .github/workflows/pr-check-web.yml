@@ -36,8 +36,8 @@ jobs:
       - name: Build
         run: npm run build:lib && npm run build:prod
         env:
-          # Secrets aren't available to PR builds; any allowed connect-src host works here.
-          PLACEHOLDER_API_URL: https://emailcollector.jeffsoftware.com
+          # Dummy value: the API is only called on form submit, which the smoke test never does.
+          PLACEHOLDER_API_URL: https://api.example.invalid
 
       - name: Verify netlify.toml CSP hashes match the build
         run: npm run update-csp -- --check
