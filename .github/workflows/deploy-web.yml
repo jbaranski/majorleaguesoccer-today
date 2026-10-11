@@ -58,3 +58,24 @@ jobs:
           git add client/netlify.toml
           git commit -m "chore: update CSP script-src hashes [skip ci]"
           git push
+
+  send-email:
+    # Only the scheduled fetch triggers email; push-triggered fetches (Dependabot merges) don't
+    needs: deploy
+    if: ${{ github.event.workflow_run.event == 'schedule' }}
+    name: Trigger daily email after morning deploy
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch send_daily_email for the morning fetch only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FETCH_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
+        run: |
+          hour=$(TZ=America/New_York date -d "${FETCH_STARTED_AT}" +%H)
+          if (( 10#${hour} >= 15 )); then
+            echo "Evening fetch (hour ${hour} ET), not sending email"
+            exit 0
+          fi
+          gh workflow run send-daily-email.yml --repo "${{ github.repository }}" --ref main
