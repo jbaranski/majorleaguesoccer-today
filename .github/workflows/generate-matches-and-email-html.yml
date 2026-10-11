@@ -5,7 +5,9 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 9,21 * * *'
+    # Off the top of the hour: GitHub delays scheduled runs under load, worst at :00
+    # 7:02 AM EDT / 6:02 AM EST and 5:02 PM EDT / 4:02 PM EST
+    - cron: '2 11,21 * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:

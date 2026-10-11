@@ -1,10 +1,8 @@
 name: send_daily_email
 
 on:
-  schedule:
-    # Runs at 5:30 AM EDT (9:30 UTC) every day
-    - cron: '30 9 * * *'
-  workflow_dispatch: # Allow manual triggering
+  # Dispatched by deploy-web after the morning deploy; also runnable by hand
+  workflow_dispatch:
 
 jobs:
   send-email:
