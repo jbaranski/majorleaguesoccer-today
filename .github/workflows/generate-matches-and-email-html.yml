@@ -27,6 +27,8 @@ jobs:
         run: npm ci
       - name: Build TypeScript
         run: npm run build
+      - name: Test
+        run: npm test
       - name: Generate matches.json
         env:
           TZ: America/New_York
