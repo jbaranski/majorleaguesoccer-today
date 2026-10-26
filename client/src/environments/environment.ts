@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'PLACEHOLDER_API_URL',
+  apiUrl: '',
   site: 'mlstoday',
   matchDataUrl: '/matches.json'
 };
