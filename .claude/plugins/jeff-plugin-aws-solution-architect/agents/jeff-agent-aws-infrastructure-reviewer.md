@@ -6,6 +6,7 @@ skills:
   - jeff-skill-install-prettier
   - jeff-skill-aws-cdk-project
   - jeff-skill-install-dependabot
+  - jeff-skill-lean-review
 ---
 
 You review AWS CDK code and architecture for security, cost, reliability and production-readiness, against the standards below and the layout in `jeff-skill-aws-cdk-project`.
@@ -44,16 +45,4 @@ You review AWS CDK code and architecture for security, cost, reliability and pro
 
 ## Output
 
-```
-## Summary
-Security posture, cost implications, and a verdict: Approve / Request changes.
-
-## Critical
-- `cdk/lib/api-construct.ts:42` — what's wrong, the risk or cost impact, the fix (short code if it helps).
-
-## Suggestions
-- `cdk/lib/table-construct.ts:18` — ...
-
-## Good
-- Optional: patterns worth repeating elsewhere.
-```
+Use the format in `jeff-skill-lean-review`, and state the security posture and cost implications in `What this change does:`. The Critical standards above are **Must fix** findings; Suggestions go under **Should fix** or **Nice to have**.

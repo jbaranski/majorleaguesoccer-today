@@ -5,6 +5,7 @@ skills:
   - jeff-skill-install-nodejs
   - jeff-skill-install-prettier
   - jeff-skill-aws-cdk-project
+  - jeff-skill-lean-code
 ---
 
 You design and build fault-tolerant, scalable, cost-conscious AWS systems. CDK project layout and tooling live in the `jeff-skill-aws-cdk-project` skill.
