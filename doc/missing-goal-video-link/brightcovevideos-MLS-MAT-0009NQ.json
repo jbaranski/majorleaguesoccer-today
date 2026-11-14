@@ -1,0 +1,652 @@
+{
+  "pagination": {
+    "maxItems": 100
+  },
+  "meta": {
+    "apiVersion": "2.0",
+    "generatedAt": "2026-11-14T18:56:06.6087069Z"
+  },
+  "items": [
+    {
+      "type": "customentity",
+      "_translationId": "836c8f20-7d9a-43b3-b31f-eb485964087c",
+      "_entityId": "f37c7672-93bb-49b5-adc2-932db9de7baa",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/highlights-d-c-united-vs-fc-cincinnati-october-24-2026",
+      "slug": "highlights-d-c-united-vs-fc-cincinnati-october-24-2026",
+      "title": "HIGHLIGHTS: DC United vs. FC Cincinnati | October 24, 2026",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "ed80b8f1-9aed-425c-872f-22772e7223a4",
+          "_entityId": "8ff61530-fc20-49ec-b0aa-8fa539d59f38",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/d-c-united",
+          "title": "D.C. United",
+          "slug": "d-c-united",
+          "neutralSlug": "d-c-united",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "2ce97f74-a55c-4177-8bb0-dbd36be213ca",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1326,
+            "name": "D.C. United",
+            "shortName": "D.C. United",
+            "abbreviation": "DC",
+            "logoColor": "webcomp_1e67a2a4-1952-450e-8c96-dac105e6cb82",
+            "logoBW": "webcomp_75edf7c2-02fe-47d5-bc77-a9868e76ca6d",
+            "crestColor": "webcomp_b6c29a0f-aaef-4c66-bd31-c509392649ad"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "ce4c5f79-069b-4f45-8ccc-e779098b6fb9",
+          "_entityId": "3be1114f-04c5-45ea-a114-5f661bad77d5",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/fc-cincinnati",
+          "title": "FC Cincinnati",
+          "slug": "fc-cincinnati",
+          "neutralSlug": "fc-cincinnati",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "defe3962-ab59-48ca-b594-2bd48b3db6f9",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 11504,
+            "name": "FC Cincinnati",
+            "shortName": "Cincinnati",
+            "abbreviation": "CIN"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "8cd5b91a-de68-41d7-8eb3-ca8726c34133",
+          "_entityId": "c9d26a97-e9af-4ce5-be27-0aa8d45de94a",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/dcvscin-10-24-2026",
+          "title": "DCvsCIN 10-24-2026",
+          "slug": "dcvscin-10-24-2026",
+          "neutralSlug": "dcvscin-10-24-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "6b3f9284-7ac6-4fbc-9d71-807838452c4c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022518,
+            "sportecId": "MLS-MAT-0009NQ",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1326,
+            "awayClubOptaId": 11504,
+            "venueOptaId": 12976,
+            "matchDay": 32
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6407363192112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "627566",
+        "sportecMatchId": "MLS-MAT-0009NQ",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/052c89c3-a68d-4b54-bc11-8cd26b38cb35/4c525f91-1306-4a75-aa81-75108c4ae0cc/text.vtt?fastly_token=NmNiZTlmOWJfODIwNjgzNmI5YTIwNDdiOGFhZjk3YWZhYWQxOGNiMmM1OTY0ODYyMDIzZDQ1M2RiYmQ4MjI5MDAzNTA2MWMzMV9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzA1MmM4OWMzLWE2OGQtNGI1NC1iYzExLThjZDI2YjM4Y2IzNS80YzUyNWY5MS0xMzA2LTRhNzUtYWE4MS03NTEwOGM0YWUwY2MvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/052c89c3-a68d-4b54-bc11-8cd26b38cb35/10s/master.m3u8?fastly_token=NmNiZTlmOWJfYTYzYjU1NmIyZWQ5YjhlMzA1OTc3ZWQyODBiNDI1ZDdiZTUyMzAwZTI2ZWMyNjJkZThkMmRmZWFmZDNiMjhhYg%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/052c89c3-a68d-4b54-bc11-8cd26b38cb35/b44d3ef4-ec76-44f0-9ed0-622b5b44c721/main.mp4?fastly_token=NmNiZTlmOWJfYjE1ZTZmMjAwZTRjZGQ5MjIzNmQzM2E4Yzk1NDdlNGEyOWI0ZGE0ZDA2ZDNmMjNhZjY0M2I4NmZmYTVlMDVkZV8vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS8wNTJjODljMy1hNjhkLTRiNTQtYmMxMS04Y2QyNmIzOGNiMzUvYjQ0ZDNlZjQtZWM3Ni00NGYwLTllZDAtNjIyYjViNDRjNzIxL21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Dylan Butler",
+      "lastUpdatedDate": "2026-10-25T02:18:50.681Z",
+      "contentDate": "2026-10-25T02:02:59.388Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "REG26-HIGHLIGHTS_DCvsCIN",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/vrgu9pxph4k5hdfciulu",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/vrgu9pxph4k5hdfciulu",
+        "format": "png",
+        "overriddenFormats": {},
+        "slug": "reg26-highlights-dcvscin",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/reg26-highlights-dcvscin"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "8645d785-0275-4f4b-827a-3e00ea077962",
+      "_entityId": "1fd6ab4b-4539-4983-a818-2e2e49d4d828",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/match-snapshot-d-c-vs-cincinnati-x1127",
+      "slug": "match-snapshot-d-c-vs-cincinnati-x1127",
+      "title": "MATCH SNAPSHOT: D.C. vs. Cincinnati",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "29d5d33b-a455-4835-bde0-9755a943cedb",
+          "_entityId": "0db1c45a-b23d-4420-a0bd-e8bbf2e1e427",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/spotlight-video",
+          "title": "Spotlight Video",
+          "slug": "spotlight-video",
+          "neutralSlug": "spotlight-video",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "7cddad5e-356c-45e3-aa5c-aeceb476018c",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {},
+          "fields": {}
+        },
+        {
+          "_translationId": "ed80b8f1-9aed-425c-872f-22772e7223a4",
+          "_entityId": "8ff61530-fc20-49ec-b0aa-8fa539d59f38",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/d-c-united",
+          "title": "D.C. United",
+          "slug": "d-c-united",
+          "neutralSlug": "d-c-united",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "2ce97f74-a55c-4177-8bb0-dbd36be213ca",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1326,
+            "name": "D.C. United",
+            "shortName": "D.C. United",
+            "abbreviation": "DC",
+            "logoColor": "webcomp_1e67a2a4-1952-450e-8c96-dac105e6cb82",
+            "logoBW": "webcomp_75edf7c2-02fe-47d5-bc77-a9868e76ca6d",
+            "crestColor": "webcomp_b6c29a0f-aaef-4c66-bd31-c509392649ad"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "ce4c5f79-069b-4f45-8ccc-e779098b6fb9",
+          "_entityId": "3be1114f-04c5-45ea-a114-5f661bad77d5",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/fc-cincinnati",
+          "title": "FC Cincinnati",
+          "slug": "fc-cincinnati",
+          "neutralSlug": "fc-cincinnati",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "defe3962-ab59-48ca-b594-2bd48b3db6f9",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 11504,
+            "name": "FC Cincinnati",
+            "shortName": "Cincinnati",
+            "abbreviation": "CIN"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "8cd5b91a-de68-41d7-8eb3-ca8726c34133",
+          "_entityId": "c9d26a97-e9af-4ce5-be27-0aa8d45de94a",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/dcvscin-10-24-2026",
+          "title": "DCvsCIN 10-24-2026",
+          "slug": "dcvscin-10-24-2026",
+          "neutralSlug": "dcvscin-10-24-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "6b3f9284-7ac6-4fbc-9d71-807838452c4c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022518,
+            "sportecId": "MLS-MAT-0009NQ",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1326,
+            "awayClubOptaId": 11504,
+            "venueOptaId": 12976,
+            "matchDay": 32
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6407363476112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "59582",
+        "sportecMatchId": "MLS-MAT-0009NQ",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/7fc24de7-b91f-4556-8f74-2b1484594d8b/9caa131d-6b85-4c18-896e-824e18a72b27/text.vtt?fastly_token=NmNiZTlhNTFfZTFhNzU4MGRlNzk5NTY4ODRlMDdlYjk2MmUxZTBjZDc2YzNmODI2YTQyYTI1ZTgwMzRhOTVkY2M5NjJiZmVlYV9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzdmYzI0ZGU3LWI5MWYtNDU1Ni04Zjc0LTJiMTQ4NDU5NGQ4Yi85Y2FhMTMxZC02Yjg1LTRjMTgtODk2ZS04MjRlMThhNzJiMjcvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/7fc24de7-b91f-4556-8f74-2b1484594d8b/10s/master.m3u8?fastly_token=NmNiZTlhNTFfMzIwZjg1OWNhYTNjMjhiM2I3ZDRkNTdmNjQyMWYyYmQ4Yjg4ZGU2ZDdmOWE1YzA3ZWVmY2Y4YTZhNTA1MTgwYg%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/7fc24de7-b91f-4556-8f74-2b1484594d8b/c855ae1a-acac-40ce-905e-8eddfdd65de8/main.mp4?fastly_token=NmNiZTlhNTFfYTM2NTNjM2UyMmI0NjlkN2I1ZTQzYWY3YWM0YTgxYTg5NjdlM2IxYTAyZmY3ZTE1YmY3OTFiNzA4NzhkMGQ2M18vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS83ZmMyNGRlNy1iOTFmLTQ1NTYtOGY3NC0yYjE0ODQ1OTRkOGIvYzg1NWFlMWEtYWNhYy00MGNlLTkwNWUtOGVkZGZkZDY1ZGU4L21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "mls-videobc-importer-client",
+      "lastUpdatedDate": "2026-10-25T02:01:47.099Z",
+      "contentDate": "2026-10-25T02:00:22.309Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "MATCH SNAPSHOT: D.C. vs. Cincinnati",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/puaabjboq2srd9zptvle",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/puaabjboq2srd9zptvle",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "match-snapshot-d-c-vs-cincinnati-x5843",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/match-snapshot-d-c-vs-cincinnati-x5843"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "335fb895-31e6-46a5-bfea-48c7eabcdcb0",
+      "_entityId": "0afb075c-a1ea-454e-bca0-620de0add296",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/goal-t-barlow-vs-d-c-united-52",
+      "slug": "goal-t-barlow-vs-d-c-united-52",
+      "title": "Goal: T. Barlow vs. DC, 52'",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "36e7c67b-e149-41ee-b342-253e5d8cef18",
+          "_entityId": "613a8d72-dc90-4f30-86f6-a3fa86e4115b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/goals",
+          "title": "Goals",
+          "slug": "goals",
+          "neutralSlug": "goals",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "2e827f5e-b732-4ad5-8f69-9a41244445b9",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "promoted": false,
+            "brandedImage": "webcomp_01409afe-baa1-4654-a7c9-bdf924046239"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "ce4c5f79-069b-4f45-8ccc-e779098b6fb9",
+          "_entityId": "3be1114f-04c5-45ea-a114-5f661bad77d5",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/fc-cincinnati",
+          "title": "FC Cincinnati",
+          "slug": "fc-cincinnati",
+          "neutralSlug": "fc-cincinnati",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "defe3962-ab59-48ca-b594-2bd48b3db6f9",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 11504,
+            "name": "FC Cincinnati",
+            "shortName": "Cincinnati",
+            "abbreviation": "CIN"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "8cd5b91a-de68-41d7-8eb3-ca8726c34133",
+          "_entityId": "c9d26a97-e9af-4ce5-be27-0aa8d45de94a",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/dcvscin-10-24-2026",
+          "title": "DCvsCIN 10-24-2026",
+          "slug": "dcvscin-10-24-2026",
+          "neutralSlug": "dcvscin-10-24-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "6b3f9284-7ac6-4fbc-9d71-807838452c4c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022518,
+            "sportecId": "MLS-MAT-0009NQ",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1326,
+            "awayClubOptaId": 11504,
+            "venueOptaId": 12976,
+            "matchDay": 32
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "b6dd69a5-c205-49b2-ae09-a7253d56057e",
+          "_entityId": "aea4237f-506b-4ec7-8723-39b5e8a9c294",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/tom-barlow",
+          "title": "Tom Barlow",
+          "slug": "tom-barlow",
+          "neutralSlug": "tom-barlow",
+          "externalSourceName": "customentity.player",
+          "externalSourceReference": {
+            "SourceId": "43b542b1-fb17-454a-827d-e7be1e850e4a",
+            "SourceName": "customentity.player"
+          },
+          "extraData": {
+            "optaId": 234346,
+            "firstName": "Tom",
+            "middleName": "",
+            "lastName": "Barlow",
+            "knownName": "",
+            "clubOptaId": 399
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6407361025112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "51223",
+        "sportecEventId": "1251800000854",
+        "sportecMatchId": "MLS-MAT-0009NQ",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/e29b7c8c-1722-4454-a035-53d0932b6f77/106ee0d0-6111-4912-8bc1-aa20d77367e3/text.vtt?fastly_token=NmNiZThhZTlfMjFhNTIxYmY0M2JiNDE0Y2NmZjA3YWM0MDUzODBkY2QyZDQ5MzJhNDA3NGE4OWMyNzcxNzFkOWE2MmE3ZGFjNV9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxL2UyOWI3YzhjLTE3MjItNDQ1NC1hMDM1LTUzZDA5MzJiNmY3Ny8xMDZlZTBkMC02MTExLTQ5MTItOGJjMS1hYTIwZDc3MzY3ZTMvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/e29b7c8c-1722-4454-a035-53d0932b6f77/10s/master.m3u8?fastly_token=NmNiZThhZTlfNTQwZWU2ZDcyZDg3YThlMjI1MjlhZjUyOTQ5OTkyYjJmYzcyZTJiMmM1NDFhMThkMDc0OTBiMjE4MmVjNTRjNg%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/e29b7c8c-1722-4454-a035-53d0932b6f77/70d1611f-fb2c-43b6-8f14-563eeb33db1c/main.mp4?fastly_token=NmNiZThhZTlfNjFlOGZhOTNkMDQxMjE0MDhiYTYwYmRlYzE2MWFjMzJmYWNjN2JmMDcyNTI4NWUzMjJlZDljMDQ0N2E3NDQ1NV8vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS9lMjliN2M4Yy0xNzIyLTQ0NTQtYTAzNS01M2QwOTMyYjZmNzcvNzBkMTYxMWYtZmIyYy00M2I2LThmMTQtNTYzZWViMzNkYjFjL21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Dylan Butler",
+      "lastUpdatedDate": "2026-10-25T01:05:43.836Z",
+      "contentDate": "2026-10-25T00:55:04.598Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "Goal: T. Barlow vs. D.C. United, 52'",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/rgswp03ujinsvlhnqknp",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/rgswp03ujinsvlhnqknp",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "goal-t-barlow-vs-d-c-united-52",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/goal-t-barlow-vs-d-c-united-52"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "3ee218d9-10aa-45c2-be11-3c11c496bd9d",
+      "_entityId": "cc2d532c-97d1-4726-8291-5c5d263491bb",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/goal-e-da-silva-ferreira-vs-d-c-united-35",
+      "slug": "goal-e-da-silva-ferreira-vs-d-c-united-35",
+      "title": "WATCH: Mr. Bangers! Evander buries another golazo",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "36e7c67b-e149-41ee-b342-253e5d8cef18",
+          "_entityId": "613a8d72-dc90-4f30-86f6-a3fa86e4115b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/goals",
+          "title": "Goals",
+          "slug": "goals",
+          "neutralSlug": "goals",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "2e827f5e-b732-4ad5-8f69-9a41244445b9",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "promoted": false,
+            "brandedImage": "webcomp_01409afe-baa1-4654-a7c9-bdf924046239"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "ce4c5f79-069b-4f45-8ccc-e779098b6fb9",
+          "_entityId": "3be1114f-04c5-45ea-a114-5f661bad77d5",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/fc-cincinnati",
+          "title": "FC Cincinnati",
+          "slug": "fc-cincinnati",
+          "neutralSlug": "fc-cincinnati",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "defe3962-ab59-48ca-b594-2bd48b3db6f9",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 11504,
+            "name": "FC Cincinnati",
+            "shortName": "Cincinnati",
+            "abbreviation": "CIN"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "8cd5b91a-de68-41d7-8eb3-ca8726c34133",
+          "_entityId": "c9d26a97-e9af-4ce5-be27-0aa8d45de94a",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/dcvscin-10-24-2026",
+          "title": "DCvsCIN 10-24-2026",
+          "slug": "dcvscin-10-24-2026",
+          "neutralSlug": "dcvscin-10-24-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "6b3f9284-7ac6-4fbc-9d71-807838452c4c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022518,
+            "sportecId": "MLS-MAT-0009NQ",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1326,
+            "awayClubOptaId": 11504,
+            "venueOptaId": 12976,
+            "matchDay": 32
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "f1596f32-187b-4a2d-9fba-2da3666e498b",
+          "_entityId": "e3158d24-422b-4242-a273-0b53a1deeeff",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/evander",
+          "title": "Evander",
+          "slug": "evander",
+          "neutralSlug": "evander",
+          "externalSourceName": "customentity.player",
+          "externalSourceReference": {
+            "SourceId": "dfe3b363-e560-465c-b271-2447802c310b",
+            "SourceName": "customentity.player"
+          },
+          "extraData": {
+            "optaId": 200933,
+            "clubOptaId": 1581,
+            "firstName": "Evander",
+            "lastName": "da Silva Ferreira",
+            "knownName": "Evander",
+            "isActiveMLSPlayer": true
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6407358256112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "51223",
+        "sportecEventId": "1251800000552",
+        "sportecMatchId": "MLS-MAT-0009NQ",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/0c216fb2-7106-4553-ad78-e6b19d25eb09/8ac89d4d-c053-45cb-9518-3bb3c284b946/text.vtt?fastly_token=NmNiZTgyZWFfMjA4ZDJkYWU1NTkwMjQ3YmQ0M2ZlNjEzNjI0ZmEwMmRlYzA0NjZmNWRjZTNkODQ0NzhjMDk1ZWJjZDlkMDQ1YV9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzBjMjE2ZmIyLTcxMDYtNDU1My1hZDc4LWU2YjE5ZDI1ZWIwOS84YWM4OWQ0ZC1jMDUzLTQ1Y2ItOTUxOC0zYmIzYzI4NGI5NDYvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/0c216fb2-7106-4553-ad78-e6b19d25eb09/10s/master.m3u8?fastly_token=NmNiZTgyZWFfZDA4MzA5NzNmOWU5NWI5ODIxZjM1MzRiN2I3MWYzODRiMGY5MGZjYWFmMmI0ZDM3OGY2ZTM4OTQzMjY2MzNmZQ%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/0c216fb2-7106-4553-ad78-e6b19d25eb09/1cce5d90-e267-4666-9e80-e1e02f25c365/main.mp4?fastly_token=NmNiZTgyZWFfMDA5YjA2YzY4YmI1YTdjODRlNjJhODY5YTg4ZTRmYTYyNDcwZjZlNTBmM2YyMGExMWYyZWNlYTJkZWZiODBjMF8vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS8wYzIxNmZiMi03MTA2LTQ1NTMtYWQ3OC1lNmIxOWQyNWViMDkvMWNjZTVkOTAtZTI2Ny00NjY2LTllODAtZTFlMDJmMjVjMzY1L21haW4ubXA0",
+        "appleCustomTitle": "Goal: Evander vs. DC, 35'",
+        "description": "FC Cincinnati's Brazilian star scored his latest jaw-dropping goal from distance. "
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Ari Liljenwall",
+      "lastUpdatedDate": "2026-10-25T00:34:52.614Z",
+      "contentDate": "2026-10-25T00:20:29.179Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "REG26-Evander-Goal",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/ztzujo8shjv0o3yw9mef",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/ztzujo8shjv0o3yw9mef",
+        "format": "png",
+        "overriddenFormats": {},
+        "slug": "reg26-evander-goal-x9711",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/reg26-evander-goal-x9711"
+      },
+      "entityCode": "brightcovevideo"
+    }
+  ]
+}
