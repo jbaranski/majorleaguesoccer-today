@@ -1,6 +1,6 @@
 # Missing goal video link (non-standard clip title)
 
-**Status:** known issue, not fixed. A tested fix exists in commit [`e9bc3cf`](https://github.com/jbaranski/majorleaguesoccer-today/commit/e9bc3cf8e71fa0269d3ec56cfce1abb73509851a). Apply it if this happens again.
+**Status:** known issue, not fixed. The fix is described below. Apply it if this happens again.
 
 ## What happened
 
@@ -44,33 +44,78 @@ The same slug fallback has two smaller bugs:
 - **Stoppage-time minute.** Only the last number is stripped, so `goal-x-vs-orl-45-3` gives opponent `ORL45`.
 - **Dedupe suffix.** In `goal-l-messi-vs-phi-26-x5096`, the `-x5096` suffix blocks the opponent, and `minuteFromSlug` reads the minute as `5096`.
 
-## Potential fix (commit `e9bc3cf`)
+## Potential fix
 
-The fix was written and tested on 2026-10-25 and never merged. It still applies cleanly to `main` as of 2026-11-14.
+All four changes are in `src/index.ts`. A version of this fix was built and tested on 2026-10-25 but not merged.
 
-- **Match team names.** The opponent from the title or slug is compared against each team's code, full name and short name. The comparison ignores accents and punctuation, so `d-c-united` resolves to D.C.
-- **Strip suffixes.** The whole minute (`-45-3`) and the `-x1234` dedupe suffix are stripped from slugs.
-- **Stop assuming home.** If the team still can't be worked out, the side is left unknown. Such a clip matches a goal by minute alone, after any same-side clips.
-- **New module and tests.** Parsing and matching move into `src/goal-videos.ts`, with `node:test` tests in `src/goal-videos.test.ts`. The real response above is the main test case. `tsconfig.test.json` type-checks the tests. `npm test` runs them, and so does the scheduled workflow.
+**1. Pass team names into `fetchGoalVideos`.** Today it only gets the two three-letter codes. Also pass `home_team_name` / `away_team_name` and `home_team_short_name` / `away_team_short_name` (both are in the schedule data; add the short names to the `MLSMatch` interface).
 
-Checks:
+**2. Match the opponent against code, full name and short name, ignoring accents and punctuation.** This is what makes `d-c-united` resolve to D.C.:
 
-- `tsc`, `npm test` (11 tests) and Prettier pass.
-- A re-parse of the slugs of about 1,000 previously linked clips (slug only, no title) gave 0 wrong sides.
-- A code review approved the fix.
+```ts
+interface VideoTeam {
+  readonly code: string;
+  readonly name: string;
+  readonly shortName: string;
+}
 
-Known limitations:
+// "D.C. United" / "d-c-united" -> "dcunited"; "Montréal" -> "montreal"
+const normalize = (s: string): string =>
+  s
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '');
 
-- **Wrong-goal risk.** A clip whose team is unknown could, in theory, attach to the other team's goal within 5 minutes.
-- **NY name variants.** Variants such as "NYCFC" / "New York Red Bulls" aren't aliased. They come out as unknown, never as the wrong team.
+const teamKeys = (t: VideoTeam): readonly string[] =>
+  [t.code, t.name, t.shortName].map(normalize).filter((k) => k.length > 0);
 
-Apply it:
-
-```sh
-git fetch origin e9bc3cf8e71fa0269d3ec56cfce1abb73509851a
-git cherry-pick e9bc3cf8e71fa0269d3ec56cfce1abb73509851a
-npm ci && npm test && npm run build
+// A clip names the conceding team, so the scoring side is the other one.
+// Returns undefined instead of guessing 'home' when the opponent isn't recognised.
+const sideFromOpponents = (opponents: readonly string[], home: VideoTeam, away: VideoTeam): Side | undefined => {
+  for (const opponent of opponents.map(normalize)) {
+    if (!opponent) continue;
+    const isHome = teamKeys(home).includes(opponent);
+    const isAway = teamKeys(away).includes(opponent);
+    if (isHome && !isAway) return 'away';
+    if (isAway && !isHome) return 'home';
+  }
+  return undefined;
+};
 ```
+
+For the opponent candidates, try the title's text after "vs." up to the comma (`D.C. United`), that text's first word (`MIN`), and the slug's opponent. Read the slug's opponent like this:
+
+```ts
+// "goal-e-da-silva-ferreira-vs-d-c-united-35" -> "d-c-united"
+// "goal-x-vs-orl-45-3" -> "orl"; "goal-l-messi-vs-phi-26-x5096" -> "phi"
+const afterVs = (slug: string): string => {
+  const i = slug.indexOf('-vs-');
+  return i === -1 ? '' : slug.slice(i + 4).replace(/-x\d+$/, '');
+};
+const opponentFromSlug = (slug: string): string => afterVs(slug).replace(/(-\d+)+$/, '');
+```
+
+**3. Fix `minuteFromSlug`.** Have it run its existing regex on `afterVs(slug)`, so the `-x5096` suffix isn't read as the minute.
+
+**4. Let unknown-side clips match by minute.** Make `GoalVideo.side` optional. In `generateJSON`, look for the closest clip (within 5 minutes) on the goal's side first. Only if there isn't one, fall back to clips whose side is unknown:
+
+```ts
+const video =
+  closest(r.goalVideos.filter((v) => v.side === e.side)) ?? closest(r.goalVideos.filter((v) => v.side === undefined));
+```
+
+**Tests:** cover the parsing with the example response above as the main case. Also include a stoppage-time slug (`goal-x-vs-orl-45-3`), a `-x1234` slug, an accented name (`cf-montreal`), and an unrecognised opponent (side stays undefined). `node:test` with Node 24's type stripping needs no new dependencies.
+
+**What testing found last time:**
+
+- Re-parsing the slugs of about 1,000 previously linked clips (slug only, no title) gave 0 wrong sides.
+- About 1% came out unknown, mostly own-goal slugs with no `-vs-`. The minute fallback covers those.
+
+**Known limitations:**
+
+- **Wrong-goal risk.** An unknown-side clip could, in theory, attach to the other team's goal within 5 minutes.
+- **NY name variants.** Variants such as "NYCFC" / "New York Red Bulls" don't match the API names. They come out as unknown, never as the wrong team.
 
 ## Commands for checking it again
 
