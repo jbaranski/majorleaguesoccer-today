@@ -1,0 +1,875 @@
+{
+  "pagination": {
+    "maxItems": 100
+  },
+  "meta": {
+    "apiVersion": "2.0",
+    "generatedAt": "2026-11-14T18:56:33.9241791Z"
+  },
+  "items": [
+    {
+      "type": "customentity",
+      "_translationId": "739e6842-cb93-475c-ba45-32fd12f412b5",
+      "_entityId": "c156cd3f-7b7c-472b-b755-3b13de3d9435",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/highlights-real-salt-lake-vs-la-galaxy-november-7-2026",
+      "slug": "highlights-real-salt-lake-vs-la-galaxy-november-7-2026",
+      "title": "HIGHLIGHTS: Real Salt Lake vs. LA Galaxy | November 7, 2026",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "4dc171cf-d3a5-441c-94d6-33488d38b429",
+          "_entityId": "79a5c092-ba58-45cf-9b33-8fe969e598f3",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/real-salt-lake",
+          "title": "Real Salt Lake",
+          "slug": "real-salt-lake",
+          "neutralSlug": "real-salt-lake",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "f1984aec-ba28-4621-9aca-301923fdc76d",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1899,
+            "name": "Real Salt Lake",
+            "shortName": "Real Salt Lake",
+            "abbreviation": "RSL"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "2137769c-62f6-4e84-b366-822aff72d07d",
+          "_entityId": "5706385e-02da-4e7f-9448-6122cbef9d6e",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/la-galaxy",
+          "title": "LA Galaxy",
+          "slug": "la-galaxy",
+          "neutralSlug": "la-galaxy",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "698a1fce-f0a0-4660-a904-c05269a72c5a",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1230,
+            "name": "LA Galaxy",
+            "shortName": "LA",
+            "abbreviation": "LA",
+            "venueOptaId": 3356,
+            "logoColor": "webcomp_97890a02-b1cd-4fc0-8466-eaa0a515f998",
+            "logoBW": "webcomp_b18f064c-5843-4a56-9b8b-15246d317e2e",
+            "crestColor": "webcomp_bbaa016d-ef06-4219-973b-a05158425761",
+            "sportecId": "MLS-CLU-00000G"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "5f796d91-a5f3-463c-99a9-b486af987717",
+          "_entityId": "6bfa7e0b-5ab8-45a5-bd0b-cab47a8dcc06",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/rslvsla-11-07-2026",
+          "title": "RSLvsLA 11-07-2026",
+          "slug": "rslvsla-11-07-2026",
+          "neutralSlug": "rslvsla-11-07-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "b5da6138-98ba-49b6-910d-965f60ccd99c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022570,
+            "sportecId": "MLS-MAT-0009P6",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1899,
+            "awayClubOptaId": 1230,
+            "venueOptaId": 4341,
+            "matchDay": 35
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "efefc351-a738-48f5-88ee-fbd37e59bc22",
+          "_entityId": "893209e8-a71c-474b-9262-3696dc1482a1",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/priority-match",
+          "title": "Priority Match",
+          "slug": "priority-match",
+          "neutralSlug": "priority-match",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "335fd483-71ff-440e-adfb-4218862c719c",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]"
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6408085220112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "627984",
+        "sportecMatchId": "MLS-MAT-0009P6",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/e3d1c316-8fb9-4bef-ad01-7a0839a76180/db40c662-f908-4002-baf7-1eca79b356bd/text.vtt?fastly_token=NmNkMTE2YWFfNmM4NmRjNDU3ODU1OWQwN2MzMDY0OTZmZjk5YTQ0ODRlNzAxM2QxMzM2MDMyYmQwMzg4MDk1M2RmZTNmOTFkNl9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxL2UzZDFjMzE2LThmYjktNGJlZi1hZDAxLTdhMDgzOWE3NjE4MC9kYjQwYzY2Mi1mOTA4LTQwMDItYmFmNy0xZWNhNzliMzU2YmQvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/e3d1c316-8fb9-4bef-ad01-7a0839a76180/10s/master.m3u8?fastly_token=NmNkMTE2YWFfZDYwMGE0ZjQzNTk2MzNkNDExMmJhNzc1MzYyZTI0MmI4ODNkNThlN2FiZWI3NWUzNGNhNTlmNjRlYzcwNWE4ZA%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/e3d1c316-8fb9-4bef-ad01-7a0839a76180/dc737ac9-4e36-4311-a28e-9381c4c6fba8/main.mp4?fastly_token=NmNkMTE2YWFfMDRmOTU2ZmVlMDA2M2QyOTIxYjkwZGEwZTBkZTMxYTcxOWI4ZTg4OTFmYjFkZjQ0ZjQxMWU1NWIyMGY5NGU3M18vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS9lM2QxYzMxNi04ZmI5LTRiZWYtYWQwMS03YTA4MzlhNzYxODAvZGM3MzdhYzktNGUzNi00MzExLWEyOGUtOTM4MWM0YzZmYmE4L21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Jonathan Sigal",
+      "lastUpdatedDate": "2026-11-08T03:06:21.326Z",
+      "contentDate": "2026-11-08T02:10:40.171Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "REG26-HIGHLIGHTS_RSLvsLA",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/mgbecdtlahwk8pvekprn",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/mgbecdtlahwk8pvekprn",
+        "format": "png",
+        "overriddenFormats": {},
+        "slug": "reg26-highlights-rslvsla",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/reg26-highlights-rslvsla"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "5a76a203-5c1a-42d9-a85e-9a6b4c7a156d",
+      "_entityId": "66e7f7ce-5995-457f-a9cd-a6dc917b2887",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/match-snapshot-salt-lake-vs-la-x3933",
+      "slug": "match-snapshot-salt-lake-vs-la-x3933",
+      "title": "MATCH SNAPSHOT: Salt Lake vs. LA",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "29d5d33b-a455-4835-bde0-9755a943cedb",
+          "_entityId": "0db1c45a-b23d-4420-a0bd-e8bbf2e1e427",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/spotlight-video",
+          "title": "Spotlight Video",
+          "slug": "spotlight-video",
+          "neutralSlug": "spotlight-video",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "7cddad5e-356c-45e3-aa5c-aeceb476018c",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {},
+          "fields": {}
+        },
+        {
+          "_translationId": "4dc171cf-d3a5-441c-94d6-33488d38b429",
+          "_entityId": "79a5c092-ba58-45cf-9b33-8fe969e598f3",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/real-salt-lake",
+          "title": "Real Salt Lake",
+          "slug": "real-salt-lake",
+          "neutralSlug": "real-salt-lake",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "f1984aec-ba28-4621-9aca-301923fdc76d",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1899,
+            "name": "Real Salt Lake",
+            "shortName": "Real Salt Lake",
+            "abbreviation": "RSL"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "2137769c-62f6-4e84-b366-822aff72d07d",
+          "_entityId": "5706385e-02da-4e7f-9448-6122cbef9d6e",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/la-galaxy",
+          "title": "LA Galaxy",
+          "slug": "la-galaxy",
+          "neutralSlug": "la-galaxy",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "698a1fce-f0a0-4660-a904-c05269a72c5a",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1230,
+            "name": "LA Galaxy",
+            "shortName": "LA",
+            "abbreviation": "LA",
+            "venueOptaId": 3356,
+            "logoColor": "webcomp_97890a02-b1cd-4fc0-8466-eaa0a515f998",
+            "logoBW": "webcomp_b18f064c-5843-4a56-9b8b-15246d317e2e",
+            "crestColor": "webcomp_bbaa016d-ef06-4219-973b-a05158425761",
+            "sportecId": "MLS-CLU-00000G"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "5f796d91-a5f3-463c-99a9-b486af987717",
+          "_entityId": "6bfa7e0b-5ab8-45a5-bd0b-cab47a8dcc06",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/rslvsla-11-07-2026",
+          "title": "RSLvsLA 11-07-2026",
+          "slug": "rslvsla-11-07-2026",
+          "neutralSlug": "rslvsla-11-07-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "b5da6138-98ba-49b6-910d-965f60ccd99c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022570,
+            "sportecId": "MLS-MAT-0009P6",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1899,
+            "awayClubOptaId": 1230,
+            "venueOptaId": 4341,
+            "matchDay": 35
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6408084720112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "59281",
+        "sportecMatchId": "MLS-MAT-0009P6",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/8f2e8908-40b2-4a1e-9231-31bfca6cbb83/093a057a-2d20-4387-9d72-7fe37df8426a/text.vtt?fastly_token=NmNkMTExNDRfYzdiNjJkNmNiM2JlMTZmZjczYzc1ZWRhYzIxMmQxZmEzNDY4YzEyYWE4YzkxYzhkNWE0ODk3M2MyZWMyZDVlY19odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzhmMmU4OTA4LTQwYjItNGExZS05MjMxLTMxYmZjYTZjYmI4My8wOTNhMDU3YS0yZDIwLTQzODctOWQ3Mi03ZmUzN2RmODQyNmEvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/8f2e8908-40b2-4a1e-9231-31bfca6cbb83/10s/master.m3u8?fastly_token=NmNkMTExNDRfMTdjNWMzNjM5MTZjMjRlZWQyYjg1ZTI1OWI3OGUzNzZjNzI5ODIyMjJlOTg5NTNiNzZmM2NlNDQ4ZDg3NGY0Nw%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/8f2e8908-40b2-4a1e-9231-31bfca6cbb83/c5810612-ed24-4d22-9f3f-68a1a0078060/main.mp4?fastly_token=NmNkMTExNDRfODI0ODc4YTA4NjhiM2IwYTgzMDYzYzQyNWRhOTNhNGIxMjkxZDg3ODJjZjI4NzUxMTJjMTBlY2EwNTI1ZTdhZV8vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS84ZjJlODkwOC00MGIyLTRhMWUtOTIzMS0zMWJmY2E2Y2JiODMvYzU4MTA2MTItZWQyNC00ZDIyLTlmM2YtNjhhMWEwMDc4MDYwL21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "mls-videobc-importer-client",
+      "lastUpdatedDate": "2026-11-08T02:10:07.013Z",
+      "contentDate": "2026-11-08T02:08:35.257Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "MATCH SNAPSHOT: Salt Lake vs. LA",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/r8urmjd9syls0vf8w1ne",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/r8urmjd9syls0vf8w1ne",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "match-snapshot-salt-lake-vs-la-x7938",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/match-snapshot-salt-lake-vs-la-x7938"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "5929f78e-f150-495a-8b26-0e784160561a",
+      "_entityId": "38cbb436-079b-4bc4-8355-25927cb95333",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/own-goal-l-de-fougerolles-rsl-40",
+      "slug": "own-goal-l-de-fougerolles-rsl-40",
+      "title": "Own Goal: L. de Fougerolles, RSL, 40'",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "36e7c67b-e149-41ee-b342-253e5d8cef18",
+          "_entityId": "613a8d72-dc90-4f30-86f6-a3fa86e4115b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/goals",
+          "title": "Goals",
+          "slug": "goals",
+          "neutralSlug": "goals",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "2e827f5e-b732-4ad5-8f69-9a41244445b9",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "promoted": false,
+            "brandedImage": "webcomp_01409afe-baa1-4654-a7c9-bdf924046239"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "4dc171cf-d3a5-441c-94d6-33488d38b429",
+          "_entityId": "79a5c092-ba58-45cf-9b33-8fe969e598f3",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/real-salt-lake",
+          "title": "Real Salt Lake",
+          "slug": "real-salt-lake",
+          "neutralSlug": "real-salt-lake",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "f1984aec-ba28-4621-9aca-301923fdc76d",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1899,
+            "name": "Real Salt Lake",
+            "shortName": "Real Salt Lake",
+            "abbreviation": "RSL"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "2137769c-62f6-4e84-b366-822aff72d07d",
+          "_entityId": "5706385e-02da-4e7f-9448-6122cbef9d6e",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/la-galaxy",
+          "title": "LA Galaxy",
+          "slug": "la-galaxy",
+          "neutralSlug": "la-galaxy",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "698a1fce-f0a0-4660-a904-c05269a72c5a",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1230,
+            "name": "LA Galaxy",
+            "shortName": "LA",
+            "abbreviation": "LA",
+            "venueOptaId": 3356,
+            "logoColor": "webcomp_97890a02-b1cd-4fc0-8466-eaa0a515f998",
+            "logoBW": "webcomp_b18f064c-5843-4a56-9b8b-15246d317e2e",
+            "crestColor": "webcomp_bbaa016d-ef06-4219-973b-a05158425761",
+            "sportecId": "MLS-CLU-00000G"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "5f796d91-a5f3-463c-99a9-b486af987717",
+          "_entityId": "6bfa7e0b-5ab8-45a5-bd0b-cab47a8dcc06",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/rslvsla-11-07-2026",
+          "title": "RSLvsLA 11-07-2026",
+          "slug": "rslvsla-11-07-2026",
+          "neutralSlug": "rslvsla-11-07-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "b5da6138-98ba-49b6-910d-965f60ccd99c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022570,
+            "sportecId": "MLS-MAT-0009P6",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1899,
+            "awayClubOptaId": 1230,
+            "venueOptaId": 4341,
+            "matchDay": 35
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6408082313112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "44791",
+        "sportecEventId": "1257000000482",
+        "sportecMatchId": "MLS-MAT-0009P6",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/c5f6c490-d8be-4f5c-99ed-34a73407dd2a/d3faf1e9-e9ec-49d7-be0d-1127e11d573d/text.vtt?fastly_token=NmNkMGZmNTdfNzg2OTcyOWY0MmFiNDc5ZWIyMDFhMjExMzM3YTljY2U5MjE3ZjVlYWQwOTRkNDcwYjJhNzIyMDdhNzQ5ODIzZV9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxL2M1ZjZjNDkwLWQ4YmUtNGY1Yy05OWVkLTM0YTczNDA3ZGQyYS9kM2ZhZjFlOS1lOWVjLTQ5ZDctYmUwZC0xMTI3ZTExZDU3M2QvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/c5f6c490-d8be-4f5c-99ed-34a73407dd2a/10s/master.m3u8?fastly_token=NmNkMGZmNTdfM2ViNWQ5NDYyMzdlNDI4OTBhYzU0MGMyZmEyZjAwZDJiMGMxN2E3NjM0ZjQ0MzgwZjUyYmUzMTQyZDI0NWU3NA%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/c5f6c490-d8be-4f5c-99ed-34a73407dd2a/0ff9fc2d-c44c-4ee5-a6e3-be37a73e940a/main.mp4?fastly_token=NmNkMGZmNTdfNTI5ZmM2ODU4ODkxZTNiNWZmMjkyMDFjOGQ1NTIxZDFmMzE3MTYxMWFhZmZiNmY4MDhmOGVhMjEzZjEwZjBmY18vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS9jNWY2YzQ5MC1kOGJlLTRmNWMtOTllZC0zNGE3MzQwN2RkMmEvMGZmOWZjMmQtYzQ0Yy00ZWU1LWE2ZTMtYmUzN2E3M2U5NDBhL21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "mls-videobc-importer-client",
+      "lastUpdatedDate": "2026-11-08T00:53:55.346Z",
+      "contentDate": "2026-11-08T00:52:51.996Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "Own Goal: L. de Fougerolles, RSL, 40'",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/mup6kruwufyxiay6o9ua",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/mup6kruwufyxiay6o9ua",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "own-goal-l-de-fougerolles-rsl-40",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/own-goal-l-de-fougerolles-rsl-40"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "eee40ada-af0d-40fc-8df7-e1298aabcba8",
+      "_entityId": "765ba887-51c6-4e51-934f-22adb78454b9",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/goal-z-booth-vs-la-13",
+      "slug": "goal-z-booth-vs-la-13",
+      "title": "Goal: Z. Booth vs. LA, 13'",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "36e7c67b-e149-41ee-b342-253e5d8cef18",
+          "_entityId": "613a8d72-dc90-4f30-86f6-a3fa86e4115b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/goals",
+          "title": "Goals",
+          "slug": "goals",
+          "neutralSlug": "goals",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "2e827f5e-b732-4ad5-8f69-9a41244445b9",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "promoted": false,
+            "brandedImage": "webcomp_01409afe-baa1-4654-a7c9-bdf924046239"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "4dc171cf-d3a5-441c-94d6-33488d38b429",
+          "_entityId": "79a5c092-ba58-45cf-9b33-8fe969e598f3",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/real-salt-lake",
+          "title": "Real Salt Lake",
+          "slug": "real-salt-lake",
+          "neutralSlug": "real-salt-lake",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "f1984aec-ba28-4621-9aca-301923fdc76d",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1899,
+            "name": "Real Salt Lake",
+            "shortName": "Real Salt Lake",
+            "abbreviation": "RSL"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "5f796d91-a5f3-463c-99a9-b486af987717",
+          "_entityId": "6bfa7e0b-5ab8-45a5-bd0b-cab47a8dcc06",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/rslvsla-11-07-2026",
+          "title": "RSLvsLA 11-07-2026",
+          "slug": "rslvsla-11-07-2026",
+          "neutralSlug": "rslvsla-11-07-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "b5da6138-98ba-49b6-910d-965f60ccd99c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022570,
+            "sportecId": "MLS-MAT-0009P6",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1899,
+            "awayClubOptaId": 1230,
+            "venueOptaId": 4341,
+            "matchDay": 35
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "3c73ba7d-e181-43fc-873e-82a6d8e9f1bf",
+          "_entityId": "a75ff3ba-a5f0-42a7-a26e-d8c02a76a842",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/zach-booth",
+          "title": "Zach Booth",
+          "slug": "zach-booth",
+          "neutralSlug": "zach-booth",
+          "externalSourceName": "customentity.player",
+          "externalSourceReference": {
+            "SourceId": "d0e5791c-688d-4d80-bdde-9595dc7dd227",
+            "SourceName": "customentity.player"
+          },
+          "extraData": {
+            "optaId": 315206181,
+            "firstName": "Zach",
+            "lastName": "Booth",
+            "isActiveMLSPlayer": true,
+            "clubOptaId": 1899
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "efefc351-a738-48f5-88ee-fbd37e59bc22",
+          "_entityId": "893209e8-a71c-474b-9262-3696dc1482a1",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/priority-match",
+          "title": "Priority Match",
+          "slug": "priority-match",
+          "neutralSlug": "priority-match",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "335fd483-71ff-440e-adfb-4218862c719c",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]"
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6408081033112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "59141",
+        "sportecEventId": "1257000000163",
+        "sportecMatchId": "MLS-MAT-0009P6",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/05cb50be-17b7-4fe5-9387-bc9379a01110/1d60a9f0-39ba-4dd1-ae93-a1a7debc4bd5/text.vtt?fastly_token=NmNkMGY5ODRfM2UyMmRlMGM1MzFmODEzMDRhZjllMTkxMjFmNjU1NDgzZGRjMjI3N2YxMTQwMWQ4OTc0YzI2ZWMxYmFmZDhhNl9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzA1Y2I1MGJlLTE3YjctNGZlNS05Mzg3LWJjOTM3OWEwMTExMC8xZDYwYTlmMC0zOWJhLTRkZDEtYWU5My1hMWE3ZGViYzRiZDUvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/05cb50be-17b7-4fe5-9387-bc9379a01110/10s/master.m3u8?fastly_token=NmNkMGY5ODRfZTUyNTMwMDY0ZWEyNjk5NjVhNzcwZGQwYzcxZDY4MmMxM2YzN2MyMjlmOTk0YzE3NzY3ZTExMWY1NDA4YjBiYg%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/05cb50be-17b7-4fe5-9387-bc9379a01110/3c58bc85-9367-408c-abaf-c4478ac24974/main.mp4?fastly_token=NmNkMGY5ODRfZTEwYzE3N2Q3YTVjZGM0OTM0OTJlMGRlMGJlMTYwODYzYmE1ZDk4M2M4YmFmMTkwNGJjNDA4NDk5ZDc3MjdkM18vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS8wNWNiNTBiZS0xN2I3LTRmZTUtOTM4Ny1iYzkzNzlhMDExMTAvM2M1OGJjODUtOTM2Ny00MDhjLWFiYWYtYzQ0NzhhYzI0OTc0L21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Dylan Butler",
+      "lastUpdatedDate": "2026-11-08T01:26:52.736Z",
+      "contentDate": "2026-11-08T00:27:32.485Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "Goal: Z. Booth vs. LA, 13'",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/tus4mgrjevhbphsdx67f",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/tus4mgrjevhbphsdx67f",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "goal-z-booth-vs-la-13",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/goal-z-booth-vs-la-13"
+      },
+      "entityCode": "brightcovevideo"
+    },
+    {
+      "type": "customentity",
+      "_translationId": "22723308-c8af-41ae-8dfb-605c88017049",
+      "_entityId": "dcfda2ad-d52f-4575-b89a-0ff63544e35d",
+      "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/brightcovevideos/goal-s-solans-vs-la-10",
+      "slug": "goal-s-solans-vs-la-10",
+      "title": "Goal: S. Solans vs. LA, 10'",
+      "tags": [
+        {
+          "_translationId": "f5c1e2b8-882f-4d05-89d9-3b1401df3bb2",
+          "_entityId": "243c1089-8f1a-4eed-ac11-e3c9265f867f",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/match-highlights",
+          "title": "Match Highlights",
+          "slug": "match-highlights",
+          "neutralSlug": "match-highlights",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "0cf296ab-5a24-4171-bf36-a3f2bc69c472",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/match-highlights&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "description": ""
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "36e7c67b-e149-41ee-b342-253e5d8cef18",
+          "_entityId": "613a8d72-dc90-4f30-86f6-a3fa86e4115b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/goals",
+          "title": "Goals",
+          "slug": "goals",
+          "neutralSlug": "goals",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "2e827f5e-b732-4ad5-8f69-9a41244445b9",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/goal&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "promoted": false,
+            "brandedImage": "webcomp_01409afe-baa1-4654-a7c9-bdf924046239"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "4dc171cf-d3a5-441c-94d6-33488d38b429",
+          "_entityId": "79a5c092-ba58-45cf-9b33-8fe969e598f3",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/real-salt-lake",
+          "title": "Real Salt Lake",
+          "slug": "real-salt-lake",
+          "neutralSlug": "real-salt-lake",
+          "externalSourceName": "customentity.club",
+          "externalSourceReference": {
+            "SourceId": "f1984aec-ba28-4621-9aca-301923fdc76d",
+            "SourceName": "customentity.club"
+          },
+          "extraData": {
+            "optaId": 1899,
+            "name": "Real Salt Lake",
+            "shortName": "Real Salt Lake",
+            "abbreviation": "RSL"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "04d08298-974b-4927-a912-47e3abf12b7d",
+          "_entityId": "ed894719-d10c-4b31-a5da-9a049901e86b",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/mls-regular-season",
+          "title": "MLS Regular Season",
+          "slug": "mls-regular-season",
+          "neutralSlug": "mls-regular-season",
+          "externalSourceName": "customentity.competition",
+          "externalSourceReference": {
+            "SourceId": "e9bb8ce1-42df-4f22-8293-32f77cdc8df1",
+            "SourceName": "customentity.competition"
+          },
+          "extraData": {
+            "optaId": 98,
+            "name": "MLS Regular Season",
+            "shortName": "Regular Season",
+            "mlsPhaseType": "Regular",
+            "nameOverwrite": true,
+            "mgmCompetitionId": "0",
+            "sportecId": "MLS-COM-000001"
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "5f796d91-a5f3-463c-99a9-b486af987717",
+          "_entityId": "6bfa7e0b-5ab8-45a5-bd0b-cab47a8dcc06",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/rslvsla-11-07-2026",
+          "title": "RSLvsLA 11-07-2026",
+          "slug": "rslvsla-11-07-2026",
+          "neutralSlug": "rslvsla-11-07-2026",
+          "externalSourceName": "customentity.match",
+          "externalSourceReference": {
+            "SourceId": "b5da6138-98ba-49b6-910d-965f60ccd99c",
+            "SourceName": "customentity.match"
+          },
+          "extraData": {
+            "optaId": 289022570,
+            "sportecId": "MLS-MAT-0009P6",
+            "matchType": "Regular",
+            "seasonOptaId": 2026,
+            "competitionOptaId": 98,
+            "homeClubOptaId": 1899,
+            "awayClubOptaId": 1230,
+            "venueOptaId": 4341,
+            "matchDay": 35
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "06e3863d-1573-4cbe-b214-ae7b8de9cd1e",
+          "_entityId": "fad7db24-579d-4e49-8469-029717b514c7",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/sergi-solans",
+          "title": "Sergi Solans",
+          "slug": "sergi-solans",
+          "neutralSlug": "sergi-solans",
+          "externalSourceName": "customentity.player",
+          "externalSourceReference": {
+            "SourceId": "e3109055-6e7e-420e-8b1a-301b6ee9ce27",
+            "SourceName": "customentity.player"
+          },
+          "extraData": {
+            "optaId": 315200205,
+            "firstName": "Sergi",
+            "lastName": "Solans",
+            "isActiveMLSPlayer": true,
+            "clubOptaId": 1899
+          },
+          "fields": {}
+        },
+        {
+          "_translationId": "efefc351-a738-48f5-88ee-fbd37e59bc22",
+          "_entityId": "893209e8-a71c-474b-9262-3696dc1482a1",
+          "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/priority-match",
+          "title": "Priority Match",
+          "slug": "priority-match",
+          "neutralSlug": "priority-match",
+          "externalSourceName": "customentity.topic",
+          "externalSourceReference": {
+            "SourceId": "335fd483-71ff-440e-adfb-4218862c719c",
+            "SourceName": "customentity.topic"
+          },
+          "extraData": {
+            "adUrl": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/www.mlssoccer.com/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]",
+            "adUrlApp": "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/8375/app.mlssoccer/video/topics/priority-match&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]"
+          },
+          "fields": {}
+        }
+      ],
+      "fields": {
+        "brightcoveId": "6408080905112",
+        "brightcoveAccountId": "5530036774001",
+        "duration": "56680",
+        "sportecEventId": "1257000000139",
+        "sportecMatchId": "MLS-MAT-0009P6",
+        "remoteUrl": "http://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/text/vtt/clear/5530036774001/63aad8b3-bd68-4c20-a463-beafa1387052/a9857912-a7ef-47ce-9a63-e6568d6a2d71/text.vtt?fastly_token=NmNkMGY4YTFfZmEyZTBkOTEyYWE3MWE0NTZmNGFkMzdkYTljZmU0ODJiMzhjOGY0Yzc0OGQ0ZDUyZDFmMzk5ZTk2ZDJlZjMzNl9odHRwOi8vZmFzdGx5LXNpZ25lZC11cy1lYXN0LTEtcHJvZC5icmlnaHRjb3ZlY2RuLmNvbS9tZWRpYS92MS90ZXh0L3Z0dC9jbGVhci81NTMwMDM2Nzc0MDAxLzYzYWFkOGIzLWJkNjgtNGMyMC1hNDYzLWJlYWZhMTM4NzA1Mi9hOTg1NzkxMi1hN2VmLTQ3Y2UtOWE2My1lNjU2OGQ2YTJkNzEvdGV4dC52dHQ%3D",
+        "brightcoveLanguage": "en-US",
+        "brightcovePolicyKey": "BCpkADawqM1uV0qejtSmqRUC1e2VOiK02sR3sIuWm7iMvIU37gaH3oChMTBYavOKmyUwZTzsGiN8_mywTsqJM8TNnvF6PVHoEEV5bXe8KaaR9eltv2IF6GtmMCSiAdQqnPBzXT2t14ME33sU",
+        "brightcoveHlsStream": "https://manifest.prod.boltdns.net/manifest/v1/hls/v4/clear/5530036774001/63aad8b3-bd68-4c20-a463-beafa1387052/10s/master.m3u8?fastly_token=NmNkMGY4YTFfMmViNDY2ZTIwYjJiM2I0ZTkxNWRkMDEzOGYyMDEzMmM3NDMwZjA5ZjQ4YjY1NzdlYjQyYTk5OTEyMGI2YTA5ZA%3D%3D",
+        "mp4Stream600": "https://fastly-signed-us-east-1-prod.brightcovecdn.com/media/v1/pmp4/static/clear/5530036774001/63aad8b3-bd68-4c20-a463-beafa1387052/f1b9a64d-ee24-404c-b601-ffbcfa1fd031/main.mp4?fastly_token=NmNkMGY4YTFfNmE5NmU5NTE4MDQ1OWQxYTI5YjA1NjFmZGIxNDA1ZDNjYmE1ZjA4Y2Q2YmQ3Y2RmZWJjM2ExMWRmZDUyNTYwNF8vL2Zhc3RseS1zaWduZWQtdXMtZWFzdC0xLXByb2QuYnJpZ2h0Y292ZWNkbi5jb20vbWVkaWEvdjEvcG1wNC9zdGF0aWMvY2xlYXIvNTUzMDAzNjc3NDAwMS82M2FhZDhiMy1iZDY4LTRjMjAtYTQ2My1iZWFmYTEzODcwNTIvZjFiOWE2NGQtZWUyNC00MDRjLWI2MDEtZmZiY2ZhMWZkMDMxL21haW4ubXA0"
+      },
+      "createdBy": "mls-videobc-importer-client",
+      "lastUpdatedBy": "Dylan Butler",
+      "lastUpdatedDate": "2026-11-08T01:26:32.845Z",
+      "contentDate": "2026-11-08T00:23:41.218Z",
+      "featured": 0,
+      "thumbnail": {
+        "title": "Goal: S. Solans vs. LA, 10'",
+        "templateUrl": "https://images.mlssoccer.com/image/private/{formatInstructions}/mls/qqpkn7ofnpozhnfcg7ow",
+        "thumbnailUrl": "https://images.mlssoccer.com/image/private/w_250,h_250,c_thumb,g_auto,q_auto,f_jpg/mls/qqpkn7ofnpozhnfcg7ow",
+        "format": "jpg",
+        "overriddenFormats": {},
+        "slug": "goal-s-solans-vs-la-10",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/photos/goal-s-solans-vs-la-10"
+      },
+      "entityCode": "brightcovevideo"
+    }
+  ]
+}

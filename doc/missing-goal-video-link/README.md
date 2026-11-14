@@ -15,17 +15,35 @@ The same pattern shows up in `client/public/matches.json` history. In each case 
 | 2026-10-24 | CIN at DC (`MLS-MAT-0009NQ`) | Evander 35' (away)                                |
 | 2026-11-07 | LA at RSL (`MLS-MAT-0009P6`) | Luc de Fougerolles 40' own goal (counts for away) |
 
-The 11-07 own goal is probably the same cause but hasn't been confirmed against the API. MLS own-goal slugs have no `-vs-` (for example `own-goal-r-cannon-col-54`), so if the title has no "vs." either, the side defaults to home. Run the first command below with `MATCH_ID=MLS-MAT-0009P6` to confirm.
+The 11-07 own goal has the same cause. Its clip is titled `Own Goal: L. de Fougerolles, RSL, 40'`, with no "vs.", and its slug `own-goal-l-de-fougerolles-rsl-40` has no `-vs-`. So the side defaulted to home, but the goal counts for LA, the away side.
 
-## Example response
+## Data
 
-The Brightcove videos response for `MLS-MAT-0009NQ`, filtered to slug and title:
+These responses were saved in this folder on 2026-11-14:
+
+| File                                   | Contents                                                         |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| `brightcovevideos-MLS-MAT-0009NQ.json` | Clips for DC vs CIN. Evander's is the `REG26-Evander-Goal` item. |
+| `key_events-MLS-MAT-0009NQ.json`       | Match events for DC vs CIN (goals at 35' and 52')                |
+| `match-MLS-MAT-0009NQ.json`            | Schedule entry for DC vs CIN: team names, short names, codes     |
+| `brightcovevideos-MLS-MAT-0009P6.json` | Clips for RSL vs LA (the 11-07 own goal)                         |
+
+The clips for `MLS-MAT-0009NQ`:
 
 ```json
-{ "slug": "highlights-d-c-united-vs-fc-cincinnati-october-24-2026", "t": "REG26-HIGHLIGHTS_DCvsCIN" }
-{ "slug": "match-snapshot-d-c-vs-cincinnati-x1127", "t": "MATCH SNAPSHOT: D.C. vs. Cincinnati" }
-{ "slug": "goal-t-barlow-vs-d-c-united-52", "t": "Goal: T. Barlow vs. D.C. United, 52'" }
-{ "slug": "goal-e-da-silva-ferreira-vs-d-c-united-35", "t": "REG26-Evander-Goal" }
+{"slug":"highlights-d-c-united-vs-fc-cincinnati-october-24-2026","title":"REG26-HIGHLIGHTS_DCvsCIN"}
+{"slug":"match-snapshot-d-c-vs-cincinnati-x1127","title":"MATCH SNAPSHOT: D.C. vs. Cincinnati"}
+{"slug":"goal-t-barlow-vs-d-c-united-52","title":"Goal: T. Barlow vs. D.C. United, 52'"}
+{"slug":"goal-e-da-silva-ferreira-vs-d-c-united-35","title":"REG26-Evander-Goal"}
+```
+
+These are the curls that fetched the saved files:
+
+```sh
+curl -s -H 'User-Agent: JEFF-Bot' 'https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=MLS-MAT-0009NQ' | jq . > brightcovevideos-MLS-MAT-0009NQ.json
+curl -s -H 'User-Agent: JEFF-Bot' 'https://stats-api.mlssoccer.com/matches/MLS-MAT-0009NQ/key_events?per_page=1000' | jq . > key_events-MLS-MAT-0009NQ.json
+curl -s -H 'User-Agent: JEFF-Bot' 'https://stats-api.mlssoccer.com/matches/seasons/MLS-SEA-0001KA?match_date%5Bgte%5D=2026-10-24&match_date%5Blte%5D=2026-10-24&per_page=1000' | jq '.schedule[] | select(.match_id == "MLS-MAT-0009NQ")' > match-MLS-MAT-0009NQ.json
+curl -s -H 'User-Agent: JEFF-Bot' 'https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=MLS-MAT-0009P6' | jq . > brightcovevideos-MLS-MAT-0009P6.json
 ```
 
 ## Root cause
@@ -105,6 +123,8 @@ const video =
   closest(r.goalVideos.filter((v) => v.side === e.side)) ?? closest(r.goalVideos.filter((v) => v.side === undefined));
 ```
 
+This also fixes the 11-07 own goal. Its clip names no opponent, so its side is unknown and it matches by minute.
+
 **Tests:** cover the parsing with the example response above as the main case. Also include a stoppage-time slug (`goal-x-vs-orl-45-3`), a `-x1234` slug, an accented name (`cf-montreal`), and an unrecognised opponent (side stays undefined). `node:test` with Node 24's type stripping needs no new dependencies.
 
 **What testing found last time:**
@@ -116,54 +136,3 @@ const video =
 
 - **Wrong-goal risk.** An unknown-side clip could, in theory, attach to the other team's goal within 5 minutes.
 - **NY name variants.** Variants such as "NYCFC" / "New York Red Bulls" don't match the API names. They come out as unknown, never as the wrong team.
-
-## Commands for checking it again
-
-Replace the match ID with the affected match's ID. You can find it in `client/public/matches.json` under `yesterdayResults[].match.match_id`.
-
-```sh
-MATCH_ID=MLS-MAT-0009NQ
-
-# Goal clips MLS published for the match (the data behind the video links)
-curl -s -H 'User-Agent: JEFF-Bot' \
-  "https://dapi.mlssoccer.com/v2/content/en-us/brightcovevideos?fields.sportecMatchId=$MATCH_ID" \
-  | jq '.items[] | {slug, t: .thumbnail.title}'
-
-# Goal events (scorer, minute, team) for the match
-curl -s -H 'User-Agent: JEFF-Bot' \
-  "https://stats-api.mlssoccer.com/matches/$MATCH_ID/key_events?per_page=1000" \
-  | jq '.events[] | select(.sub_type == "goals" or .type == "own_goals")
-        | {type, minute: .event.minute_of_play, team: .event.team_name,
-           player: ((.event.shot_at_goal // .event) | "\(.player_first_name) \(.player_last_name)")}'
-
-# Team names, short names and three-letter codes for the match (what side detection compares against)
-curl -s -H 'User-Agent: JEFF-Bot' \
-  "https://stats-api.mlssoccer.com/matches/seasons/MLS-SEA-0001KA?match_date%5Bgte%5D=2026-10-24&match_date%5Blte%5D=2026-10-24&per_page=1000" \
-  | jq --arg id "$MATCH_ID" '.schedule[] | select(.match_id == $id)
-        | {home_team_name, home_team_short_name, home_team_three_letter_code,
-           away_team_name, away_team_short_name, away_team_three_letter_code}'
-```
-
-Goals without a link in the current `matches.json`:
-
-```sh
-jq -r '.yesterdayResults[] | .match as $m | .goalEvents[]
-       | select(.isShootout | not) | select(.videoUrl == null)
-       | "\($m.match_id)  \($m.home_team_name) vs \($m.away_team_name)  \(.minute)m \(.playerName) (\(.side))"' \
-  client/public/matches.json
-```
-
-The same check across `matches.json` history (one line per run that had a goal without a link):
-
-```sh
-for c in $(git log --format=%h -- client/public/matches.json); do
-  git show "$c:client/public/matches.json" | jq -r --arg c "$c" '
-    .lastUpdated as $u
-    | [.yesterdayResults[]? | .match as $m | .goalEvents[]
-     | select((.isShootout | not) and .videoUrl == null)
-     | "\($m.match_id) \(.minute)m \(.playerName) (\(.side))"]
-    | select(length > 0) | "\($c) \($u) \(join(", "))"' 2>/dev/null
-done
-```
-
-Note: a whole match with no links is usually a different case: MLS published no clips for it (Leagues Cup, friendlies and so on). The bug described here is a single goal without a link while the rest of its match has links.
