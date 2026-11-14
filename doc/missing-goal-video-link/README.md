@@ -1,6 +1,6 @@
 # Missing goal video link (non-standard clip title)
 
-**Status:** known issue, not fixed. A tested fix is saved in [`fix.patch`](fix.patch). Apply it if this happens again.
+**Status:** known issue, not fixed. A tested fix exists in commit [`e9bc3cf`](https://github.com/jbaranski/majorleaguesoccer-today/commit/e9bc3cf8e71fa0269d3ec56cfce1abb73509851a). Apply it if this happens again.
 
 ## What happened
 
@@ -44,9 +44,9 @@ The same slug fallback has two smaller bugs:
 - **Stoppage-time minute.** Only the last number is stripped, so `goal-x-vs-orl-45-3` gives opponent `ORL45`.
 - **Dedupe suffix.** In `goal-l-messi-vs-phi-26-x5096`, the `-x5096` suffix blocks the opponent, and `minuteFromSlug` reads the minute as `5096`.
 
-## Potential fix (`fix.patch`)
+## Potential fix (commit `e9bc3cf`)
 
-The patch was written and tested on 2026-10-25 (commit `e9bc3cf`, never merged). It still applies cleanly to `main` as of 2026-11-14.
+The fix was written and tested on 2026-10-25 and never merged. It still applies cleanly to `main` as of 2026-11-14.
 
 - **Match team names.** The opponent from the title or slug is compared against each team's code, full name and short name. The comparison ignores accents and punctuation, so `d-c-united` resolves to D.C.
 - **Strip suffixes.** The whole minute (`-45-3`) and the `-x1234` dedupe suffix are stripped from slugs.
@@ -57,7 +57,7 @@ Checks:
 
 - `tsc`, `npm test` (11 tests) and Prettier pass.
 - A re-parse of the slugs of about 1,000 previously linked clips (slug only, no title) gave 0 wrong sides.
-- A code review approved the patch.
+- A code review approved the fix.
 
 Known limitations:
 
@@ -67,7 +67,8 @@ Known limitations:
 Apply it:
 
 ```sh
-git am doc/missing-goal-video-link/fix.patch   # or: git apply doc/missing-goal-video-link/fix.patch
+git fetch origin e9bc3cf8e71fa0269d3ec56cfce1abb73509851a
+git cherry-pick e9bc3cf8e71fa0269d3ec56cfce1abb73509851a
 npm ci && npm test && npm run build
 ```
 
